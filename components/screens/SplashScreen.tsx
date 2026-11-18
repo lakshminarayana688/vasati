@@ -35,14 +35,14 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onGetStarted, onLogi
           <h2 className="text-2xl font-extrabold text-vasati-dark tracking-tight">
             Find Your Perfect PG
           </h2>
-          <p className="text-sm font-medium text-gray-500 mt-1">
+          <p className="text-sm font-medium text-vasati-secondary mt-1">
             Stay Better, Live Happier
           </p>
         </div>
       </div>
 
       {/* Bottom Section: Purple Curved Background & Action Buttons */}
-      <div className="relative w-full bg-gradient-to-t from-vasati-purple via-vasati-purple to-purple-800 rounded-t-[2.5rem] pt-8 pb-8 px-6 text-center text-white shadow-2xl">
+      <div className="relative w-full bg-gradient-to-t from-vasati-royal via-vasati-purple to-vasati-purple-vibrant rounded-t-[2.5rem] pt-8 pb-8 px-6 text-center text-white shadow-2xl">
         <button
           onClick={onGetStarted}
           className="w-full py-4 px-6 rounded-full bg-white text-vasati-purple font-bold text-base flex items-center justify-center gap-2 shadow-lg transition-all duration-200 hover:bg-vasati-purple-soft hover:shadow-xl active:scale-[0.98]"

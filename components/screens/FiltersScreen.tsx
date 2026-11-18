@@ -135,8 +135,8 @@ export const FiltersScreen: React.FC<FiltersScreenProps> = ({
                   onClick={() => setGender(g)}
                   className={`py-2.5 px-3 rounded-2xl text-xs font-bold transition-all ${
                     isSelected
-                      ? 'bg-vasati-purple text-white shadow-md shadow-vasati-purple/20'
-                      : 'bg-gray-50 text-gray-600 border border-gray-200/60 hover:bg-gray-100'
+                      ? 'bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant text-white shadow-md shadow-vasati-purple/20'
+                      : 'bg-white text-vasati-secondary border border-vasati-purple-border hover:bg-vasati-purple-soft'
                   }`}
                 >
                   {g}
@@ -159,8 +159,8 @@ export const FiltersScreen: React.FC<FiltersScreenProps> = ({
                   onClick={() => setPgType(t)}
                   className={`py-2.5 px-3 rounded-2xl text-xs font-bold transition-all ${
                     isSelected
-                      ? 'bg-vasati-purple text-white shadow-md shadow-vasati-purple/20'
-                      : 'bg-gray-50 text-gray-600 border border-gray-200/60 hover:bg-gray-100'
+                      ? 'bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant text-white shadow-md shadow-vasati-purple/20'
+                      : 'bg-white text-vasati-secondary border border-vasati-purple-border hover:bg-vasati-purple-soft'
                   }`}
                 >
                   {t}
@@ -183,8 +183,8 @@ export const FiltersScreen: React.FC<FiltersScreenProps> = ({
                   onClick={() => setFood(f)}
                   className={`py-2.5 px-3 rounded-2xl text-xs font-bold transition-all ${
                     isSelected
-                      ? 'bg-vasati-purple text-white shadow-md shadow-vasati-purple/20'
-                      : 'bg-gray-50 text-gray-600 border border-gray-200/60 hover:bg-gray-100'
+                      ? 'bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant text-white shadow-md shadow-vasati-purple/20'
+                      : 'bg-white text-vasati-secondary border border-vasati-purple-border hover:bg-vasati-purple-soft'
                   }`}
                 >
                   {f}
@@ -209,10 +209,10 @@ export const FiltersScreen: React.FC<FiltersScreenProps> = ({
                   className={`flex flex-col items-center justify-center p-2.5 rounded-2xl aspect-square border transition-all ${
                     isSelected
                       ? 'bg-vasati-purple-soft border-vasati-purple text-vasati-purple shadow-sm'
-                      : 'bg-white border-gray-200/80 text-gray-600 hover:border-gray-300'
+                      : 'bg-white border-vasati-purple-border text-vasati-secondary hover:border-vasati-purple/40 hover:bg-vasati-purple-soft/30'
                   }`}
                 >
-                  <Icon className={`w-5 h-5 mb-1 ${isSelected ? 'text-vasati-purple' : 'text-gray-600'}`} />
+                  <Icon className={`w-5 h-5 mb-1 ${isSelected ? 'text-vasati-purple' : 'text-vasati-secondary'}`} />
                   <span className="text-[10px] font-bold text-center leading-tight">
                     {item.name}
                   </span>
@@ -224,10 +224,10 @@ export const FiltersScreen: React.FC<FiltersScreenProps> = ({
       </div>
 
       {/* Sticky Bottom Apply Button */}
-      <div className="p-5 border-t border-gray-100 bg-white">
+      <div className="p-5 border-t border-purple-100 bg-white">
         <button
           onClick={handleApply}
-          className="w-full py-3.5 rounded-full bg-vasati-purple hover:bg-vasati-purple-dark text-white font-extrabold text-sm shadow-xl shadow-vasati-purple/25 transition-all duration-200 active:scale-98"
+          className="w-full py-3.5 rounded-full bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant hover:from-vasati-royal hover:to-vasati-purple text-white font-extrabold text-sm shadow-xl shadow-vasati-purple/25 transition-all duration-200 active:scale-98"
         >
           Apply Filters
         </button>

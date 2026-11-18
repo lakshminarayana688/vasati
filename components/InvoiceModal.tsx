@@ -39,18 +39,18 @@ export const InvoiceModal: React.FC<InvoiceModalProps> = ({ invoiceData, onClose
     <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto no-scrollbar">
       <div className="bg-white rounded-3xl w-full max-w-2xl p-6 sm:p-8 shadow-2xl text-vasati-dark font-sans relative my-8 animate-fade-in print:p-0 print:shadow-none print:m-0">
         {/* Action Controls (hidden when printing) */}
-        <div className="flex items-center justify-between pb-4 border-b border-gray-100 print:hidden">
+        <div className="flex items-center justify-between pb-4 border-b border-vasati-purple-border/30 print:hidden">
           <div className="flex items-center gap-2">
             <button
               onClick={handlePrint}
-              className="px-3.5 py-1.5 rounded-xl bg-purple-50 text-vasati-purple hover:bg-purple-100 font-bold text-xs flex items-center gap-1.5 transition-colors"
+              className="px-3.5 py-1.5 rounded-xl bg-vasati-purple-soft text-vasati-purple hover:bg-vasati-purple hover:text-white font-bold text-xs flex items-center gap-1.5 transition-all"
             >
               <Printer className="w-3.5 h-3.5" />
               <span>Print Invoice</span>
             </button>
             <button
               onClick={() => alert('Tax Invoice PDF downloaded successfully')}
-              className="px-3.5 py-1.5 rounded-xl bg-purple-50 text-vasati-purple hover:bg-purple-100 font-bold text-xs flex items-center gap-1.5 transition-colors"
+              className="px-3.5 py-1.5 rounded-xl bg-vasati-purple-soft text-vasati-purple hover:bg-vasati-purple hover:text-white font-bold text-xs flex items-center gap-1.5 transition-all"
             >
               <Download className="w-3.5 h-3.5" />
               <span>Download PDF</span>
@@ -59,7 +59,7 @@ export const InvoiceModal: React.FC<InvoiceModalProps> = ({ invoiceData, onClose
 
           <button
             onClick={onClose}
-            className="p-1.5 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600"
+            className="p-1.5 rounded-full hover:bg-vasati-purple-soft text-vasati-secondary hover:text-vasati-dark"
           >
             <X className="w-5 h-5" />
           </button>
@@ -144,13 +144,13 @@ export const InvoiceModal: React.FC<InvoiceModalProps> = ({ invoiceData, onClose
         </div>
 
         {/* Totals & Commission Ledger Summary */}
-        <div className="pt-4 border-t border-gray-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-xs">
-          <div className="p-3 bg-purple-50/70 rounded-2xl border border-purple-100 max-w-sm">
+        <div className="pt-4 border-t border-vasati-purple-border/40 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-xs">
+          <div className="p-3 bg-vasati-purple-soft/60 rounded-2xl border border-vasati-purple-border/60 max-w-sm">
             <p className="font-bold text-vasati-purple text-[11px] flex items-center gap-1">
               <ShieldCheck className="w-3.5 h-3.5" />
               VASATI Commission System Breakdown
             </p>
-            <p className="text-[10px] text-gray-600 mt-1">
+            <p className="text-[10px] text-vasati-secondary mt-1">
               First Month Rent: ₹{invoiceData.monthlyRent.toLocaleString('en-IN')} • Platform Fee (8%): <strong className="text-vasati-orange">₹{invoiceData.commissionAmount}</strong> • Host Net Remittance: <strong>₹{(invoiceData.totalAmount - invoiceData.commissionAmount).toLocaleString('en-IN')}</strong>.
             </p>
           </div>

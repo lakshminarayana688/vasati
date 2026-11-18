@@ -249,10 +249,10 @@ export const DetailsScreen: React.FC<DetailsScreenProps> = ({
                 return (
                   <div
                     key={key}
-                    className="flex flex-col items-center justify-center p-2.5 rounded-2xl bg-gray-50 border border-gray-100/80 aspect-square"
+                    className="flex flex-col items-center justify-center p-2.5 rounded-2xl bg-white border border-vasati-purple-border/70 aspect-square shadow-sm"
                   >
-                    <Icon className="w-5 h-5 text-vasati-dark mb-1" />
-                    <span className="text-[10px] font-bold text-gray-700 text-center leading-tight">
+                    <Icon className="w-5 h-5 text-vasati-purple mb-1" />
+                    <span className="text-[10px] font-bold text-vasati-dark text-center leading-tight">
                       {item.name}
                     </span>
                   </div>
@@ -361,17 +361,17 @@ export const DetailsScreen: React.FC<DetailsScreenProps> = ({
       </div>
 
       {/* Sticky Bottom Actions Bar */}
-      <div className="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-100 p-4 flex items-center gap-3 shadow-nav z-20">
+      <div className="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-purple-100 p-4 flex items-center gap-3 shadow-nav z-20">
         <button
           onClick={() => setShowVisitModal(true)}
-          className="flex-1 py-3 px-4 rounded-full border-2 border-vasati-purple text-vasati-purple hover:bg-vasati-purple-soft font-bold text-xs transition-all active:scale-98"
+          className="flex-1 py-3 px-4 rounded-full bg-white border-2 border-vasati-purple text-vasati-purple hover:bg-vasati-purple-soft font-bold text-xs transition-all active:scale-98"
         >
           Request a Visit
         </button>
 
         <button
           onClick={() => onBookNow(property)}
-          className="flex-1 py-3 px-4 rounded-full bg-vasati-purple hover:bg-vasati-purple-dark text-white font-extrabold text-xs shadow-lg shadow-vasati-purple/25 transition-all active:scale-98"
+          className="flex-1 py-3 px-4 rounded-full bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant hover:from-vasati-royal hover:to-vasati-purple text-white font-extrabold text-xs shadow-lg shadow-vasati-purple/25 transition-all active:scale-98"
         >
           Book Now
         </button>

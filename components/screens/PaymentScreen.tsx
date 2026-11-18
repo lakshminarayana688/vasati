@@ -142,14 +142,14 @@ export const PaymentScreen: React.FC<PaymentScreenProps> = ({
         <div className="pt-6 space-y-2.5">
           <button
             onClick={() => onPaymentSuccess(paymentResult)}
-            className="w-full py-3.5 rounded-full bg-vasati-purple hover:bg-vasati-purple-dark text-white font-bold text-xs shadow-lg shadow-vasati-purple/20 transition-all"
+            className="w-full py-3.5 rounded-full bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant hover:from-vasati-royal hover:to-vasati-purple text-white font-bold text-xs shadow-lg shadow-vasati-purple/20 transition-all"
           >
             Go to My Bookings
           </button>
 
           <button
             onClick={() => setShowInvoiceModal(true)}
-            className="w-full py-3 rounded-full border border-vasati-purple text-vasati-purple hover:bg-purple-50 font-bold text-xs flex items-center justify-center gap-1.5 transition-all"
+            className="w-full py-3 rounded-full bg-white border-2 border-vasati-purple text-vasati-purple hover:bg-vasati-purple-soft font-bold text-xs flex items-center justify-center gap-1.5 transition-all"
           >
             <FileText className="w-4 h-4" />
             <span>Download GST Tax Invoice</span>
@@ -371,7 +371,7 @@ export const PaymentScreen: React.FC<PaymentScreenProps> = ({
         <button
           onClick={handlePayNow}
           disabled={processing}
-          className="w-full py-4 rounded-full bg-vasati-purple hover:bg-vasati-purple-dark text-white font-extrabold text-sm shadow-xl shadow-vasati-purple/25 flex items-center justify-center gap-2 transition-all active:scale-98 disabled:opacity-60"
+          className="w-full py-4 rounded-full bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant hover:from-vasati-royal hover:to-vasati-purple text-white font-extrabold text-sm shadow-xl shadow-vasati-purple/25 flex items-center justify-center gap-2 transition-all active:scale-98 disabled:opacity-60"
         >
           {processing ? (
             <div className="flex items-center gap-2">

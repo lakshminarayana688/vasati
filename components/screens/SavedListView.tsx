@@ -16,10 +16,10 @@ export const SavedListView: React.FC<SavedListViewProps> = ({
 }) => {
   return (
     <div className="w-full h-full bg-vasati-lavender flex flex-col justify-between font-sans relative">
-      <div className="px-5 pt-4 pb-3 flex items-center justify-between bg-white border-b border-gray-100">
+      <div className="px-5 pt-4 pb-3 flex items-center justify-between bg-white border-b border-vasati-purple-border/40">
         <button
           onClick={onBack}
-          className="p-1 rounded-full hover:bg-gray-100 text-vasati-dark"
+          className="p-1 rounded-full hover:bg-vasati-purple-soft/50 text-vasati-dark"
         >
           <ChevronLeft className="w-6 h-6" />
         </button>
@@ -30,9 +30,9 @@ export const SavedListView: React.FC<SavedListViewProps> = ({
       <div className="flex-1 overflow-y-auto no-scrollbar p-4 space-y-4">
         {savedProperties.length === 0 ? (
           <div className="text-center py-16 px-4">
-            <Heart className="w-12 h-12 text-gray-300 mx-auto mb-2" />
-            <h3 className="text-sm font-bold text-gray-700">No saved PGs yet</h3>
-            <p className="text-xs text-gray-400 mt-1">
+            <Heart className="w-12 h-12 text-vasati-secondary/40 mx-auto mb-2" />
+            <h3 className="text-sm font-bold text-vasati-dark">No saved PGs yet</h3>
+            <p className="text-xs text-vasati-secondary mt-1">
               Tap the heart icon on any PG card to bookmark it for later.
             </p>
           </div>
@@ -41,7 +41,7 @@ export const SavedListView: React.FC<SavedListViewProps> = ({
             <div
               key={pg.id}
               onClick={() => onSelectProperty(pg.id)}
-              className="bg-white rounded-3xl p-3.5 shadow-card hover:shadow-card-hover border border-gray-100 transition-all cursor-pointer relative"
+              className="bg-white rounded-3xl p-3.5 shadow-card hover:shadow-card-hover border border-vasati-purple-border/50 hover:border-vasati-purple/40 transition-all cursor-pointer relative"
             >
               <div className="relative w-full h-36 rounded-2xl overflow-hidden">
                 <img
@@ -63,7 +63,7 @@ export const SavedListView: React.FC<SavedListViewProps> = ({
               <div className="mt-3 flex items-start justify-between">
                 <div>
                   <h4 className="text-sm font-extrabold text-vasati-dark">{pg.name}</h4>
-                  <p className="text-xs text-gray-500 flex items-center gap-1 mt-0.5">
+                  <p className="text-xs text-vasati-secondary flex items-center gap-1 mt-0.5">
                     <MapPin className="w-3 h-3 text-vasati-purple" />
                     {pg.locality}, {pg.city}
                   </p>
@@ -74,14 +74,14 @@ export const SavedListView: React.FC<SavedListViewProps> = ({
                 </div>
               </div>
 
-              <div className="mt-3 flex items-center justify-between border-t border-gray-100 pt-2.5">
+              <div className="mt-3 flex items-center justify-between border-t border-vasati-purple-border/40 pt-2.5">
                 <div>
                   <span className="text-base font-black text-vasati-purple">
                     ₹{pg.monthly_rent_from?.toLocaleString('en-IN')}
                   </span>
-                  <span className="text-xs text-gray-400"> / mo</span>
+                  <span className="text-xs text-vasati-secondary"> / mo</span>
                 </div>
-                <button className="w-8 h-8 rounded-full bg-vasati-purple text-white flex items-center justify-center shadow-md">
+                <button className="w-8 h-8 rounded-full bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant hover:from-vasati-royal hover:to-vasati-purple text-white flex items-center justify-center shadow-md active:scale-95 transition-all">
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>

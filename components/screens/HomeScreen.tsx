@@ -150,15 +150,15 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             Find the Best <br />
             PGs Near You
           </h1>
-          <p className="text-xs font-medium text-gray-500 mt-1">
+          <p className="text-xs font-medium text-vasati-secondary mt-1">
             Comfortable • Safe • Affordable
           </p>
         </div>
 
-        {/* Search Input Bar */}
+        {/* Search Input Bar - 5. INPUTS AND SEARCH BARS */}
         <div className="px-5 mt-4">
           <div className="relative flex items-center">
-            <Search className="w-4 h-4 text-gray-400 absolute left-4" />
+            <Search className="w-4 h-4 text-vasati-secondary absolute left-4" />
             <input
               type="text"
               value={searchQuery}
@@ -169,7 +169,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                 }
               }}
               placeholder="Search by area, location..."
-              className="w-full pl-11 pr-12 py-3 bg-gray-50/90 border border-gray-200/80 rounded-2xl text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-vasati-purple/30 focus:border-vasati-purple transition-all"
+              className="w-full pl-11 pr-12 py-3 bg-white border border-vasati-purple-border rounded-2xl text-sm text-vasati-dark placeholder:text-vasati-secondary/70 focus:outline-none focus:ring-2 focus:ring-vasati-purple/20 focus:border-vasati-purple transition-all shadow-sm"
             />
             <button
               onClick={onOpenFilters}
@@ -194,8 +194,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                 }}
                 className={`px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 ${
                   isActive
-                    ? 'bg-vasati-purple text-white shadow-md shadow-vasati-purple/20'
-                    : 'bg-gray-100/90 text-gray-700 hover:bg-gray-200/80'
+                    ? 'bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant text-white shadow-md shadow-vasati-purple/20'
+                    : 'bg-white border border-vasati-purple-border text-vasati-secondary hover:bg-vasati-purple-soft'
                 }`}
               >
                 {cat}
@@ -206,7 +206,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 
         {/* Promotional Banner Card */}
         <div className="px-5 mt-5">
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-vasati-purple via-purple-700 to-vasati-purple-light p-4 text-white shadow-xl">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-vasati-royal via-vasati-purple to-vasati-purple-vibrant p-4 text-white shadow-xl">
             <div className="flex items-center justify-between">
               <div className="max-w-[55%]">
                 <span className="inline-block px-2.5 py-0.5 rounded-full bg-white/20 text-[10px] font-bold uppercase tracking-wider mb-1.5 backdrop-blur-sm">
@@ -219,7 +219,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                 </h3>
                 <button
                   onClick={() => onOpenListings({ maxRent: 8000 })}
-                  className="mt-3 px-4 py-1.5 rounded-full bg-vasati-orange hover:bg-vasati-orange-dark text-white font-bold text-xs flex items-center gap-1.5 shadow-md transition-all active:scale-95"
+                  className="mt-3 px-4 py-1.5 rounded-full bg-gradient-to-r from-vasati-orange to-vasati-orange-gold hover:opacity-95 text-white font-bold text-xs flex items-center gap-1.5 shadow-md shadow-vasati-orange/25 transition-all active:scale-95"
                 >
                   <span>Book Now</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -361,7 +361,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       </div>
 
       {/* Bottom Sticky Navigation Bar matching Reference Image */}
-      <div className="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-100 py-2.5 px-6 flex items-center justify-between shadow-nav z-30">
+      <div className="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-purple-100/80 py-2.5 px-6 flex items-center justify-between shadow-nav z-30">
         <button
           onClick={() => onNavigateTab('home')}
           className="flex flex-col items-center gap-0.5 text-vasati-purple"
@@ -372,7 +372,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 
         <button
           onClick={() => onNavigateTab('search')}
-          className="flex flex-col items-center gap-0.5 text-gray-400 hover:text-vasati-purple transition-colors"
+          className="flex flex-col items-center gap-0.5 text-vasati-secondary hover:text-vasati-purple transition-colors"
         >
           <Search className="w-5 h-5" />
           <span className="text-[10px] font-medium">Search</span>
@@ -380,7 +380,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 
         <button
           onClick={() => onNavigateTab('saved')}
-          className="flex flex-col items-center gap-0.5 text-gray-400 hover:text-vasati-purple transition-colors"
+          className="flex flex-col items-center gap-0.5 text-vasati-secondary hover:text-vasati-purple transition-colors"
         >
           <Bookmark className="w-5 h-5" />
           <span className="text-[10px] font-medium">Saved</span>
@@ -388,7 +388,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 
         <button
           onClick={() => onNavigateTab('bookings')}
-          className="flex flex-col items-center gap-0.5 text-gray-400 hover:text-vasati-purple transition-colors"
+          className="flex flex-col items-center gap-0.5 text-vasati-secondary hover:text-vasati-purple transition-colors"
         >
           <CalendarCheck className="w-5 h-5" />
           <span className="text-[10px] font-medium">Bookings</span>
@@ -396,7 +396,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 
         <button
           onClick={() => onNavigateTab('profile')}
-          className="flex flex-col items-center gap-0.5 text-gray-400 hover:text-vasati-purple transition-colors"
+          className="flex flex-col items-center gap-0.5 text-vasati-secondary hover:text-vasati-purple transition-colors"
         >
           <User className="w-5 h-5" />
           <span className="text-[10px] font-medium">Profile</span>

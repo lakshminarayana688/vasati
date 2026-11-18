@@ -57,10 +57,10 @@ export const BookingsListView: React.FC<BookingsListViewProps> = ({ onBack, onSe
 
   return (
     <div className="w-full h-full bg-vasati-lavender flex flex-col justify-between font-sans relative">
-      <div className="px-5 pt-4 pb-3 flex items-center justify-between bg-white border-b border-gray-100">
+      <div className="px-5 pt-4 pb-3 flex items-center justify-between bg-white border-b border-vasati-purple-border/40">
         <button
           onClick={onBack}
-          className="p-1 rounded-full hover:bg-gray-100 text-vasati-dark"
+          className="p-1 rounded-full hover:bg-vasati-purple-soft/50 text-vasati-dark"
         >
           <ChevronLeft className="w-6 h-6" />
         </button>
@@ -75,15 +75,15 @@ export const BookingsListView: React.FC<BookingsListViewProps> = ({ onBack, onSe
           </div>
         ) : bookings.length === 0 ? (
           <div className="text-center py-16 px-4">
-            <Calendar className="w-12 h-12 text-gray-300 mx-auto mb-2" />
-            <h3 className="text-sm font-bold text-gray-700">No active bookings yet</h3>
-            <p className="text-xs text-gray-400 mt-1">Explore top PGs and book your ideal stay today.</p>
+            <Calendar className="w-12 h-12 text-vasati-secondary/40 mx-auto mb-2" />
+            <h3 className="text-sm font-bold text-vasati-dark">No active bookings yet</h3>
+            <p className="text-xs text-vasati-secondary mt-1">Explore top PGs and book your ideal stay today.</p>
           </div>
         ) : (
           bookings.map(b => (
             <div
               key={b.id}
-              className="bg-white rounded-3xl p-4 shadow-card border border-gray-100/80 space-y-3"
+              className="bg-white rounded-3xl p-4 shadow-card hover:shadow-card-hover border border-vasati-purple-border/50 space-y-3 transition-all"
             >
               <div className="flex items-center justify-between">
                 <span className="text-[11px] font-mono font-bold text-vasati-purple">
@@ -102,30 +102,30 @@ export const BookingsListView: React.FC<BookingsListViewProps> = ({ onBack, onSe
                 />
                 <div className="flex-1 min-w-0">
                   <h4 className="text-sm font-extrabold text-vasati-dark truncate">{b.property_name}</h4>
-                  <p className="text-xs text-gray-500 flex items-center gap-1 mt-0.5">
+                  <p className="text-xs text-vasati-secondary flex items-center gap-1 mt-0.5">
                     <MapPin className="w-3 h-3 text-vasati-purple" />
                     {b.property_locality}, {b.property_city}
                   </p>
-                  <p className="text-xs font-bold text-gray-700 mt-1">
+                  <p className="text-xs font-bold text-vasati-dark/80 mt-1">
                     {b.room_type} • {b.duration_months} Months
                   </p>
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-gray-100 flex items-center justify-between text-xs">
+              <div className="pt-3 border-t border-vasati-purple-border/30 flex items-center justify-between text-xs">
                 <div>
-                  <span className="text-gray-400 font-medium">Total Paid: </span>
+                  <span className="text-vasati-secondary font-medium">Total Paid: </span>
                   <span className="font-extrabold text-vasati-purple">
                     ₹{b.total_amount?.toLocaleString('en-IN')}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] text-gray-400">Move-in: {b.move_in_date}</span>
+                  <span className="text-[10px] text-vasati-secondary">Move-in: {b.move_in_date}</span>
                 </div>
               </div>
 
               {b.invoice_number && (
-                <div className="pt-2 border-t border-dashed border-gray-100 flex items-center justify-between text-[11px] text-gray-500">
+                <div className="pt-2 border-t border-dashed border-vasati-purple-border/40 flex items-center justify-between text-[11px] text-vasati-secondary">
                   <span className="flex items-center gap-1">
                     <FileText className="w-3.5 h-3.5 text-vasati-purple" />
                     <span>Invoice: {b.invoice_number}</span>

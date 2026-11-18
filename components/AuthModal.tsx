@@ -64,12 +64,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             <p className="text-xs text-gray-500 text-center mt-0.5">Enter your phone number to login or sign up</p>
 
             {/* Role Switcher */}
-            <div className="mt-4 p-1 bg-gray-100 rounded-2xl flex text-xs font-bold">
+            <div className="mt-4 p-1 bg-vasati-lavender rounded-2xl flex text-xs font-bold border border-vasati-purple-border/40">
               <button
                 type="button"
                 onClick={() => setRole('customer')}
                 className={`flex-1 py-1.5 rounded-xl transition-all ${
-                  role === 'customer' ? 'bg-vasati-purple text-white shadow-sm' : 'text-gray-600'
+                  role === 'customer' ? 'bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant text-white shadow-sm' : 'text-vasati-secondary'
                 }`}
               >
                 Tenant
@@ -78,7 +78,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 type="button"
                 onClick={() => setRole('owner')}
                 className={`flex-1 py-1.5 rounded-xl transition-all ${
-                  role === 'owner' ? 'bg-vasati-purple text-white shadow-sm' : 'text-gray-600'
+                  role === 'owner' ? 'bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant text-white shadow-sm' : 'text-vasati-secondary'
                 }`}
               >
                 PG Host
@@ -86,9 +86,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             </div>
 
             <div className="mt-4">
-              <label className="text-xs font-bold text-gray-700 block mb-1">Mobile Number</label>
-              <div className="flex items-center border border-gray-200 rounded-2xl overflow-hidden focus-within:ring-2 focus-within:ring-vasati-purple/30">
-                <span className="px-3 text-xs font-bold text-gray-500 bg-gray-50 border-r border-gray-200 py-3">
+              <label className="text-xs font-bold text-vasati-dark block mb-1">Mobile Number</label>
+              <div className="flex items-center border border-vasati-purple-border rounded-2xl overflow-hidden focus-within:ring-2 focus-within:ring-vasati-purple/30 bg-white">
+                <span className="px-3 text-xs font-bold text-vasati-secondary bg-vasati-purple-soft/40 border-r border-vasati-purple-border py-3">
                   +91
                 </span>
                 <input
@@ -97,7 +97,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   value={phone}
                   onChange={e => setPhone(e.target.value)}
                   placeholder="98765 43210"
-                  className="flex-1 px-3 py-3 text-xs font-bold focus:outline-none"
+                  className="flex-1 px-3 py-3 text-xs font-bold focus:outline-none text-vasati-dark"
                 />
               </div>
             </div>
@@ -105,7 +105,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             <button
               type="submit"
               disabled={loading}
-              className="w-full mt-5 py-3.5 rounded-full bg-vasati-purple hover:bg-vasati-purple-dark text-white font-extrabold text-xs shadow-lg shadow-vasati-purple/25 flex items-center justify-center gap-1.5 transition-all active:scale-98"
+              className="w-full mt-5 py-3.5 rounded-full bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant hover:from-vasati-royal hover:to-vasati-purple text-white font-extrabold text-xs shadow-card-hover flex items-center justify-center gap-1.5 transition-all active:scale-98"
             >
               {loading ? (
                 <span>Sending OTP...</span>
@@ -117,7 +117,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               )}
             </button>
 
-            <p className="text-[10px] text-gray-400 text-center mt-3">
+            <p className="text-[10px] text-vasati-secondary text-center mt-3">
               🛡️ OTP will be simulated for testing (Code: 5621)
             </p>
           </form>
@@ -126,7 +126,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         {step === 'otp' && (
           <form onSubmit={handleVerifyOtp} className="mt-4 text-center">
             <h3 className="text-base font-extrabold text-vasati-dark">Verify OTP</h3>
-            <p className="text-xs text-gray-500 mt-0.5">Enter 4-digit code sent to +91 {phone}</p>
+            <p className="text-xs text-vasati-secondary mt-0.5">Enter 4-digit code sent to +91 {phone}</p>
 
             <div className="flex justify-center gap-2.5 my-5">
               {otp.map((digit, idx) => (
@@ -140,7 +140,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     newOtp[idx] = e.target.value;
                     setOtp(newOtp);
                   }}
-                  className="w-11 h-12 text-center text-lg font-black border-2 border-purple-200 rounded-xl focus:border-vasati-purple focus:outline-none bg-purple-50/30"
+                  className="w-11 h-12 text-center text-lg font-black border-2 border-vasati-purple-border rounded-xl focus:border-vasati-purple focus:outline-none bg-vasati-purple-soft/30 text-vasati-dark"
                 />
               ))}
             </div>
@@ -148,7 +148,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 rounded-full bg-vasati-purple hover:bg-vasati-purple-dark text-white font-extrabold text-xs shadow-lg transition-all"
+              className="w-full py-3.5 rounded-full bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant hover:from-vasati-royal hover:to-vasati-purple text-white font-extrabold text-xs shadow-card-hover transition-all"
             >
               {loading ? 'Verifying...' : 'Verify & Continue'}
             </button>

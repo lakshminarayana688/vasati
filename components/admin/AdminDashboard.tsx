@@ -525,7 +525,7 @@ export const AdminDashboard: React.FC = () => {
             {/* TAB: 8% COMMISSION ENGINE */}
             {activeTab === 'commissions' && (
               <div className="space-y-6">
-                <div className="bg-gradient-to-r from-purple-900 via-slate-900 to-slate-950 border border-purple-800 p-6 rounded-3xl">
+                <div className="bg-gradient-to-r from-vasati-royal/80 via-slate-900 to-slate-950 border border-vasati-purple/40 p-6 rounded-3xl">
                   <h3 className="text-lg font-black text-white">VASATI Commission Settings & Revenue Engine</h3>
                   <p className="text-xs text-slate-300 mt-1 max-w-2xl">
                     Owner-paid commission rate is globally set at 8% of the first month's agreed rent for confirmed bookings. Security deposits and months 2-11 carry 0% platform charges.
@@ -543,7 +543,7 @@ export const AdminDashboard: React.FC = () => {
                     </div>
                     <button
                       onClick={() => alert(`Platform commission updated to ${commissionRate}%`)}
-                      className="mt-5 px-4 py-2 bg-vasati-orange hover:bg-vasati-orange-dark text-white rounded-xl font-bold"
+                      className="mt-5 px-4 py-2 bg-gradient-to-r from-vasati-orange to-vasati-orange-gold hover:from-vasati-orange-dark hover:to-vasati-orange text-white rounded-xl font-bold shadow-md active:scale-95 transition-all"
                     >
                       Update Configuration
                     </button>

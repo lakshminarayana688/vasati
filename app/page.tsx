@@ -274,7 +274,7 @@ export default function VasatiApp() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F0EDF6] flex flex-col items-center justify-start text-vasati-dark">
+    <div className="min-h-screen bg-[#F8F3FF] flex flex-col items-center justify-start text-vasati-dark">
       {/* Top Utility Control Header */}
       <nav className="w-full bg-white border-b border-purple-100 shadow-sm py-2.5 px-4 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3">

@@ -3,15 +3,29 @@
 @tailwind utilities;
 
 :root {
-  --primary-purple: #5C16C5;
-  --secondary-orange: #FF7A00;
-  --lavender-bg: #F8F6FC;
+  /* 1. BRAND COLOUR THEME */
+  --royal-purple: #4B0082;
+  --rich-purple: #5B0BB5;
+  --vibrant-purple: #7200D9;
+  --primary-purple: #5B0BB5;
+
+  --secondary-orange: #FF8A00;
+  --golden-orange: #FFB000;
+
+  --main-bg: #FFFFFF;
+  --light-lavender: #F8F3FF;
+  --soft-purple-bg: #F1E8FF;
+  --card-bg: #FFFFFF;
+
+  --primary-text: #241044;
+  --secondary-text: #70677D;
+  --white-text: #FFFFFF;
 }
 
 body {
-  color: #1A102A;
-  background-color: #F8F6FC;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  color: #241044;
+  background-color: #F8F3FF;
+  font-family: var(--font-poppins), var(--font-inter), system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -27,24 +41,78 @@ body {
 
 /* Glassmorphism & Soft Shadows */
 .vasati-glass {
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
 
-.vasati-gradient-button {
-  background: linear-gradient(135deg, #5C16C5 0%, #7C3AED 100%);
+/* 2. BUTTON THEME */
+/* Primary buttons: Purple gradient */
+.vasati-gradient-button,
+.btn-primary-purple {
+  background: linear-gradient(135deg, #5B0BB5 0%, #7200D9 100%);
+  color: #FFFFFF;
+  box-shadow: 0 6px 18px rgba(91, 11, 181, 0.25);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vasati-gradient-button:hover,
+.btn-primary-purple:hover {
+  background: linear-gradient(135deg, #4B0082 0%, #5B0BB5 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(91, 11, 181, 0.35);
+}
+
+.vasati-gradient-button:active,
+.btn-primary-purple:active {
+  transform: translateY(0);
+}
+
+/* Secondary buttons: White background with purple border */
+.btn-secondary-purple {
+  background: #FFFFFF;
+  border: 1.5px solid #5B0BB5;
+  color: #5B0BB5;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-secondary-purple:hover {
+  background: #F1E8FF;
+  color: #4B0082;
+  border-color: #4B0082;
+}
+
+/* Highlight buttons: Orange gradient */
+.btn-highlight-orange {
+  background: linear-gradient(135deg, #FF8A00 0%, #FFB000 100%);
+  color: #FFFFFF;
+  box-shadow: 0 4px 14px rgba(255, 138, 0, 0.3);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-highlight-orange:hover {
+  background: linear-gradient(135deg, #E66D00 0%, #FF8A00 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(255, 138, 0, 0.4);
+}
+
+/* 5. INPUTS AND SEARCH BARS */
+.vasati-input {
+  background-color: #FFFFFF;
+  border: 1px solid #E8D9FD;
+  color: #241044;
   transition: all 0.2s ease;
 }
 
-.vasati-gradient-button:hover {
-  background: linear-gradient(135deg, #4F12AF 0%, #6D28D9 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 10px 25px -5px rgba(92, 22, 197, 0.35);
+.vasati-input:focus {
+  border-color: #5B0BB5;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(91, 11, 181, 0.15);
 }
 
-.vasati-gradient-button:active {
-  transform: translateY(0);
+.vasati-input::placeholder {
+  color: #70677D;
+  opacity: 0.7;
 }
 
 /* Custom slider styling for filter screen */
@@ -53,10 +121,10 @@ input[type=range]::-webkit-slider-thumb {
   height: 22px;
   width: 22px;
   border-radius: 50%;
-  background: #5C16C5;
+  background: #5B0BB5;
   cursor: pointer;
   border: 3px solid #FFFFFF;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  box-shadow: 0 2px 8px rgba(91, 11, 181, 0.35);
   margin-top: -7px;
 }
 
@@ -64,7 +132,6 @@ input[type=range]::-webkit-slider-runnable-track {
   width: 100%;
   height: 8px;
   cursor: pointer;
-  background: #E9D5FF;
+  background: #E8D9FD;
   border-radius: 4px;
 }
-

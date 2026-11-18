@@ -219,7 +219,7 @@ export const ListingsScreen: React.FC<ListingsScreenProps> = ({
                           ).map((tag: string) => (
                             <span
                               key={tag}
-                              className="px-2 py-0.5 rounded-md bg-gray-100 text-gray-600 text-[10px] font-bold"
+                              className="px-2 py-0.5 rounded-md bg-vasati-purple-soft text-vasati-purple text-[10px] font-bold border border-vasati-purple-border/60"
                             >
                               {tag}
                             </span>
@@ -228,7 +228,7 @@ export const ListingsScreen: React.FC<ListingsScreenProps> = ({
                       </div>
 
                       {/* Arrow Action Button matching design */}
-                      <button className="w-9 h-9 rounded-full bg-vasati-purple flex items-center justify-center text-white shadow-md shadow-vasati-purple/30 group-hover:bg-vasati-purple-dark transition-all">
+                      <button className="w-9 h-9 rounded-full bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant flex items-center justify-center text-white shadow-md shadow-vasati-purple/30 group-hover:from-vasati-royal group-hover:to-vasati-purple transition-all">
                         <ArrowRight className="w-4 h-4" />
                       </button>
                     </div>

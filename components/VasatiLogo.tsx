@@ -16,8 +16,8 @@ export const VasatiLogo: React.FC<VasatiLogoProps> = ({
   horizontal = false,
 }) => {
   const isWhite = variant === 'white';
-  const purple = isWhite ? '#FFFFFF' : '#5C16C5';
-  const orange = isWhite ? '#FFA447' : '#FF7A00';
+  const purple = isWhite ? '#FFFFFF' : '#5B0BB5';
+  const orange = isWhite ? '#FFB000' : '#FF8A00';
 
   // Dimension scaling
   const dims = {
@@ -76,7 +76,7 @@ export const VasatiLogo: React.FC<VasatiLogoProps> = ({
           {showTagline && (
             <span
               className={`font-medium tracking-wide uppercase ${dims.taglineSize} mt-0.5`}
-              style={{ color: isWhite ? '#E2E8F0' : '#4A154B' }}
+              style={{ color: isWhite ? '#E2E8F0' : '#241044' }}
             >
               Your Space. Our Priority.
             </span>
@@ -137,7 +137,7 @@ export const VasatiLogo: React.FC<VasatiLogoProps> = ({
           <span className="w-5 h-[1.5px] rounded-full" style={{ backgroundColor: orange }} />
           <span
             className={`font-medium tracking-wide uppercase ${dims.taglineSize}`}
-            style={{ color: isWhite ? '#E2E8F0' : '#4A154B' }}
+            style={{ color: isWhite ? '#E2E8F0' : '#241044' }}
           >
             Your Space. Our Priority.
           </span>

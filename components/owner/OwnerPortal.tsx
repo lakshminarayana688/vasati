@@ -235,25 +235,25 @@ export const OwnerPortal: React.FC = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-slate-50 font-sans pb-16">
+    <div className="w-full min-h-screen bg-vasati-lavender text-vasati-dark font-sans pb-16">
       {/* Owner Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-30 shadow-sm">
+      <header className="bg-white border-b border-vasati-purple-border/40 sticky top-0 z-30 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <VasatiLogo size="sm" showTagline={false} />
-            <div className="h-6 w-px bg-gray-200" />
+            <div className="h-6 w-px bg-vasati-purple-border/40" />
             <div>
               <span className="text-xs font-black uppercase tracking-wider text-vasati-purple">
                 Host Portal
               </span>
-              <p className="text-xs font-bold text-gray-700">Sri Sai Stays & Hospitality</p>
+              <p className="text-xs font-bold text-vasati-dark">Sri Sai Stays & Hospitality</p>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
             <button
               onClick={() => setShowAgreementModal(true)}
-              className="px-3 py-1.5 rounded-full bg-purple-50 hover:bg-purple-100 text-vasati-purple text-xs font-bold border border-purple-200 transition-colors"
+              className="px-3 py-1.5 rounded-full bg-vasati-purple-soft hover:bg-vasati-purple-soft/80 text-vasati-purple text-xs font-bold border border-vasati-purple-border transition-colors"
             >
               8% Commission Agreement
             </button>
@@ -268,7 +268,7 @@ export const OwnerPortal: React.FC = () => {
         </div>
 
         {/* Navigation Tabs */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex space-x-6 overflow-x-auto no-scrollbar text-xs font-bold border-t border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex space-x-6 overflow-x-auto no-scrollbar text-xs font-bold border-t border-vasati-purple-border/30">
           {[
             { id: 'dashboard', label: 'Dashboard', icon: TrendingUp },
             { id: 'properties', label: 'My Properties', icon: Building2 },
@@ -285,8 +285,8 @@ export const OwnerPortal: React.FC = () => {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`py-3 flex items-center gap-1.5 whitespace-nowrap border-b-2 transition-colors ${isActive
-                    ? 'border-vasati-purple text-vasati-purple'
-                    : 'border-transparent text-gray-500 hover:text-gray-900'
+                    ? 'border-vasati-purple text-vasati-purple font-black'
+                    : 'border-transparent text-vasati-secondary hover:text-vasati-dark'
                   }`}
               >
                 <Icon className="w-4 h-4" />
@@ -311,51 +311,51 @@ export const OwnerPortal: React.FC = () => {
               <div className="space-y-6">
                 {/* 4 Metric Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                  <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
-                    <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">Active Properties</p>
+                  <div className="bg-white p-5 rounded-2xl border border-vasati-purple-border/50 shadow-card hover:shadow-card-hover transition-all">
+                    <p className="text-xs font-bold text-vasati-secondary uppercase tracking-wider">Active Properties</p>
                     <p className="text-2xl font-black text-vasati-dark mt-1">{properties.length}</p>
                     <p className="text-[11px] text-emerald-600 font-bold mt-1">100% Listed & Verified</p>
                   </div>
 
-                  <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
-                    <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">Active Bookings</p>
+                  <div className="bg-white p-5 rounded-2xl border border-vasati-purple-border/50 shadow-card hover:shadow-card-hover transition-all">
+                    <p className="text-xs font-bold text-vasati-secondary uppercase tracking-wider">Active Bookings</p>
                     <p className="text-2xl font-black text-vasati-purple mt-1">{bookings.length}</p>
-                    <p className="text-[11px] text-gray-500 mt-1">Confirmed Tenants</p>
+                    <p className="text-[11px] text-vasati-secondary mt-1">Confirmed Tenants</p>
                   </div>
 
-                  <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
-                    <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">Gross Booking Value</p>
+                  <div className="bg-white p-5 rounded-2xl border border-vasati-purple-border/50 shadow-card hover:shadow-card-hover transition-all">
+                    <p className="text-xs font-bold text-vasati-secondary uppercase tracking-wider">Gross Booking Value</p>
                     <p className="text-2xl font-black text-emerald-600 mt-1">
                       ₹{(commissions?.summary?.totalGross || 24000).toLocaleString('en-IN')}
                     </p>
-                    <p className="text-[11px] text-gray-500 mt-1">Processed safely via VASATI</p>
+                    <p className="text-[11px] text-vasati-secondary mt-1">Processed safely via VASATI</p>
                   </div>
 
-                  <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
-                    <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">Net Owner Payout</p>
+                  <div className="bg-white p-5 rounded-2xl border border-vasati-purple-border/50 shadow-card hover:shadow-card-hover transition-all">
+                    <p className="text-xs font-bold text-vasati-secondary uppercase tracking-wider">Net Owner Payout</p>
                     <p className="text-2xl font-black text-vasati-dark mt-1">
                       ₹{(commissions?.summary?.totalOwnerPayout || 23360).toLocaleString('en-IN')}
                     </p>
-                    <p className="text-[11px] text-purple-700 font-bold mt-1">
+                    <p className="text-[11px] text-vasati-purple font-bold mt-1">
                       After 8% 1st Month Commission (₹{commissions?.summary?.totalCommissions || 640})
                     </p>
                   </div>
                 </div>
 
                 {/* Owner Commission Agreement Notice */}
-                <div className="p-4 rounded-2xl bg-purple-50 border border-purple-200 flex items-start justify-between">
+                <div className="p-4 rounded-2xl bg-vasati-purple-soft/60 border border-vasati-purple-border flex items-start justify-between shadow-card">
                   <div className="flex items-start gap-3">
                     <FileText className="w-5 h-5 text-vasati-purple shrink-0 mt-0.5" />
                     <div>
                       <h4 className="text-xs font-black text-vasati-purple uppercase tracking-wider">
                         VASATI Owner Commission Policy: 8% on 1st Month Rent
                       </h4>
-                      <p className="text-xs text-gray-600 mt-0.5 max-w-3xl">
+                      <p className="text-xs text-vasati-secondary mt-0.5 max-w-3xl">
                         As agreed in your Host Agreement, VASATI charges an industry-leading transparent fee of 8% only on the first month's agreed rent upon confirmed move-in. Subsequent months carry 0% platform commission! Security deposits are strictly untouched.
                       </p>
                     </div>
                   </div>
-                  <span className="px-3 py-1 bg-white text-vasati-purple text-xs font-bold rounded-full border border-purple-200">
+                  <span className="px-3 py-1 bg-white text-vasati-purple text-xs font-bold rounded-full border border-vasati-purple-border shadow-sm">
                     Active & Bound
                   </span>
                 </div>
@@ -458,7 +458,7 @@ export const OwnerPortal: React.FC = () => {
                   <h3 className="text-base font-extrabold text-vasati-dark">My Registered PG Properties</h3>
                   <button
                     onClick={() => setActiveTab('add_pg')}
-                    className="px-4 py-2 bg-vasati-purple text-white text-xs font-bold rounded-full shadow-md flex items-center gap-1.5"
+                    className="px-4 py-2 bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant hover:from-vasati-royal hover:to-vasati-purple text-white text-xs font-bold rounded-full shadow-card active:scale-95 transition-all flex items-center gap-1.5"
                   >
                     <PlusCircle className="w-4 h-4" />
                     <span>Add Another PG</span>
@@ -467,7 +467,7 @@ export const OwnerPortal: React.FC = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                   {properties.map(p => (
-                    <div key={p.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col justify-between">
+                    <div key={p.id} className="bg-white rounded-2xl border border-vasati-purple-border/50 shadow-card hover:shadow-card-hover overflow-hidden flex flex-col justify-between transition-all">
                       <div>
                         <div className="relative h-44 w-full">
                           <img
@@ -475,43 +475,43 @@ export const OwnerPortal: React.FC = () => {
                             alt={p.name}
                             className="w-full h-full object-cover"
                           />
-                          <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-white/90 backdrop-blur-md text-[10px] font-black text-vasati-purple">
+                          <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-white/90 backdrop-blur-md text-[10px] font-black text-vasati-purple shadow-sm">
                             {p.category}
                           </span>
                         </div>
 
                         <div className="p-4">
                           <h4 className="text-sm font-extrabold text-vasati-dark">{p.name}</h4>
-                          <p className="text-xs text-gray-500 flex items-center gap-1 mt-0.5">
+                          <p className="text-xs text-vasati-secondary flex items-center gap-1 mt-0.5">
                             <MapPin className="w-3.5 h-3.5 text-vasati-purple" />
                             {p.locality}, {p.city}
                           </p>
 
-                          <div className="mt-3 flex items-center justify-between text-xs pt-3 border-t border-gray-100">
+                          <div className="mt-3 flex items-center justify-between text-xs pt-3 border-t border-vasati-purple-border/30">
                             <div>
-                              <p className="text-[10px] text-gray-400">Monthly Rent</p>
+                              <p className="text-[10px] text-vasati-secondary">Monthly Rent</p>
                               <p className="font-black text-vasati-purple">₹{p.monthly_rent_from?.toLocaleString('en-IN')}</p>
                             </div>
                             <div>
-                              <p className="text-[10px] text-gray-400">Security Deposit</p>
-                              <p className="font-bold text-gray-700">₹{p.security_deposit?.toLocaleString('en-IN')}</p>
+                              <p className="text-[10px] text-vasati-secondary">Security Deposit</p>
+                              <p className="font-bold text-vasati-dark">₹{p.security_deposit?.toLocaleString('en-IN')}</p>
                             </div>
                             <div>
-                              <p className="text-[10px] text-gray-400">Rating</p>
+                              <p className="text-[10px] text-vasati-secondary">Rating</p>
                               <p className="font-bold text-amber-600">★ {p.rating}</p>
                             </div>
                           </div>
                         </div>
                       </div>
 
-                      <div className="p-4 bg-gray-50 border-t border-gray-100 flex items-center justify-between text-xs">
+                      <div className="p-4 bg-vasati-purple-soft/30 border-t border-vasati-purple-border/30 flex items-center justify-between text-xs">
                         <span className="text-emerald-600 font-bold flex items-center gap-1">
                           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                           Live on VASATI
                         </span>
                         <button
                           onClick={() => handleOpenRoomModal(p)}
-                          className="px-2.5 py-1 rounded-lg bg-vasati-purple hover:bg-vasati-purple-dark text-white font-bold text-[11px] transition-all shadow-sm"
+                          className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant hover:from-vasati-royal hover:to-vasati-purple text-white font-bold text-[11px] transition-all shadow-sm"
                         >
                           Manage Beds & Availability
                         </button>
@@ -524,9 +524,9 @@ export const OwnerPortal: React.FC = () => {
 
             {/* TAB: ADD NEW PG */}
             {activeTab === 'add_pg' && (
-              <div className="max-w-2xl mx-auto bg-white p-6 sm:p-8 rounded-3xl border border-gray-100 shadow-md">
+              <div className="max-w-2xl mx-auto bg-white p-6 sm:p-8 rounded-3xl border border-vasati-purple-border/50 shadow-card">
                 <h3 className="text-lg font-extrabold text-vasati-dark">Add New PG Property</h3>
-                <p className="text-xs text-gray-500 mt-0.5">
+                <p className="text-xs text-vasati-secondary mt-0.5">
                   Publish a new property to the VASATI marketplace. Instant anti-bypass masking applied.
                 </p>
 
@@ -534,29 +534,29 @@ export const OwnerPortal: React.FC = () => {
                   <div className="text-center py-10">
                     <CheckCircle2 className="w-14 h-14 text-emerald-500 mx-auto mb-3" />
                     <h4 className="text-base font-extrabold text-vasati-dark">Property Created!</h4>
-                    <p className="text-xs text-gray-500 mt-1">Your new PG is now published and live.</p>
+                    <p className="text-xs text-vasati-secondary mt-1">Your new PG is now published and live.</p>
                   </div>
                 ) : (
                   <form onSubmit={handleCreatePg} className="mt-6 space-y-4">
                     <div>
-                      <label className="text-xs font-bold text-gray-700 block mb-1">PG Name</label>
+                      <label className="text-xs font-bold text-vasati-dark block mb-1">PG Name</label>
                       <input
                         type="text"
                         required
                         value={pgName}
                         onChange={e => setPgName(e.target.value)}
                         placeholder="e.g. Sri Sai Executive Luxury PG"
-                        className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-xs focus:ring-2 focus:ring-vasati-purple/30"
+                        className="w-full px-3.5 py-2.5 border border-vasati-purple-border rounded-xl text-xs focus:ring-2 focus:ring-vasati-purple/30 bg-white text-vasati-dark"
                       />
                     </div>
 
                     <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <label className="text-xs font-bold text-gray-700 block mb-1">Category</label>
+                        <label className="text-xs font-bold text-vasati-dark block mb-1">Category</label>
                         <select
                           value={pgCategory}
                           onChange={e => setPgCategory(e.target.value)}
-                          className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-xs"
+                          className="w-full px-3.5 py-2.5 border border-vasati-purple-border rounded-xl text-xs bg-white text-vasati-dark"
                         >
                           <option>Co-living</option>
                           <option>Boys PG</option>
@@ -565,81 +565,81 @@ export const OwnerPortal: React.FC = () => {
                       </div>
 
                       <div>
-                        <label className="text-xs font-bold text-gray-700 block mb-1">Locality (Bengaluru)</label>
+                        <label className="text-xs font-bold text-vasati-dark block mb-1">Locality (Bengaluru)</label>
                         <input
                           type="text"
                           required
                           value={pgLocality}
                           onChange={e => setPgLocality(e.target.value)}
                           placeholder="e.g. Koramangala 5th Block"
-                          className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-xs"
+                          className="w-full px-3.5 py-2.5 border border-vasati-purple-border rounded-xl text-xs bg-white text-vasati-dark"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="text-xs font-bold text-gray-700 block mb-1">Full Street Address</label>
+                      <label className="text-xs font-bold text-vasati-dark block mb-1">Full Street Address</label>
                       <input
                         type="text"
                         required
                         value={pgAddress}
                         onChange={e => setPgAddress(e.target.value)}
                         placeholder="e.g. #42, 7th Cross, Near Sony World Signal"
-                        className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-xs"
+                        className="w-full px-3.5 py-2.5 border border-vasati-purple-border rounded-xl text-xs bg-white text-vasati-dark"
                       />
-                      <span className="text-[10px] text-gray-400 mt-1 block">
+                      <span className="text-[10px] text-vasati-secondary mt-1 block">
                         * Exact flat/building number will remain masked from public visitors until a visit or booking is approved.
                       </span>
                     </div>
 
                     <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <label className="text-xs font-bold text-gray-700 block mb-1">Monthly Rent Starting From (₹)</label>
+                        <label className="text-xs font-bold text-vasati-dark block mb-1">Monthly Rent Starting From (₹)</label>
                         <input
                           type="number"
                           required
                           value={pgRent}
                           onChange={e => setPgRent(Number(e.target.value))}
-                          className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-xs"
+                          className="w-full px-3.5 py-2.5 border border-vasati-purple-border rounded-xl text-xs bg-white text-vasati-dark"
                         />
                       </div>
 
                       <div>
-                        <label className="text-xs font-bold text-gray-700 block mb-1">Security Deposit (₹)</label>
+                        <label className="text-xs font-bold text-vasati-dark block mb-1">Security Deposit (₹)</label>
                         <input
                           type="number"
                           required
                           value={pgDeposit}
                           onChange={e => setPgDeposit(Number(e.target.value))}
-                          className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-xs"
+                          className="w-full px-3.5 py-2.5 border border-vasati-purple-border rounded-xl text-xs bg-white text-vasati-dark"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="text-xs font-bold text-gray-700 block mb-1">Photo Image URL</label>
+                      <label className="text-xs font-bold text-vasati-dark block mb-1">Photo Image URL</label>
                       <input
                         type="url"
                         value={pgImgUrl}
                         onChange={e => setPgImgUrl(e.target.value)}
-                        className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-xs font-mono"
+                        className="w-full px-3.5 py-2.5 border border-vasati-purple-border rounded-xl text-xs font-mono bg-white text-vasati-dark"
                       />
                     </div>
 
                     <div>
-                      <label className="text-xs font-bold text-gray-700 block mb-1">Property Description</label>
+                      <label className="text-xs font-bold text-vasati-dark block mb-1">Property Description</label>
                       <textarea
                         rows={3}
                         value={pgDescription}
                         onChange={e => setPgDescription(e.target.value)}
                         placeholder="Describe room amenities, Wi-Fi speed, food schedule..."
-                        className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-xs"
+                        className="w-full px-3.5 py-2.5 border border-vasati-purple-border rounded-xl text-xs bg-white text-vasati-dark"
                       />
                     </div>
 
                     <button
                       type="submit"
-                      className="w-full py-3.5 rounded-full bg-vasati-purple hover:bg-vasati-purple-dark text-white font-extrabold text-xs shadow-lg transition-all"
+                      className="w-full py-3.5 rounded-full bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant hover:from-vasati-royal hover:to-vasati-purple text-white font-extrabold text-xs shadow-card-hover active:scale-98 transition-all"
                     >
                       Publish Property to VASATI
                     </button>
@@ -1116,7 +1116,7 @@ export const OwnerPortal: React.FC = () => {
                 </span>
                 <button
                   onClick={() => setShowAgreementModal(false)}
-                  className="px-4 py-2 bg-vasati-purple text-white font-bold rounded-xl"
+                  className="px-4 py-2 bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant hover:from-vasati-royal hover:to-vasati-purple text-white font-bold rounded-xl shadow-sm transition-all"
                 >
                   Close Agreement
                 </button>
@@ -1128,16 +1128,16 @@ export const OwnerPortal: React.FC = () => {
         {/* KYC Verification Modal */}
         {showKycModal && (
           <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-3xl w-full max-w-md p-6 shadow-2xl animate-fade-in relative text-xs">
+            <div className="bg-white rounded-3xl w-full max-w-md p-6 shadow-2xl animate-fade-in relative text-xs border border-vasati-purple-border/50">
               <button
                 onClick={() => setShowKycModal(false)}
-                className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-gray-100 text-gray-400"
+                className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-gray-100 text-vasati-secondary"
               >
                 <X className="w-5 h-5" />
               </button>
 
               <h3 className="text-base font-extrabold text-vasati-dark">Host Identity & Property KYC</h3>
-              <p className="text-[11px] text-gray-500 mt-0.5">Government ID & Ownership Verification</p>
+              <p className="text-[11px] text-vasati-secondary mt-0.5">Government ID & Ownership Verification</p>
 
               <div className="mt-4 space-y-3">
                 <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-between">
@@ -1167,7 +1167,7 @@ export const OwnerPortal: React.FC = () => {
 
               <button
                 onClick={() => setShowKycModal(false)}
-                className="w-full mt-5 py-2.5 bg-vasati-purple text-white font-bold rounded-xl"
+                className="w-full mt-5 py-2.5 bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant hover:from-vasati-royal hover:to-vasati-purple text-white font-bold rounded-xl shadow-md transition-all active:scale-98"
               >
                 Done
               </button>

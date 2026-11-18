@@ -83,7 +83,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
     <div className="w-full h-full bg-white flex flex-col justify-between font-sans relative pb-16">
       <div className="flex-1 overflow-y-auto no-scrollbar pb-6">
         {/* Top Purple Header Banner matching Screen 8 */}
-        <div className="bg-gradient-to-br from-vasati-purple to-purple-800 pt-7 pb-8 px-6 text-white rounded-b-[2.5rem] shadow-xl relative">
+        <div className="bg-gradient-to-br from-vasati-royal via-vasati-purple to-vasati-purple-vibrant pt-7 pb-8 px-6 text-white rounded-b-[2.5rem] shadow-xl relative">
           {/* Settings Gear Top Right */}
           <button
             onClick={() => setActiveModal('profile')}
@@ -233,7 +233,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
       <div className="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-100 py-2.5 px-6 flex items-center justify-between shadow-nav z-30">
         <button
           onClick={() => onNavigateTab('home')}
-          className="flex flex-col items-center gap-0.5 text-gray-400 hover:text-vasati-purple transition-colors"
+          className="flex flex-col items-center gap-0.5 text-vasati-secondary hover:text-vasati-purple transition-colors"
         >
           <Home className="w-5 h-5" />
           <span className="text-[10px] font-medium">Home</span>
@@ -241,7 +241,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
 
         <button
           onClick={() => onNavigateTab('search')}
-          className="flex flex-col items-center gap-0.5 text-gray-400 hover:text-vasati-purple transition-colors"
+          className="flex flex-col items-center gap-0.5 text-vasati-secondary hover:text-vasati-purple transition-colors"
         >
           <Search className="w-5 h-5" />
           <span className="text-[10px] font-medium">Search</span>
@@ -249,7 +249,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
 
         <button
           onClick={() => onNavigateTab('saved')}
-          className="flex flex-col items-center gap-0.5 text-gray-400 hover:text-vasati-purple transition-colors"
+          className="flex flex-col items-center gap-0.5 text-vasati-secondary hover:text-vasati-purple transition-colors"
         >
           <Bookmark className="w-5 h-5" />
           <span className="text-[10px] font-medium">Saved</span>
@@ -257,7 +257,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
 
         <button
           onClick={() => onNavigateTab('bookings')}
-          className="flex flex-col items-center gap-0.5 text-gray-400 hover:text-vasati-purple transition-colors"
+          className="flex flex-col items-center gap-0.5 text-vasati-secondary hover:text-vasati-purple transition-colors"
         >
           <CalendarCheck className="w-5 h-5" />
           <span className="text-[10px] font-medium">Bookings</span>

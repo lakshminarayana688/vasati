@@ -169,12 +169,12 @@ export const BookingScreen: React.FC<BookingScreenProps> = ({
                       isOccupied
                         ? 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed opacity-60'
                         : isSelected
-                        ? 'bg-vasati-purple text-white border-vasati-purple shadow-sm'
-                        : 'bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100'
+                        ? 'bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant text-white border-vasati-purple shadow-sm'
+                        : 'bg-white border-vasati-purple-border text-vasati-dark hover:bg-vasati-purple-soft'
                     }`}
                   >
                     <p className="text-xs font-bold">{b.name}</p>
-                    <p className={`text-[10px] mt-0.5 ${isSelected ? 'text-purple-200' : 'text-gray-500'}`}>
+                    <p className={`text-[10px] mt-0.5 ${isSelected ? 'text-purple-200' : 'text-vasati-secondary'}`}>
                       {b.desc}
                     </p>
                   </button>
@@ -197,8 +197,8 @@ export const BookingScreen: React.FC<BookingScreenProps> = ({
                   onClick={() => setDuration(m)}
                   className={`py-2 rounded-2xl text-xs font-bold transition-all ${
                     isSelected
-                      ? 'bg-vasati-purple text-white shadow-md shadow-vasati-purple/20'
-                      : 'bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100'
+                      ? 'bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant text-white shadow-md shadow-vasati-purple/20'
+                      : 'bg-white text-vasati-secondary border border-vasati-purple-border hover:bg-vasati-purple-soft'
                   }`}
                 >
                   {m} {m === 1 ? 'Month' : 'Months'}
@@ -267,7 +267,7 @@ export const BookingScreen: React.FC<BookingScreenProps> = ({
 
         <button
           onClick={handleContinue}
-          className="py-3.5 px-6 rounded-full bg-vasati-purple hover:bg-vasati-purple-dark text-white font-extrabold text-xs shadow-lg shadow-vasati-purple/25 flex items-center gap-2 transition-all active:scale-98"
+          className="py-3.5 px-6 rounded-full bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant hover:from-vasati-royal hover:to-vasati-purple text-white font-extrabold text-xs shadow-lg shadow-vasati-purple/25 flex items-center gap-2 transition-all active:scale-98"
         >
           <span>Continue</span>
           <ArrowRight className="w-4 h-4" />
