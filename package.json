@@ -1,0 +1,46 @@
+{
+  "name": "vasati",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lakshminarayana688/vasati.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/lakshminarayana688/vasati/issues"
+  },
+  "homepage": "https://github.com/lakshminarayana688/vasati#readme",
+  "dependencies": {
+    "autoprefixer": "^10.6.2",
+    "better-sqlite3": "^13.2.0",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.75.0",
+    "next": "^14.2.20",
+    "postcss": "^8.5.33",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwindcss": "^3.4.17",
+    "tailwindcss-merge": "^0.0.1-security"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^9.6.0",
+    "@types/canvas-confetti": "^1.9.0",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "canvas-confetti": "^1.9.4",
+    "tsx": "^4.23.15",
+    "typescript": "^5.4.5"
+  }
+}

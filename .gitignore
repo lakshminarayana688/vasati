@@ -1,0 +1,9 @@
+node_modules/
+.next/
+out/
+build/
+*.db-journal
+*.db-shm
+*.db-wal
+.DS_Store
+*.local

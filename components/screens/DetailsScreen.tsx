@@ -1,0 +1,555 @@
+import React, { useState } from 'react';
+import {
+  ChevronLeft,
+  Heart,
+  Star,
+  MapPin,
+  Snowflake,
+  Wifi,
+  Utensils,
+  SquareParking,
+  ShieldCheck,
+  ArrowUpDown,
+  Zap,
+  Video,
+  Share2,
+  Calendar,
+  MessageSquare,
+  Clock,
+  CheckCircle,
+  X,
+  AlertCircle
+} from 'lucide-react';
+
+interface DetailsScreenProps {
+  propertyId: string;
+  onBack: () => void;
+  onBookNow: (property: any) => void;
+  savedIds: string[];
+  onToggleSave: (propertyId: string) => void;
+}
+
+const FACILITY_ICONS: Record<string, any> = {
+  ac: { name: 'AC', icon: Snowflake },
+  wifi: { name: 'Wi-Fi', icon: Wifi },
+  meals: { name: 'Meals', icon: Utensils },
+  parking: { name: 'Parking', icon: SquareParking },
+  security: { name: 'Security', icon: ShieldCheck },
+  lift: { name: 'Lift', icon: ArrowUpDown },
+  power_backup: { name: 'Power Backup', icon: Zap },
+  cctv: { name: 'CCTV', icon: Video },
+};
+
+export const DetailsScreen: React.FC<DetailsScreenProps> = ({
+  propertyId,
+  onBack,
+  onBookNow,
+  savedIds,
+  onToggleSave,
+}) => {
+  const [property, setProperty] = useState<any>(null);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [showVisitModal, setShowVisitModal] = useState(false);
+  const [showMapModal, setShowMapModal] = useState(false);
+  const [showChatModal, setShowChatModal] = useState(false);
+
+  // Visit modal form states
+  const [visitDate, setVisitDate] = useState('');
+  const [visitTime, setVisitTime] = useState('11:00 AM');
+  const [visitNotes, setVisitNotes] = useState('');
+  const [visitSubmitted, setVisitSubmitted] = useState(false);
+
+  // Chat message state
+  const [chatMessage, setChatMessage] = useState('');
+  const [chatHistory, setChatHistory] = useState<any[]>([]);
+
+  React.useEffect(() => {
+    async function loadProperty() {
+      try {
+        setLoading(true);
+        const res = await fetch(`/api/properties/${propertyId}`);
+        const data = await res.json();
+        if (data.success) {
+          setProperty(data.property);
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadProperty();
+  }, [propertyId]);
+
+  if (loading || !property) {
+    return (
+      <div className="w-full h-full bg-white flex items-center justify-center font-sans">
+        <div className="w-8 h-8 border-4 border-vasati-purple border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  const isSaved = savedIds.includes(property.id);
+  const images = property.images && property.images.length > 0
+    ? property.images
+    : [{ image_url: 'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=1000&q=80' }];
+
+  const handleRequestVisit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const res = await fetch('/api/visits', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          property_id: property.id,
+          visit_date: visitDate || new Date().toISOString().split('T')[0],
+          visit_time: visitTime,
+          notes: visitNotes,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setVisitSubmitted(true);
+        setTimeout(() => {
+          setVisitSubmitted(false);
+          setShowVisitModal(false);
+        }, 2200);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleSendMessage = async () => {
+    if (!chatMessage.trim()) return;
+    const newMsg = {
+      sender_id: 'usr_cust_1',
+      sender_name: 'Lakshminarayana G',
+      message: chatMessage,
+      created_at: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    };
+    setChatHistory(prev => [...prev, newMsg]);
+    const outgoing = chatMessage;
+    setChatMessage('');
+
+    try {
+      await fetch('/api/enquiries', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          property_id: property.id,
+          message: outgoing,
+        }),
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  return (
+    <div className="w-full h-full bg-white flex flex-col justify-between font-sans relative">
+      {/* Scrollable Details Body */}
+      <div className="flex-1 overflow-y-auto no-scrollbar pb-24">
+        {/* Hero Gallery with Floating Buttons */}
+        <div className="relative w-full h-72 bg-gray-900">
+          <img
+            src={images[activeImageIndex]?.image_url}
+            alt={property.name}
+            className="w-full h-full object-cover transition-all duration-300"
+          />
+
+          {/* Floating Back Button */}
+          <button
+            onClick={onBack}
+            className="absolute top-4 left-4 w-9 h-9 rounded-full bg-white/80 backdrop-blur-md flex items-center justify-center text-vasati-dark hover:bg-white shadow-md z-10 transition-all"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+
+          {/* Floating Save & Share */}
+          <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
+            <button
+              onClick={() => onToggleSave(property.id)}
+              className="w-9 h-9 rounded-full bg-white/80 backdrop-blur-md flex items-center justify-center text-gray-700 hover:text-red-500 shadow-md transition-all"
+            >
+              <Heart className={`w-5 h-5 ${isSaved ? 'fill-red-500 text-red-500' : ''}`} />
+            </button>
+          </div>
+
+          {/* Image Counter Badge matching Screen 5: "1/8" */}
+          <div className="absolute bottom-3 right-4 bg-black/60 backdrop-blur-md text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+            {activeImageIndex + 1}/{images.length}
+          </div>
+
+          {/* Thumbnail Dot Strip */}
+          <div className="absolute bottom-3 left-4 flex gap-1.5">
+            {images.slice(0, 5).map((_: any, idx: number) => (
+              <button
+                key={idx}
+                onClick={() => setActiveImageIndex(idx)}
+                className={`w-2 h-2 rounded-full transition-all ${
+                  activeImageIndex === idx ? 'bg-white w-4' : 'bg-white/50'
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Property Info Content */}
+        <div className="px-5 pt-4">
+          {/* Title and Rating */}
+          <div className="flex items-start justify-between">
+            <div>
+              <h1 className="text-xl font-extrabold text-vasati-dark">{property.name}</h1>
+              <div className="flex items-center gap-1.5 mt-1">
+                <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                <span className="text-sm font-bold text-gray-900">{property.rating}</span>
+                <span className="text-xs text-gray-400">({property.review_count} reviews)</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Location & Map Link */}
+          <div className="flex items-center justify-between mt-2.5 pb-3 border-b border-gray-100">
+            <div className="flex items-center gap-1 text-xs text-gray-600">
+              <MapPin className="w-4 h-4 text-vasati-purple shrink-0" />
+              <span>{property.locality}, {property.city}</span>
+            </div>
+
+            <button
+              onClick={() => setShowMapModal(true)}
+              className="text-xs font-bold text-vasati-purple hover:underline flex items-center gap-1"
+            >
+              <MapPin className="w-3.5 h-3.5" />
+              <span>View on Map</span>
+            </button>
+          </div>
+
+          {/* Monthly Rent */}
+          <div className="mt-3">
+            <span className="text-2xl font-black text-vasati-purple">
+              ₹{property.monthly_rent_from.toLocaleString('en-IN')}
+            </span>
+            <span className="text-sm text-gray-400 font-medium"> / month</span>
+          </div>
+
+          {/* Facilities 2x4 Grid */}
+          <div className="mt-5">
+            <h3 className="text-sm font-extrabold text-vasati-dark mb-3">Facilities</h3>
+            <div className="grid grid-cols-4 gap-2.5">
+              {['ac', 'wifi', 'meals', 'parking', 'security', 'lift', 'power_backup', 'cctv'].map(key => {
+                const item = FACILITY_ICONS[key];
+                if (!item) return null;
+                const Icon = item.icon;
+                return (
+                  <div
+                    key={key}
+                    className="flex flex-col items-center justify-center p-2.5 rounded-2xl bg-gray-50 border border-gray-100/80 aspect-square"
+                  >
+                    <Icon className="w-5 h-5 text-vasati-dark mb-1" />
+                    <span className="text-[10px] font-bold text-gray-700 text-center leading-tight">
+                      {item.name}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* About this PG */}
+          <div className="mt-6">
+            <h3 className="text-sm font-extrabold text-vasati-dark mb-2">About this PG</h3>
+            <p className="text-xs text-gray-600 leading-relaxed">
+              {property.description}
+            </p>
+          </div>
+
+          {/* Room Availability */}
+          <div className="mt-6">
+            <h3 className="text-sm font-extrabold text-vasati-dark mb-2">Available Room Types</h3>
+            <div className="space-y-2">
+              {property.rooms && property.rooms.map((room: any) => (
+                <div
+                  key={room.id}
+                  className="p-3 rounded-2xl border border-purple-100 bg-vasati-purple-soft/30 flex items-center justify-between"
+                >
+                  <div>
+                    <h4 className="text-xs font-bold text-vasati-dark">{room.room_type}</h4>
+                    <p className="text-[10px] text-gray-500">{room.description}</p>
+                    <p className="text-[10px] font-bold text-emerald-600 mt-0.5">
+                      {room.available_beds} beds available
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-sm font-black text-vasati-purple">
+                      ₹{room.monthly_rent.toLocaleString('en-IN')}
+                    </span>
+                    <span className="text-[10px] text-gray-400">/mo</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Anti-Bypass Protected Host Card */}
+          <div className="mt-6 p-3.5 rounded-2xl bg-purple-50/70 border border-purple-100 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-vasati-purple text-white flex items-center justify-center font-bold text-sm">
+                VS
+              </div>
+              <div>
+                <div className="flex items-center gap-1.5">
+                  <h4 className="text-xs font-bold text-vasati-dark">{property.owner?.businessName}</h4>
+                  <span className="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-emerald-100 text-emerald-700">
+                    KYC Verified
+                  </span>
+                </div>
+                <p className="text-[10px] text-gray-500">
+                  {property.owner?.contactMode}
+                </p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setShowChatModal(true)}
+              className="p-2.5 rounded-full bg-white text-vasati-purple shadow-sm hover:bg-vasati-purple hover:text-white transition-colors"
+              title="Chat with Host"
+            >
+              <MessageSquare className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Reviews Preview */}
+          <div className="mt-6 pb-4">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-extrabold text-vasati-dark">Ratings & Reviews</h3>
+              <span className="text-xs font-bold text-vasati-purple">4.7 / 5.0</span>
+            </div>
+            <div className="p-3 rounded-2xl bg-gray-50 border border-gray-100">
+              <div className="flex items-center gap-1 mb-1">
+                {[1, 2, 3, 4, 5].map(s => (
+                  <Star key={s} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                ))}
+                <span className="text-xs font-bold text-gray-800 ml-1">Lakshminarayana G</span>
+              </div>
+              <p className="text-xs text-gray-600">
+                Spacious room, fast Wi-Fi, and very supportive staff. The food is hygienic and fresh!
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Sticky Bottom Actions Bar */}
+      <div className="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-100 p-4 flex items-center gap-3 shadow-nav z-20">
+        <button
+          onClick={() => setShowVisitModal(true)}
+          className="flex-1 py-3 px-4 rounded-full border-2 border-vasati-purple text-vasati-purple hover:bg-vasati-purple-soft font-bold text-xs transition-all active:scale-98"
+        >
+          Request a Visit
+        </button>
+
+        <button
+          onClick={() => onBookNow(property)}
+          className="flex-1 py-3 px-4 rounded-full bg-vasati-purple hover:bg-vasati-purple-dark text-white font-extrabold text-xs shadow-lg shadow-vasati-purple/25 transition-all active:scale-98"
+        >
+          Book Now
+        </button>
+      </div>
+
+      {/* Request Visit Modal */}
+      {showVisitModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl w-full max-w-sm p-6 shadow-2xl animate-fade-in relative">
+            <button
+              onClick={() => setShowVisitModal(false)}
+              className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {visitSubmitted ? (
+              <div className="text-center py-6">
+                <CheckCircle className="w-14 h-14 text-emerald-500 mx-auto mb-3 animate-bounce" />
+                <h3 className="text-base font-extrabold text-vasati-dark">Visit Requested!</h3>
+                <p className="text-xs text-gray-500 mt-1">
+                  Unique Visit ID generated. The owner will confirm within 2 hours.
+                </p>
+                <div className="mt-3 inline-block px-3 py-1 rounded-full bg-purple-50 text-vasati-purple text-xs font-bold">
+                  VST-VAS-{Math.floor(1000 + Math.random() * 9000)}
+                </div>
+              </div>
+            ) : (
+              <form onSubmit={handleRequestVisit}>
+                <h3 className="text-base font-extrabold text-vasati-dark">Schedule a Visit</h3>
+                <p className="text-xs text-gray-500 mt-0.5">
+                  Visit {property.name} before booking.
+                </p>
+
+                <div className="mt-4 space-y-3">
+                  <div>
+                    <label className="text-xs font-bold text-gray-700 block mb-1">
+                      Preferred Date
+                    </label>
+                    <input
+                      type="date"
+                      required
+                      value={visitDate}
+                      onChange={e => setVisitDate(e.target.value)}
+                      min={new Date().toISOString().split('T')[0]}
+                      className="w-full px-3 py-2 border rounded-xl text-xs focus:ring-2 focus:ring-vasati-purple/30"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-bold text-gray-700 block mb-1">
+                      Preferred Time Slot
+                    </label>
+                    <select
+                      value={visitTime}
+                      onChange={e => setVisitTime(e.target.value)}
+                      className="w-full px-3 py-2 border rounded-xl text-xs focus:ring-2 focus:ring-vasati-purple/30"
+                    >
+                      <option>10:00 AM</option>
+                      <option>11:00 AM</option>
+                      <option>02:00 PM</option>
+                      <option>04:00 PM</option>
+                      <option>06:00 PM</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-bold text-gray-700 block mb-1">
+                      Special Questions / Requests
+                    </label>
+                    <textarea
+                      value={visitNotes}
+                      onChange={e => setVisitNotes(e.target.value)}
+                      rows={2}
+                      placeholder="e.g. Want to see single room with desk..."
+                      className="w-full px-3 py-2 border rounded-xl text-xs focus:ring-2 focus:ring-vasati-purple/30"
+                    />
+                  </div>
+
+                  {/* Anti-Bypass Location Notice */}
+                  <div className="p-2.5 rounded-xl bg-purple-50 border border-purple-100 text-[11px] text-purple-900 flex items-start gap-1.5">
+                    <AlertCircle className="w-4 h-4 text-vasati-purple shrink-0 mt-0.5" />
+                    <span>
+                      Approximate landmark shown. Exact street address is unlocked instantly once the host confirms your visit.
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full mt-4 py-3 rounded-full bg-vasati-purple hover:bg-vasati-purple-dark text-white font-bold text-xs shadow-md transition-all"
+                >
+                  Confirm Visit Request
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Approximate Map Modal */}
+      {showMapModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl w-full max-w-sm p-5 shadow-2xl animate-fade-in relative">
+            <button
+              onClick={() => setShowMapModal(false)}
+              className="absolute top-4 right-4 p-1 rounded-full hover:bg-gray-100 text-gray-400"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <h3 className="text-sm font-extrabold text-vasati-dark">Approximate Location</h3>
+            <p className="text-xs text-gray-500 mt-0.5">{property.approximate_location}</p>
+
+            <div className="mt-3 relative w-full h-48 bg-purple-50 rounded-2xl overflow-hidden border border-purple-100 flex items-center justify-center">
+              <div className="absolute inset-0 opacity-50 bg-[radial-gradient(#5C16C5_1px,transparent_1px)] [background-size:16px_16px]" />
+              {/* Safe Radius Circle */}
+              <div className="w-28 h-28 rounded-full bg-vasati-purple/15 border-2 border-dashed border-vasati-purple flex items-center justify-center animate-pulse">
+                <MapPin className="w-8 h-8 text-vasati-purple" />
+              </div>
+            </div>
+
+            <div className="mt-3 text-[11px] text-gray-500 text-center">
+              🛡️ Anti-Bypass Protection: Exact unit address unlocked upon confirmed visit or booking.
+            </div>
+
+            <button
+              onClick={() => setShowMapModal(false)}
+              className="w-full mt-3 py-2.5 rounded-full bg-vasati-purple text-white text-xs font-bold"
+            >
+              Got it
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* In-App Masked Chat Modal */}
+      {showChatModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl w-full max-w-sm h-[480px] shadow-2xl flex flex-col justify-between overflow-hidden animate-fade-in">
+            {/* Header */}
+            <div className="p-4 bg-vasati-purple text-white flex items-center justify-between">
+              <div>
+                <h3 className="text-xs font-bold">{property.name} Host</h3>
+                <p className="text-[10px] text-purple-200">VASATI Masked In-App Channel</p>
+              </div>
+              <button
+                onClick={() => setShowChatModal(false)}
+                className="text-white hover:text-purple-200"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Chat Body */}
+            <div className="flex-1 p-3 overflow-y-auto no-scrollbar space-y-2 bg-gray-50 text-xs">
+              <div className="bg-purple-100 p-2.5 rounded-2xl text-purple-900 text-[11px] text-center">
+                🔒 Privacy Protected: Direct phone numbers are masked to prevent spam and bypass.
+              </div>
+
+              <div className="bg-white p-2.5 rounded-2xl shadow-sm max-w-[80%] border border-gray-100">
+                <p className="font-bold text-[10px] text-vasati-purple">Host</p>
+                <p className="text-gray-700">Hello! Thanks for your interest in {property.name}. How can I assist you with your stay?</p>
+              </div>
+
+              {chatHistory.map((m, idx) => (
+                <div
+                  key={idx}
+                  className="bg-vasati-purple text-white p-2.5 rounded-2xl shadow-sm max-w-[80%] ml-auto text-right"
+                >
+                  <p>{m.message}</p>
+                  <span className="text-[9px] text-purple-200 block mt-0.5">{m.created_at}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Chat Input */}
+            <div className="p-3 bg-white border-t border-gray-100 flex items-center gap-2">
+              <input
+                type="text"
+                value={chatMessage}
+                onChange={e => setChatMessage(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleSendMessage()}
+                placeholder="Type your message..."
+                className="flex-1 px-3 py-2 bg-gray-100 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-vasati-purple"
+              />
+              <button
+                onClick={handleSendMessage}
+                className="px-3.5 py-2 bg-vasati-purple text-white rounded-xl text-xs font-bold hover:bg-vasati-purple-dark"
+              >
+                Send
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
