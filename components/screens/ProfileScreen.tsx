@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { VasatiLogo } from '../VasatiLogo';
 import {
   Settings,
   ChevronRight,
@@ -436,8 +437,9 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
             >
               <X className="w-5 h-5" />
             </button>
-            <h3 className="text-lg font-black text-vasati-purple">VASATI</h3>
-            <p className="text-xs font-bold text-vasati-orange">Your Space. Our Priority.</p>
+            <div className="my-2 flex justify-center">
+              <VasatiLogo size="md" showTagline={true} />
+            </div>
             <div className="mt-4 text-xs text-gray-600 text-left space-y-2 leading-relaxed">
               <p>
                 VASATI is India's leading managed PG & co-living rental marketplace, connecting discerning tenants with verified PG hosts across Bengaluru and major metro cities.

@@ -5,6 +5,7 @@ interface VasatiLogoProps {
   showTagline?: boolean;
   variant?: 'colored' | 'white';
   className?: string;
+  horizontal?: boolean;
 }
 
 export const VasatiLogo: React.FC<VasatiLogoProps> = ({
@@ -12,6 +13,7 @@ export const VasatiLogo: React.FC<VasatiLogoProps> = ({
   showTagline = true,
   variant = 'colored',
   className = '',
+  horizontal = false,
 }) => {
   const isWhite = variant === 'white';
   const purple = isWhite ? '#FFFFFF' : '#5C16C5';
@@ -19,47 +21,87 @@ export const VasatiLogo: React.FC<VasatiLogoProps> = ({
 
   // Dimension scaling
   const dims = {
-    sm: { iconW: 32, iconH: 26, fontSize: 'text-xl', taglineSize: 'text-[9px]', spacing: 'gap-1' },
-    md: { iconW: 46, iconH: 38, fontSize: 'text-2xl', taglineSize: 'text-[11px]', spacing: 'gap-1.5' },
-    lg: { iconW: 68, iconH: 56, fontSize: 'text-4xl', taglineSize: 'text-[13px]', spacing: 'gap-2' },
-    xl: { iconW: 92, iconH: 76, fontSize: 'text-5xl', taglineSize: 'text-[15px]', spacing: 'gap-2.5' },
+    sm: { imgW: 42, imgH: 27, fontSize: 'text-lg', taglineSize: 'text-[9px]', pinW: 8, pinH: 10 },
+    md: { imgW: 64, imgH: 41, fontSize: 'text-2xl', taglineSize: 'text-[11px]', pinW: 10, pinH: 12 },
+    lg: { imgW: 110, imgH: 70, fontSize: 'text-4xl', taglineSize: 'text-[13px]', pinW: 13, pinH: 16 },
+    xl: { imgW: 155, imgH: 99, fontSize: 'text-5xl', taglineSize: 'text-[15px]', pinW: 16, pinH: 20 },
   }[size];
+
+  if (horizontal) {
+    return (
+      <div className={`flex items-center gap-2.5 select-none ${className}`}>
+        {/* Official 3D VASATI Ribbon Logo */}
+        <div className={`shrink-0 overflow-hidden ${isWhite ? 'bg-white/95 p-1 rounded-xl shadow-sm' : ''}`}>
+          <img
+            src="/vasati-logo.jpg"
+            alt="VASATI"
+            width={dims.imgW}
+            height={dims.imgH}
+            className="object-contain mix-blend-multiply transition-transform duration-300 hover:scale-105"
+            style={{ width: dims.imgW, height: dims.imgH }}
+          />
+        </div>
+
+        {/* Wordmark & Tagline */}
+        <div className="flex flex-col">
+          <div className="flex items-center tracking-tight font-black leading-none">
+            <span
+              className={`font-serif tracking-tight font-bold ${dims.fontSize}`}
+              style={{ color: purple }}
+            >
+              Vasat
+            </span>
+            <div className="relative inline-flex flex-col items-center">
+              <svg
+                width={dims.pinW}
+                height={dims.pinH}
+                viewBox="0 0 12 16"
+                fill="none"
+                className="mb-[1px]"
+              >
+                <path
+                  d="M6 0C2.68629 0 0 2.68629 0 6C0 10.5 6 16 6 16C6 16 12 10.5 12 6C12 2.68629 9.31371 0 6 0ZM6 8C4.89543 8 4 7.10457 4 6C4 4.89543 4.89543 4 6 4C7.10457 4 8 4.89543 8 6C8 7.10457 7.10457 8 6 8Z"
+                  fill={orange}
+                />
+              </svg>
+              <span
+                className={`font-serif font-bold ${dims.fontSize} leading-none`}
+                style={{ color: purple }}
+              >
+                ı
+              </span>
+            </div>
+          </div>
+
+          {showTagline && (
+            <span
+              className={`font-medium tracking-wide uppercase ${dims.taglineSize} mt-0.5`}
+              style={{ color: isWhite ? '#E2E8F0' : '#4A154B' }}
+            >
+              Your Space. Our Priority.
+            </span>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`flex flex-col items-center justify-center select-none ${className}`}>
-      {/* Stylized VASATI Geometric Icon */}
-      <svg
-        width={dims.iconW}
-        height={dims.iconH}
-        viewBox="0 0 100 80"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className="transition-transform duration-300 hover:scale-105"
-      >
-        {/* Left Purple Wing */}
-        <path
-          d="M10 25C24 45 40 68 50 78C45 60 38 40 28 20C24 14 18 18 10 25Z"
-          fill={purple}
+      {/* Official 3D VASATI Ribbon Logo */}
+      <div className={`overflow-hidden ${isWhite ? 'bg-white/95 p-1.5 rounded-2xl shadow-sm mb-1' : ''}`}>
+        <img
+          src="/vasati-logo.jpg"
+          alt="VASATI Official Logo"
+          width={dims.imgW}
+          height={dims.imgH}
+          className="object-contain mix-blend-multiply transition-transform duration-300 hover:scale-105"
+          style={{ width: dims.imgW, height: dims.imgH }}
         />
-        {/* Right Purple Wing */}
-        <path
-          d="M90 25C76 45 60 68 50 78C55 60 62 40 72 20C76 14 82 18 90 25Z"
-          fill={purple}
-        />
-        {/* Central Orange Roof Peak */}
-        <path
-          d="M50 14L28 36L36 43L50 28L64 43L72 36L50 14Z"
-          fill={orange}
-        />
-        {/* 4 Window Squares inside Roof */}
-        <rect x="44" y="34" width="4.5" height="4.5" rx="0.8" fill={purple} />
-        <rect x="51.5" y="34" width="4.5" height="4.5" rx="0.8" fill={purple} />
-        <rect x="44" y="41.5" width="4.5" height="4.5" rx="0.8" fill={purple} />
-        <rect x="51.5" y="41.5" width="4.5" height="4.5" rx="0.8" fill={purple} />
-      </svg>
+      </div>
 
       {/* Brand Name with Orange Pin Dot on 'i' */}
-      <div className="flex items-center tracking-tight font-black mt-0.5">
+      <div className="flex items-center tracking-tight font-black mt-1">
         <span
           className={`font-serif tracking-tight font-bold ${dims.fontSize}`}
           style={{ color: purple }}
@@ -68,10 +110,9 @@ export const VasatiLogo: React.FC<VasatiLogoProps> = ({
         </span>
         {/* 'i' with orange location pin as dot */}
         <div className="relative inline-flex flex-col items-center">
-          {/* Orange location pin */}
           <svg
-            width={size === 'xl' ? 14 : size === 'lg' ? 11 : size === 'md' ? 9 : 7}
-            height={size === 'xl' ? 18 : size === 'lg' ? 14 : size === 'md' ? 11 : 9}
+            width={dims.pinW}
+            height={dims.pinH}
             viewBox="0 0 12 16"
             fill="none"
             className="mb-[1px]"
@@ -81,7 +122,6 @@ export const VasatiLogo: React.FC<VasatiLogoProps> = ({
               fill={orange}
             />
           </svg>
-          {/* Stem of 'i' */}
           <span
             className={`font-serif font-bold ${dims.fontSize} leading-none`}
             style={{ color: purple }}
@@ -93,11 +133,11 @@ export const VasatiLogo: React.FC<VasatiLogoProps> = ({
 
       {/* Tagline: — Your Space. Our Priority. — */}
       {showTagline && (
-        <div className="flex items-center gap-1.5 mt-0.5">
+        <div className="flex items-center gap-1.5 mt-1">
           <span className="w-5 h-[1.5px] rounded-full" style={{ backgroundColor: orange }} />
           <span
             className={`font-medium tracking-wide uppercase ${dims.taglineSize}`}
-            style={{ color: isWhite ? '#FFFFFF' : '#4A154B' }}
+            style={{ color: isWhite ? '#E2E8F0' : '#4A154B' }}
           >
             Your Space. Our Priority.
           </span>
@@ -107,4 +147,3 @@ export const VasatiLogo: React.FC<VasatiLogoProps> = ({
     </div>
   );
 };
-
