@@ -183,3 +183,4 @@ for (const p of newProps) {
 
 console.log('Seeded properties for Hyderabad and Pune successfully!');
 console.log('Distinct cities now:', db.prepare('SELECT DISTINCT city FROM properties').all());
+

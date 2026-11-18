@@ -72,3 +72,42 @@ export async function GET(
   }
 }
 
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const db = getDb();
+    const { id } = params;
+    const body = await request.json();
+
+    if (body.rooms && Array.isArray(body.rooms)) {
+      const updateRoom = db.prepare(`
+        UPDATE rooms
+        SET available_beds = ?, monthly_rent = ?
+        WHERE id = ? AND property_id = ?
+      `);
+      for (const r of body.rooms) {
+        updateRoom.run(Number(r.available_beds), Number(r.monthly_rent), r.id, id);
+      }
+    }
+
+    if (body.monthly_rent_from !== undefined) {
+      db.prepare(`
+        UPDATE properties
+        SET monthly_rent_from = ?, security_deposit = ?, updated_at = CURRENT_TIMESTAMP
+        WHERE id = ?
+      `).run(
+        body.monthly_rent_from,
+        body.security_deposit || body.monthly_rent_from,
+        id
+      );
+    }
+
+    return NextResponse.json({ success: true, message: 'Property and room availability updated' });
+  } catch (error: any) {
+    console.error('Property update error:', error);
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
+}
+

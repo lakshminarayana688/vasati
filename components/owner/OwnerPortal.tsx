@@ -24,11 +24,17 @@ import {
 import { VasatiLogo } from '../VasatiLogo';
 
 export const OwnerPortal: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'properties' | 'add_pg' | 'visits' | 'bookings' | 'commissions'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'properties' | 'add_pg' | 'visits' | 'bookings' | 'enquiries' | 'commissions'>('dashboard');
   const [properties, setProperties] = useState<any[]>([]);
   const [bookings, setBookings] = useState<any[]>([]);
   const [visits, setVisits] = useState<any[]>([]);
   const [commissions, setCommissions] = useState<any>(null);
+  const [enquiries, setEnquiries] = useState<any[]>([]);
+  const [selectedEnquiry, setSelectedEnquiry] = useState<any>(null);
+  const [replyText, setReplyText] = useState('');
+  const [roomModalProperty, setRoomModalProperty] = useState<any>(null);
+  const [roomModalList, setRoomModalList] = useState<any[]>([]);
+  const [savingRooms, setSavingRooms] = useState(false);
   const [loading, setLoading] = useState(true);
 
   // Add PG form states
@@ -48,24 +54,32 @@ export const OwnerPortal: React.FC = () => {
   const loadData = async () => {
     try {
       setLoading(true);
-      const [pRes, bRes, vRes, cRes] = await Promise.all([
+      const [pRes, bRes, vRes, cRes, eRes] = await Promise.all([
         fetch('/api/properties'),
         fetch('/api/bookings?ownerId=usr_own_1'),
         fetch('/api/visits?ownerId=usr_own_1'),
         fetch('/api/commissions?ownerId=usr_own_1'),
+        fetch('/api/enquiries?userId=usr_own_1'),
       ]);
 
-      const [pData, bData, vData, cData] = await Promise.all([
+      const [pData, bData, vData, cData, eData] = await Promise.all([
         pRes.json(),
         bRes.json(),
         vRes.json(),
         cRes.json(),
+        eRes.json(),
       ]);
 
       if (pData.success) setProperties(pData.properties);
       if (bData.success) setBookings(bData.bookings);
       if (vData.success) setVisits(vData.visits);
       if (cData.success) setCommissions(cData);
+      if (eData.success) {
+        setEnquiries(eData.enquiries);
+        if (eData.enquiries.length > 0 && !selectedEnquiry) {
+          setSelectedEnquiry(eData.enquiries[0]);
+        }
+      }
     } catch (err) {
       console.error(err);
     } finally {
@@ -148,6 +162,78 @@ export const OwnerPortal: React.FC = () => {
     }
   };
 
+  const handleOpenRoomModal = async (property: any) => {
+    setRoomModalProperty(property);
+    try {
+      const res = await fetch(`/api/properties/${property.id}`);
+      const data = await res.json();
+      if (data.success && data.property.rooms) {
+        setRoomModalList(data.property.rooms);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleSaveRooms = async () => {
+    if (!roomModalProperty) return;
+    setSavingRooms(true);
+    try {
+      const minRent = roomModalList.reduce(
+        (min, r) => Math.min(min, r.monthly_rent),
+        roomModalList[0]?.monthly_rent || roomModalProperty.monthly_rent_from
+      );
+      const res = await fetch(`/api/properties/${roomModalProperty.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          rooms: roomModalList,
+          monthly_rent_from: minRent,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert('Room availability & pricing updated successfully!');
+        setRoomModalProperty(null);
+        loadData();
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setSavingRooms(false);
+    }
+  };
+
+  const handleSendReply = async () => {
+    if (!replyText.trim() || !selectedEnquiry) return;
+    try {
+      const res = await fetch('/api/enquiries', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          enquiry_id: selectedEnquiry.id,
+          property_id: selectedEnquiry.property_id,
+          sender_id: 'usr_own_1',
+          receiver_id: selectedEnquiry.customer_id,
+          message: replyText,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setReplyText('');
+        const eRes = await fetch('/api/enquiries?userId=usr_own_1');
+        const eData = await eRes.json();
+        if (eData.success) {
+          setEnquiries(eData.enquiries);
+          const updated = eData.enquiries.find((x: any) => x.id === selectedEnquiry.id);
+          if (updated) setSelectedEnquiry(updated);
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <div className="w-full min-h-screen bg-slate-50 font-sans pb-16">
       {/* Owner Header */}
@@ -189,6 +275,7 @@ export const OwnerPortal: React.FC = () => {
             { id: 'add_pg', label: 'Add New PG', icon: PlusCircle },
             { id: 'visits', label: `Visits (${visits.filter(v => v.status === 'pending').length} Pending)`, icon: Calendar },
             { id: 'bookings', label: 'Bookings & Check-ins', icon: Users },
+            { id: 'enquiries', label: `Enquiries (${enquiries.length})`, icon: MessageSquare },
             { id: 'commissions', label: 'Commission & Settlements', icon: DollarSign },
           ].map(tab => {
             const Icon = tab.icon;
@@ -422,7 +509,12 @@ export const OwnerPortal: React.FC = () => {
                           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                           Live on VASATI
                         </span>
-                        <span className="font-mono text-[10px] text-gray-400">{p.id}</span>
+                        <button
+                          onClick={() => handleOpenRoomModal(p)}
+                          className="px-2.5 py-1 rounded-lg bg-vasati-purple hover:bg-vasati-purple-dark text-white font-bold text-[11px] transition-all shadow-sm"
+                        >
+                          Manage Beds & Availability
+                        </button>
                       </div>
                     </div>
                   ))}
@@ -753,7 +845,240 @@ export const OwnerPortal: React.FC = () => {
                 </div>
               </div>
             )}
+
+            {/* TAB: ENQUIRIES & CHAT */}
+            {activeTab === 'enquiries' && (
+              <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 space-y-4">
+                <div className="flex items-center justify-between pb-4 border-b border-gray-100">
+                  <div>
+                    <h3 className="text-base font-extrabold text-vasati-dark">Customer Enquiries & In-App Chat</h3>
+                    <p className="text-xs text-gray-500 mt-0.5">
+                      Direct messaging channel with prospective tenants. Phone numbers remain masked for privacy and anti-bypass attribution.
+                    </p>
+                  </div>
+                  <span className="px-3 py-1 bg-purple-50 text-vasati-purple rounded-full text-xs font-bold border border-purple-200">
+                    {enquiries.length} Active Enquiries
+                  </span>
+                </div>
+
+                {enquiries.length === 0 ? (
+                  <div className="text-center py-16">
+                    <MessageSquare className="w-12 h-12 text-gray-300 mx-auto mb-2" />
+                    <h4 className="text-sm font-bold text-gray-700">No enquiries yet</h4>
+                    <p className="text-xs text-gray-400 mt-1">Tenant questions and room enquiries will appear here.</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-[520px]">
+                    {/* Enquiry List */}
+                    <div className="border border-gray-100 rounded-2xl overflow-y-auto divide-y divide-gray-100 bg-gray-50/50">
+                      {enquiries.map(e => {
+                        const isSelected = selectedEnquiry?.id === e.id;
+                        return (
+                          <div
+                            key={e.id}
+                            onClick={() => setSelectedEnquiry(e)}
+                            className={`p-3.5 cursor-pointer transition-all ${
+                              isSelected ? 'bg-purple-100/70 border-l-4 border-vasati-purple' : 'hover:bg-white'
+                            }`}
+                          >
+                            <div className="flex items-center justify-between">
+                              <h4 className="text-xs font-extrabold text-vasati-dark">{e.customer_name}</h4>
+                              <span className="text-[10px] font-mono text-vasati-purple font-bold">{e.enquiry_code}</span>
+                            </div>
+                            <p className="text-[11px] text-gray-500 mt-0.5 font-medium">{e.property_name}</p>
+                            <p className="text-xs text-gray-700 mt-1 truncate">{e.initial_message}</p>
+                            <div className="mt-2 flex items-center justify-between text-[10px] text-gray-400">
+                              <span>Target: {e.move_in_target_date || 'Flexible'}</span>
+                              <span className="px-1.5 py-0.5 bg-white rounded-md border text-gray-600 font-bold">{e.room_type_interest}</span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* Chat Conversation View */}
+                    <div className="md:col-span-2 border border-gray-100 rounded-2xl flex flex-col justify-between overflow-hidden bg-white">
+                      {selectedEnquiry ? (
+                        <>
+                          {/* Chat Header */}
+                          <div className="p-3.5 bg-gray-50 border-b border-gray-100 flex items-center justify-between text-xs">
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <span className="font-extrabold text-vasati-dark">{selectedEnquiry.customer_name}</span>
+                                <span className="text-[10px] px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full font-bold">
+                                  Verified Tenant
+                                </span>
+                              </div>
+                              <p className="text-[11px] text-gray-500 mt-0.5">
+                                Property: <span className="font-bold text-vasati-purple">{selectedEnquiry.property_name}</span> • Preferred: {selectedEnquiry.room_type_interest}
+                              </p>
+                            </div>
+                            <span className="font-mono text-[10px] text-gray-400">ID: {selectedEnquiry.enquiry_code}</span>
+                          </div>
+
+                          {/* Message List */}
+                          <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-gray-50/30 text-xs">
+                            <div className="p-2.5 rounded-xl bg-purple-50 border border-purple-100 text-purple-900 text-[11px] text-center">
+                              🛡️ VASATI Anti-Bypass Channel: Direct contact details are masked. All communication is recorded for booking attribution.
+                            </div>
+
+                            {selectedEnquiry.messages && selectedEnquiry.messages.length > 0 ? (
+                              selectedEnquiry.messages.map((m: any) => {
+                                const isHost = m.sender_id === 'usr_own_1';
+                                return (
+                                  <div
+                                    key={m.id}
+                                    className={`flex flex-col max-w-[80%] ${
+                                      isHost ? 'ml-auto items-end' : 'mr-auto items-start'
+                                    }`}
+                                  >
+                                    <span className="text-[10px] text-gray-400 mb-0.5 font-bold">
+                                      {isHost ? 'You (Host)' : selectedEnquiry.customer_name}
+                                    </span>
+                                    <div
+                                      className={`p-3 rounded-2xl shadow-sm ${
+                                        isHost
+                                          ? 'bg-vasati-purple text-white rounded-tr-none'
+                                          : 'bg-white text-gray-800 border border-gray-100 rounded-tl-none'
+                                      }`}
+                                    >
+                                      <p>{m.message}</p>
+                                    </div>
+                                    <span className="text-[9px] text-gray-400 mt-0.5">
+                                      {new Date(m.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                    </span>
+                                  </div>
+                                );
+                              })
+                            ) : (
+                              <div className="p-3 bg-white rounded-2xl border border-gray-100 text-gray-700">
+                                <p className="font-bold text-[10px] text-vasati-purple">{selectedEnquiry.customer_name}</p>
+                                <p className="mt-1">{selectedEnquiry.initial_message}</p>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Reply Box */}
+                          <div className="p-3 bg-white border-t border-gray-100 flex items-center gap-2">
+                            <input
+                              type="text"
+                              value={replyText}
+                              onChange={e => setReplyText(e.target.value)}
+                              onKeyDown={e => e.key === 'Enter' && handleSendReply()}
+                              placeholder={`Reply to ${selectedEnquiry.customer_name}...`}
+                              className="flex-1 px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-vasati-purple/20 focus:border-vasati-purple"
+                            />
+                            <button
+                              onClick={handleSendReply}
+                              className="px-5 py-2.5 bg-vasati-purple hover:bg-vasati-purple-dark text-white rounded-xl text-xs font-bold transition-all shadow-md"
+                            >
+                              Send Reply
+                            </button>
+                          </div>
+                        </>
+                      ) : (
+                        <div className="flex items-center justify-center h-full text-xs text-gray-400">
+                          Select an enquiry to view conversation
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </>
+        )}
+
+        {/* Room Availability & Pricing Editor Modal */}
+        {roomModalProperty && (
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-3xl w-full max-w-lg p-6 shadow-2xl animate-fade-in relative text-xs">
+              <button
+                onClick={() => setRoomModalProperty(null)}
+                className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-gray-100 text-gray-400"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <h3 className="text-base font-extrabold text-vasati-dark">Manage Bed Availability & Pricing</h3>
+              <p className="text-[11px] text-gray-500 mt-0.5">
+                Property: <span className="font-bold text-vasati-purple">{roomModalProperty.name}</span>
+              </p>
+
+              <div className="mt-4 space-y-4 max-h-80 overflow-y-auto no-scrollbar pr-1">
+                {roomModalList.map((r, idx) => (
+                  <div key={r.id || idx} className="p-3.5 rounded-2xl bg-gray-50 border border-gray-200/80 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="font-extrabold text-sm text-vasati-dark">{r.room_type}</span>
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                        r.available_beds > 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'
+                      }`}>
+                        {r.available_beds > 0 ? `${r.available_beds} Beds Available` : 'Sold Out / Full'}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3 pt-2 border-t border-gray-200">
+                      <div>
+                        <label className="text-[10px] font-bold text-gray-500 block mb-1">Monthly Rent (₹)</label>
+                        <input
+                          type="number"
+                          value={r.monthly_rent}
+                          onChange={e => {
+                            const val = Number(e.target.value);
+                            setRoomModalList(prev => prev.map((item, i) => i === idx ? { ...item, monthly_rent: val } : item));
+                          }}
+                          className="w-full px-2.5 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-bold"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-[10px] font-bold text-gray-500 block mb-1">Available Beds</label>
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setRoomModalList(prev => prev.map((item, i) => i === idx ? { ...item, available_beds: Math.max(0, item.available_beds - 1) } : item));
+                            }}
+                            className="w-7 h-7 rounded-lg bg-white border border-gray-200 font-bold text-base flex items-center justify-center hover:bg-gray-100"
+                          >
+                            -
+                          </button>
+                          <span className="w-8 text-center font-bold text-sm">{r.available_beds}</span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setRoomModalList(prev => prev.map((item, i) => i === idx ? { ...item, available_beds: item.available_beds + 1 } : item));
+                            }}
+                            className="w-7 h-7 rounded-lg bg-white border border-gray-200 font-bold text-base flex items-center justify-center hover:bg-gray-100"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-5 flex items-center justify-end gap-2 pt-3 border-t border-gray-100">
+                <button
+                  type="button"
+                  onClick={() => setRoomModalProperty(null)}
+                  className="px-4 py-2 rounded-xl text-gray-500 font-bold hover:bg-gray-100"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  disabled={savingRooms}
+                  onClick={handleSaveRooms}
+                  className="px-5 py-2 rounded-xl bg-vasati-purple hover:bg-vasati-purple-dark text-white font-bold shadow-md transition-all disabled:opacity-60"
+                >
+                  {savingRooms ? 'Saving...' : 'Save Availability & Pricing'}
+                </button>
+              </div>
+            </div>
+          </div>
         )}
         {/* Commission Agreement Modal */}
         {showAgreementModal && (
