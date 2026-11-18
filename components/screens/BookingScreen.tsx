@@ -219,47 +219,47 @@ export const BookingScreen: React.FC<BookingScreenProps> = ({
               type="date"
               value={moveInDate}
               onChange={e => setMoveInDate(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-xs font-bold text-vasati-dark focus:outline-none focus:ring-2 focus:ring-vasati-purple/30"
+              className="w-full pl-10 pr-4 py-3 bg-white border border-vasati-purple-border rounded-2xl text-xs font-bold text-vasati-dark focus:outline-none focus:ring-2 focus:ring-vasati-purple/30"
             />
           </div>
         </div>
 
         {/* Transparent Price Breakdown */}
-        <div className="p-4 rounded-2xl bg-gray-50 border border-gray-100 space-y-2">
-          <div className="flex items-center justify-between text-xs text-gray-600">
+        <div className="p-4 rounded-2xl bg-vasati-purple-soft/50 border border-vasati-purple-border/60 space-y-2 shadow-sm">
+          <div className="flex items-center justify-between text-xs text-vasati-secondary">
             <span>Rent ({duration} {duration === 1 ? 'Month' : 'Months'})</span>
-            <span className="font-bold text-gray-900">₹{totalStayRent.toLocaleString('en-IN')}</span>
+            <span className="font-bold text-vasati-dark">₹{totalStayRent.toLocaleString('en-IN')}</span>
           </div>
 
-          <div className="flex items-center justify-between text-xs text-gray-600">
+          <div className="flex items-center justify-between text-xs text-vasati-secondary">
             <div className="flex items-center gap-1">
               <span>Security Deposit</span>
               <span className="text-[10px] text-emerald-600 font-bold">(100% Refundable)</span>
             </div>
-            <span className="font-bold text-gray-900">₹{securityDeposit.toLocaleString('en-IN')}</span>
+            <span className="font-bold text-vasati-dark">₹{securityDeposit.toLocaleString('en-IN')}</span>
           </div>
 
-          <div className="flex items-center justify-between text-xs text-gray-600">
+          <div className="flex items-center justify-between text-xs text-vasati-secondary">
             <span>Maintenance & Wi-Fi</span>
             <span className="font-bold text-emerald-600">FREE</span>
           </div>
 
-          <div className="pt-2 border-t border-gray-200 flex items-center justify-between text-sm font-black text-vasati-dark">
+          <div className="pt-2 border-t border-vasati-purple-border/40 flex items-center justify-between text-sm font-black text-vasati-dark">
             <span>Total Payable</span>
             <span className="text-vasati-purple font-black">₹{totalPayable.toLocaleString('en-IN')}</span>
           </div>
         </div>
 
-        <div className="text-[11px] text-gray-500 flex items-center gap-1.5 justify-center">
+        <div className="text-[11px] text-vasati-secondary flex items-center gap-1.5 justify-center">
           <ShieldCheck className="w-4 h-4 text-vasati-purple" />
           <span>VASATI Anti-Bypass & Secure Booking Guarantee</span>
         </div>
       </div>
 
       {/* Sticky Bottom Bar */}
-      <div className="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-100 p-4 flex items-center justify-between shadow-nav z-20">
+      <div className="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-vasati-purple-border/30 p-4 flex items-center justify-between shadow-nav z-20">
         <div>
-          <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Total Amount</p>
+          <p className="text-[10px] uppercase font-bold text-vasati-secondary tracking-wider">Total Amount</p>
           <p className="text-xl font-black text-vasati-purple leading-tight">
             ₹{totalPayable.toLocaleString('en-IN')}
           </p>

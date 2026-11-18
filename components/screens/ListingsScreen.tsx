@@ -34,10 +34,10 @@ export const ListingsScreen: React.FC<ListingsScreenProps> = ({
   return (
     <div className="w-full h-full bg-vasati-lavender flex flex-col justify-between font-sans relative">
       {/* Top Header */}
-      <div className="px-5 pt-4 pb-3 flex items-center justify-between bg-white border-b border-gray-100 z-10">
+      <div className="px-5 pt-4 pb-3 flex items-center justify-between bg-white border-b border-vasati-purple-border/40 z-10">
         <button
           onClick={onBack}
-          className="p-1 rounded-full hover:bg-gray-100 text-vasati-dark transition-colors"
+          className="p-1 rounded-full hover:bg-vasati-purple-soft/50 text-vasati-dark transition-colors"
         >
           <ChevronLeft className="w-6 h-6" />
         </button>
@@ -56,8 +56,8 @@ export const ListingsScreen: React.FC<ListingsScreenProps> = ({
       </div>
 
       {/* Results Count & Quick Filter Bar */}
-      <div className="px-5 py-2.5 bg-white/70 backdrop-blur-sm border-b border-gray-100 flex items-center justify-between text-xs">
-        <span className="font-extrabold text-gray-700">
+      <div className="px-5 py-2.5 bg-white/70 backdrop-blur-sm border-b border-vasati-purple-border/30 flex items-center justify-between text-xs">
+        <span className="font-extrabold text-vasati-dark">
           {properties.length} PGs found
         </span>
 
@@ -129,11 +129,11 @@ export const ListingsScreen: React.FC<ListingsScreenProps> = ({
         <div className="flex-1 overflow-y-auto no-scrollbar px-4 py-3 space-y-4">
           {properties.length === 0 ? (
             <div className="text-center py-16 px-4">
-              <p className="text-base font-bold text-gray-700">No PGs match your filters</p>
-              <p className="text-xs text-gray-400 mt-1">Try resetting some filters to see more results</p>
+              <p className="text-base font-bold text-vasati-dark">No PGs match your filters</p>
+              <p className="text-xs text-vasati-secondary mt-1">Try resetting some filters to see more results</p>
               <button
                 onClick={onOpenFilters}
-                className="mt-4 px-5 py-2 rounded-full bg-vasati-purple text-white text-xs font-bold shadow-md"
+                className="mt-4 px-5 py-2 rounded-full bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant hover:from-vasati-royal hover:to-vasati-purple text-white text-xs font-bold shadow-card active:scale-95 transition-all"
               >
                 Modify Filters
               </button>
@@ -145,7 +145,7 @@ export const ListingsScreen: React.FC<ListingsScreenProps> = ({
                 <div
                   key={pg.id}
                   onClick={() => onSelectProperty(pg.id)}
-                  className="bg-white rounded-3xl p-3.5 shadow-card hover:shadow-card-hover border border-gray-100/90 transition-all cursor-pointer group"
+                  className="bg-white rounded-3xl p-3.5 shadow-card hover:shadow-card-hover border border-vasati-purple-border/50 hover:border-vasati-purple/40 transition-all cursor-pointer group"
                 >
                   {/* Property Image with Badges */}
                   <div className="relative w-full h-44 rounded-2xl overflow-hidden">
@@ -157,7 +157,7 @@ export const ListingsScreen: React.FC<ListingsScreenProps> = ({
 
                     {/* Premium Tag */}
                     {pg.is_premium === 1 && (
-                      <div className="absolute top-3 left-3 bg-vasati-purple text-white text-[10px] font-black px-3 py-1 rounded-full shadow-md flex items-center gap-1 backdrop-blur-sm">
+                      <div className="absolute top-3 left-3 bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant text-white text-[10px] font-black px-3 py-1 rounded-full shadow-md flex items-center gap-1 backdrop-blur-sm">
                         <Sparkles className="w-3 h-3 text-vasati-orange" />
                         Premium
                       </div>
@@ -184,7 +184,7 @@ export const ListingsScreen: React.FC<ListingsScreenProps> = ({
                         <h3 className="text-base font-extrabold text-vasati-dark tracking-tight">
                           {pg.name}
                         </h3>
-                        <p className="text-xs text-gray-500 flex items-center gap-1 mt-0.5">
+                        <p className="text-xs text-vasati-secondary flex items-center gap-1 mt-0.5">
                           <MapPin className="w-3.5 h-3.5 text-vasati-purple shrink-0" />
                           <span>{pg.locality}, {pg.city}</span>
                         </p>
@@ -194,17 +194,17 @@ export const ListingsScreen: React.FC<ListingsScreenProps> = ({
                       <div className="flex items-center gap-1 bg-amber-50/80 px-2.5 py-1 rounded-xl border border-amber-200">
                         <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
                         <span className="text-xs font-bold text-amber-900">{pg.rating}</span>
-                        <span className="text-[10px] text-gray-400">({pg.review_count >= 1000 ? `${(pg.review_count / 1000).toFixed(1)}k` : pg.review_count})</span>
+                        <span className="text-[10px] text-vasati-secondary">({pg.review_count >= 1000 ? `${(pg.review_count / 1000).toFixed(1)}k` : pg.review_count})</span>
                       </div>
                     </div>
 
                     {/* Price and Action Button */}
-                    <div className="mt-3 flex items-center justify-between border-t border-gray-100 pt-3">
+                    <div className="mt-3 flex items-center justify-between border-t border-vasati-purple-border/30 pt-3">
                       <div>
                         <span className="text-lg font-black text-vasati-purple">
                           ₹{pg.monthly_rent_from.toLocaleString('en-IN')}
                         </span>
-                        <span className="text-xs text-gray-400 font-medium"> / month</span>
+                        <span className="text-xs text-vasati-secondary font-medium"> / month</span>
 
                         {/* Facility Pills matching Reference Image */}
                         <div className="flex items-center gap-1.5 mt-1.5">

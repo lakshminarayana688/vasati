@@ -184,10 +184,10 @@ export const PaymentScreen: React.FC<PaymentScreenProps> = ({
   return (
     <div className="w-full h-full bg-white flex flex-col justify-between font-sans relative">
       {/* Top Header */}
-      <div className="px-5 pt-4 pb-3 flex items-center justify-between border-b border-gray-100 z-10">
+      <div className="px-5 pt-4 pb-3 flex items-center justify-between border-b border-vasati-purple-border/40 z-10">
         <button
           onClick={onBack}
-          className="p-1 rounded-full hover:bg-gray-100 text-vasati-dark transition-colors"
+          className="p-1 rounded-full hover:bg-vasati-purple-soft/50 text-vasati-dark transition-colors"
         >
           <ChevronLeft className="w-6 h-6" />
         </button>
@@ -200,7 +200,7 @@ export const PaymentScreen: React.FC<PaymentScreenProps> = ({
       {/* Main Content */}
       <div className="flex-1 overflow-y-auto no-scrollbar px-5 py-4 space-y-5 pb-24">
         {/* Booking Summary Card */}
-        <div className="p-3.5 rounded-3xl bg-gray-50 border border-gray-100 flex items-center gap-3">
+        <div className="p-3.5 rounded-3xl bg-white border border-vasati-purple-border/60 shadow-card flex items-center gap-3">
           <img
             src={coverImage}
             alt={propertyName}
@@ -208,10 +208,10 @@ export const PaymentScreen: React.FC<PaymentScreenProps> = ({
           />
           <div className="flex-1 min-w-0">
             <h3 className="text-sm font-extrabold text-vasati-dark truncate">{propertyName}</h3>
-            <p className="text-xs text-gray-500 truncate">📍 {locality}</p>
+            <p className="text-xs text-vasati-secondary truncate">📍 {locality}</p>
             <p className="text-xs font-black text-vasati-purple mt-0.5">
               ₹{amount.toLocaleString('en-IN')}{' '}
-              <span className="font-normal text-gray-500">
+              <span className="font-normal text-vasati-secondary">
                 ({duration} Months{bookingDetails?.selected_bed ? ` • ${bookingDetails.selected_bed}` : ''})
               </span>
             </p>
@@ -227,23 +227,23 @@ export const PaymentScreen: React.FC<PaymentScreenProps> = ({
               onClick={() => setSelectedMethod('UPI')}
               className={`p-3.5 rounded-2xl border-2 transition-all cursor-pointer ${
                 selectedMethod === 'UPI'
-                  ? 'border-vasati-purple bg-purple-50/40 shadow-sm'
-                  : 'border-gray-100 hover:border-gray-200'
+                  ? 'border-vasati-purple bg-vasati-purple-soft/50 shadow-sm'
+                  : 'border-vasati-purple-border/60 hover:border-vasati-purple/40 bg-white'
               }`}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-xl bg-purple-100 text-vasati-purple flex items-center justify-center font-black text-xs">
+                  <div className="w-8 h-8 rounded-xl bg-vasati-purple-soft text-vasati-purple flex items-center justify-center font-black text-xs">
                     UPI
                   </div>
                   <div>
                     <h4 className="text-xs font-bold text-vasati-dark">UPI</h4>
-                    <p className="text-[10px] text-gray-500">Google Pay, PhonePe, Paytm</p>
+                    <p className="text-[10px] text-vasati-secondary">Google Pay, PhonePe, Paytm</p>
                   </div>
                 </div>
 
                 <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                  selectedMethod === 'UPI' ? 'border-vasati-purple' : 'border-gray-300'
+                  selectedMethod === 'UPI' ? 'border-vasati-purple' : 'border-vasati-purple-border'
                 }`}>
                   {selectedMethod === 'UPI' && (
                     <div className="w-2.5 h-2.5 rounded-full bg-vasati-purple" />
@@ -252,13 +252,13 @@ export const PaymentScreen: React.FC<PaymentScreenProps> = ({
               </div>
 
               {selectedMethod === 'UPI' && (
-                <div className="mt-3 pt-3 border-t border-purple-100 flex items-center gap-2">
+                <div className="mt-3 pt-3 border-t border-vasati-purple-border/40 flex items-center gap-2">
                   <input
                     type="text"
                     value={upiId}
                     onChange={e => setUpiId(e.target.value)}
                     placeholder="Enter UPI ID (e.g. mobile@upi)"
-                    className="flex-1 px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-vasati-purple"
+                    className="flex-1 px-3 py-1.5 bg-white border border-vasati-purple-border rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-vasati-purple text-vasati-dark"
                   />
                   <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg">
                     Verified
@@ -272,8 +272,8 @@ export const PaymentScreen: React.FC<PaymentScreenProps> = ({
               onClick={() => setSelectedMethod('Card')}
               className={`p-3.5 rounded-2xl border-2 transition-all cursor-pointer ${
                 selectedMethod === 'Card'
-                  ? 'border-vasati-purple bg-purple-50/40 shadow-sm'
-                  : 'border-gray-100 hover:border-gray-200'
+                  ? 'border-vasati-purple bg-vasati-purple-soft/50 shadow-sm'
+                  : 'border-vasati-purple-border/60 hover:border-vasati-purple/40 bg-white'
               }`}
             >
               <div className="flex items-center justify-between">
@@ -283,12 +283,12 @@ export const PaymentScreen: React.FC<PaymentScreenProps> = ({
                   </div>
                   <div>
                     <h4 className="text-xs font-bold text-vasati-dark">Credit / Debit Card</h4>
-                    <p className="text-[10px] text-gray-500">Visa, MasterCard, RuPay</p>
+                    <p className="text-[10px] text-vasati-secondary">Visa, MasterCard, RuPay</p>
                   </div>
                 </div>
 
                 <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                  selectedMethod === 'Card' ? 'border-vasati-purple' : 'border-gray-300'
+                  selectedMethod === 'Card' ? 'border-vasati-purple' : 'border-vasati-purple-border'
                 }`}>
                   {selectedMethod === 'Card' && (
                     <div className="w-2.5 h-2.5 rounded-full bg-vasati-purple" />
@@ -302,8 +302,8 @@ export const PaymentScreen: React.FC<PaymentScreenProps> = ({
               onClick={() => setSelectedMethod('NetBanking')}
               className={`p-3.5 rounded-2xl border-2 transition-all cursor-pointer ${
                 selectedMethod === 'NetBanking'
-                  ? 'border-vasati-purple bg-purple-50/40 shadow-sm'
-                  : 'border-gray-100 hover:border-gray-200'
+                  ? 'border-vasati-purple bg-vasati-purple-soft/50 shadow-sm'
+                  : 'border-vasati-purple-border/60 hover:border-vasati-purple/40 bg-white'
               }`}
             >
               <div className="flex items-center justify-between">
@@ -313,12 +313,12 @@ export const PaymentScreen: React.FC<PaymentScreenProps> = ({
                   </div>
                   <div>
                     <h4 className="text-xs font-bold text-vasati-dark">Net Banking</h4>
-                    <p className="text-[10px] text-gray-500">All Major Indian Banks</p>
+                    <p className="text-[10px] text-vasati-secondary">All Major Indian Banks</p>
                   </div>
                 </div>
 
                 <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                  selectedMethod === 'NetBanking' ? 'border-vasati-purple' : 'border-gray-300'
+                  selectedMethod === 'NetBanking' ? 'border-vasati-purple' : 'border-vasati-purple-border'
                 }`}>
                   {selectedMethod === 'NetBanking' && (
                     <div className="w-2.5 h-2.5 rounded-full bg-vasati-purple" />
@@ -332,8 +332,8 @@ export const PaymentScreen: React.FC<PaymentScreenProps> = ({
               onClick={() => setSelectedMethod('Wallet')}
               className={`p-3.5 rounded-2xl border-2 transition-all cursor-pointer ${
                 selectedMethod === 'Wallet'
-                  ? 'border-vasati-purple bg-purple-50/40 shadow-sm'
-                  : 'border-gray-100 hover:border-gray-200'
+                  ? 'border-vasati-purple bg-vasati-purple-soft/50 shadow-sm'
+                  : 'border-vasati-purple-border/60 hover:border-vasati-purple/40 bg-white'
               }`}
             >
               <div className="flex items-center justify-between">
@@ -343,12 +343,12 @@ export const PaymentScreen: React.FC<PaymentScreenProps> = ({
                   </div>
                   <div>
                     <h4 className="text-xs font-bold text-vasati-dark">Paytm Wallet</h4>
-                    <p className="text-[10px] text-gray-500">Fast 1-click checkout</p>
+                    <p className="text-[10px] text-vasati-secondary">Fast 1-click checkout</p>
                   </div>
                 </div>
 
                 <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                  selectedMethod === 'Wallet' ? 'border-vasati-purple' : 'border-gray-300'
+                  selectedMethod === 'Wallet' ? 'border-vasati-purple' : 'border-vasati-purple-border'
                 }`}>
                   {selectedMethod === 'Wallet' && (
                     <div className="w-2.5 h-2.5 rounded-full bg-vasati-purple" />
@@ -360,14 +360,14 @@ export const PaymentScreen: React.FC<PaymentScreenProps> = ({
         </div>
 
         {/* Security Trust Badge */}
-        <div className="flex items-center justify-center gap-2 text-xs text-gray-500 pt-2">
+        <div className="flex items-center justify-center gap-2 text-xs text-vasati-secondary pt-2">
           <ShieldCheck className="w-4 h-4 text-emerald-600" />
           <span>Your payment information is 100% secure</span>
         </div>
       </div>
 
       {/* Sticky Bottom Action */}
-      <div className="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-100 p-4 shadow-nav z-20">
+      <div className="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-vasati-purple-border/30 p-4 shadow-nav z-20">
         <button
           onClick={handlePayNow}
           disabled={processing}
