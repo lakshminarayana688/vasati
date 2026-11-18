@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { InvoiceModal } from '../InvoiceModal';
 import {
   Building2,
   PlusCircle,
@@ -42,6 +43,7 @@ export const OwnerPortal: React.FC = () => {
   const [pgCreated, setPgCreated] = useState(false);
   const [showAgreementModal, setShowAgreementModal] = useState(false);
   const [showKycModal, setShowKycModal] = useState(false);
+  const [selectedInvoice, setSelectedInvoice] = useState<any>(null);
 
   const loadData = async () => {
     try {
@@ -195,11 +197,10 @@ export const OwnerPortal: React.FC = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`py-3 flex items-center gap-1.5 whitespace-nowrap border-b-2 transition-colors ${
-                  isActive
+                className={`py-3 flex items-center gap-1.5 whitespace-nowrap border-b-2 transition-colors ${isActive
                     ? 'border-vasati-purple text-vasati-purple'
                     : 'border-transparent text-gray-500 hover:text-gray-900'
-                }`}
+                  }`}
               >
                 <Icon className="w-4 h-4" />
                 <span>{tab.label}</span>
@@ -570,9 +571,8 @@ export const OwnerPortal: React.FC = () => {
                         <div className="flex items-center gap-2">
                           <span className="font-bold text-xs text-vasati-dark">{v.customer_name}</span>
                           <span className="text-[10px] font-mono text-vasati-purple font-bold">{v.visit_code}</span>
-                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                            v.status === 'approved' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
-                          }`}>
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${v.status === 'approved' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+                            }`}>
                             {v.status}
                           </span>
                         </div>
@@ -725,7 +725,21 @@ export const OwnerPortal: React.FC = () => {
                             </td>
                             <td className="py-3 text-right">
                               <button
-                                onClick={() => alert(`Downloaded Invoice ${stmt.invoice_number}`)}
+                                onClick={() => setSelectedInvoice({
+                                  invoiceNumber: stmt.invoice_number,
+                                  bookingCode: stmt.booking_code,
+                                  propertyName: stmt.property_name,
+                                  roomType: 'Single Room',
+                                  customerName: stmt.customer_name || 'Lakshminarayana G',
+                                  ownerName: stmt.owner_name || 'Ramesh Sharma',
+                                  businessName: 'Sri Sai Stays & Hospitality',
+                                  monthlyRent: stmt.base_first_month_rent,
+                                  durationMonths: stmt.duration_months || 3,
+                                  securityDeposit: stmt.security_deposit || 8000,
+                                  totalAmount: stmt.gross_booking_amount,
+                                  commissionAmount: stmt.commission_amount,
+                                  transactionReference: stmt.payout_reference,
+                                })}
                                 className="text-vasati-purple font-bold hover:underline"
                               >
                                 Statement
@@ -834,6 +848,13 @@ export const OwnerPortal: React.FC = () => {
               </button>
             </div>
           </div>
+        )}
+
+        {selectedInvoice && (
+          <InvoiceModal
+            invoiceData={selectedInvoice}
+            onClose={() => setSelectedInvoice(null)}
+          />
         )}
       </main>
     </div>

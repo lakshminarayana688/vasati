@@ -14,6 +14,7 @@ import { SavedListView } from '@/components/screens/SavedListView';
 import { OwnerPortal } from '@/components/owner/OwnerPortal';
 import { AdminDashboard } from '@/components/admin/AdminDashboard';
 import { VasatiLogo } from '@/components/VasatiLogo';
+import { AuthModal } from '@/components/AuthModal';
 import {
   Smartphone,
   Monitor,
@@ -41,6 +42,7 @@ export default function VasatiApp() {
   const [selectedPropertyId, setSelectedPropertyId] = useState<string>('prop_sri_sai');
   const [activeFilters, setActiveFilters] = useState<Partial<FilterState>>({});
   const [currentBookingDetails, setCurrentBookingDetails] = useState<any>(null);
+  const [showAuthModal, setShowAuthModal] = useState<boolean>(false);
 
   // Fetch properties
   const loadProperties = async (filters: any = {}) => {
@@ -177,7 +179,7 @@ export default function VasatiApp() {
         return (
           <SplashScreen
             onGetStarted={() => setActiveScreen('home')}
-            onLogin={() => setActiveScreen('profile')}
+            onLogin={() => setShowAuthModal(true)}
           />
         );
       case 'home':
@@ -243,7 +245,10 @@ export default function VasatiApp() {
             onNavigateTab={handleNavigateTab}
             onOpenBookings={() => setActiveScreen('bookings_list')}
             onOpenSaved={() => setActiveScreen('saved_list')}
-            onLogout={() => setActiveScreen('splash')}
+            onLogout={() => {
+              setActiveScreen('splash');
+              setShowAuthModal(true);
+            }}
           />
         );
       case 'bookings_list':
@@ -430,6 +435,23 @@ export default function VasatiApp() {
           </div>
         )}
       </div>
+
+      {/* Global OTP Auth Modal */}
+      {showAuthModal && (
+        <AuthModal
+          initialRole={activeRole === 'owner' ? 'owner' : 'customer'}
+          onClose={() => setShowAuthModal(false)}
+          onSuccess={user => {
+            setShowAuthModal(false);
+            if (user.role === 'owner') {
+              setActiveRole('owner');
+            } else {
+              setActiveRole('customer');
+              setActiveScreen('home');
+            }
+          }}
+        />
+      )}
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { InvoiceModal } from '../InvoiceModal';
 import {
   ChevronLeft,
   Calendar,
@@ -18,6 +19,7 @@ interface BookingsListViewProps {
 export const BookingsListView: React.FC<BookingsListViewProps> = ({ onBack, onSelectProperty }) => {
   const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedInvoice, setSelectedInvoice] = useState<any>(null);
 
   useEffect(() => {
     async function loadBookings() {
@@ -148,7 +150,23 @@ export const BookingsListView: React.FC<BookingsListViewProps> = ({ onBack, onSe
                       </button>
                     )}
                     <button
-                      onClick={() => alert(`Downloaded Official VASATI Receipt for ${b.booking_code}`)}
+                      onClick={() => setSelectedInvoice({
+                        invoiceNumber: b.invoice_number,
+                        bookingCode: b.booking_code,
+                        propertyName: b.property_name,
+                        roomType: b.room_type,
+                        customerName: b.customer_name || 'Lakshminarayana G',
+                        customerEmail: b.customer_email || 'lakshmi@gmail.com',
+                        customerPhone: b.customer_phone || '+91 98450 12345',
+                        ownerName: b.owner_name,
+                        businessName: 'Sri Sai Stays & Hospitality',
+                        monthlyRent: b.monthly_rent || (b.total_amount / b.duration_months),
+                        durationMonths: b.duration_months,
+                        securityDeposit: b.security_deposit || 8000,
+                        totalAmount: b.total_amount,
+                        commissionAmount: b.commission_amount || Math.round((b.total_amount / b.duration_months) * 0.08),
+                        transactionReference: b.transaction_reference,
+                      })}
                       className="font-bold text-vasati-purple hover:underline flex items-center gap-1"
                     >
                       <Download className="w-3 h-3" />
@@ -161,6 +179,13 @@ export const BookingsListView: React.FC<BookingsListViewProps> = ({ onBack, onSe
           ))
         )}
       </div>
+
+      {selectedInvoice && (
+        <InvoiceModal
+          invoiceData={selectedInvoice}
+          onClose={() => setSelectedInvoice(null)}
+        />
+      )}
     </div>
   );
 };

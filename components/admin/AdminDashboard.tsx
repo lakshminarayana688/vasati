@@ -253,6 +253,120 @@ export const AdminDashboard: React.FC = () => {
                   </div>
                 </div>
 
+                {/* Performance Analytics & Conversion Funnel */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* Revenue Growth Bars */}
+                  <div className="bg-slate-800/80 rounded-2xl border border-slate-700 p-5">
+                    <div className="flex items-center justify-between mb-4">
+                      <div>
+                        <h3 className="text-sm font-extrabold text-white">Monthly Platform Volume (₹ Lakhs)</h3>
+                        <p className="text-[11px] text-slate-400">Gross Stays vs 8% Commission Revenue</p>
+                      </div>
+                      <span className="text-[10px] font-bold text-emerald-400 bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800">
+                        +24.8% MoM
+                      </span>
+                    </div>
+
+                    <div className="h-44 flex items-end justify-between gap-3 pt-6 pb-2 px-2">
+                      {[
+                        { month: 'Jul', gross: 38, comm: 3.0, h: '40%' },
+                        { month: 'Aug', gross: 52, comm: 4.1, h: '55%' },
+                        { month: 'Sep', gross: 64, comm: 5.1, h: '68%' },
+                        { month: 'Oct', gross: 78, comm: 6.2, h: '82%' },
+                        { month: 'Nov', gross: 94, comm: 7.5, h: '100%' },
+                      ].map(bar => (
+                        <div key={bar.month} className="flex-1 flex flex-col items-center gap-1.5 h-full justify-end group">
+                          <span className="text-[10px] font-bold text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity">
+                            ₹{bar.gross}L
+                          </span>
+                          <div className="w-full flex items-end justify-center gap-1 h-32">
+                            <div
+                              style={{ height: bar.h }}
+                              className="w-1/2 bg-gradient-to-t from-purple-800 to-vasati-purple rounded-t-lg transition-all group-hover:brightness-110"
+                            />
+                            <div
+                              style={{ height: `${parseInt(bar.h) * 0.45}%` }}
+                              className="w-1/2 bg-gradient-to-t from-orange-600 to-vasati-orange rounded-t-lg transition-all group-hover:brightness-110"
+                            />
+                          </div>
+                          <span className="text-[11px] font-bold text-slate-400">{bar.month}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="flex items-center justify-center gap-6 pt-3 border-t border-slate-700/80 text-[11px]">
+                      <span className="flex items-center gap-1.5 text-slate-300">
+                        <span className="w-2.5 h-2.5 rounded-sm bg-vasati-purple" />
+                        Gross Rental Value
+                      </span>
+                      <span className="flex items-center gap-1.5 text-slate-300">
+                        <span className="w-2.5 h-2.5 rounded-sm bg-vasati-orange" />
+                        VASATI Commission (8%)
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Anti-Bypass Funnel & Area Distribution */}
+                  <div className="bg-slate-800/80 rounded-2xl border border-slate-700 p-5 flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center justify-between mb-4">
+                        <div>
+                          <h3 className="text-sm font-extrabold text-white">Anti-Bypass Conversion Funnel</h3>
+                          <p className="text-[11px] text-slate-400">Attribution Window: 30 Calendar Days</p>
+                        </div>
+                        <span className="text-[10px] font-mono text-purple-400 font-bold">100% AUDITED</span>
+                      </div>
+
+                      <div className="space-y-3 text-xs">
+                        <div>
+                          <div className="flex justify-between text-slate-300 font-bold mb-1">
+                            <span>1. Inquiries Created (`ENQ`)</span>
+                            <span className="font-mono">2,450 (100%)</span>
+                          </div>
+                          <div className="w-full h-2 bg-slate-700 rounded-full overflow-hidden">
+                            <div className="h-full bg-purple-500 rounded-full w-full" />
+                          </div>
+                        </div>
+
+                        <div>
+                          <div className="flex justify-between text-slate-300 font-bold mb-1">
+                            <span>2. Visits Scheduled & Masked Calls</span>
+                            <span className="font-mono">1,680 (68.5%)</span>
+                          </div>
+                          <div className="w-full h-2 bg-slate-700 rounded-full overflow-hidden">
+                            <div className="h-full bg-indigo-500 rounded-full w-[68.5%]" />
+                          </div>
+                        </div>
+
+                        <div>
+                          <div className="flex justify-between text-slate-300 font-bold mb-1">
+                            <span>3. Confirmed Paid Bookings</span>
+                            <span className="font-mono">1,180 (48.1%)</span>
+                          </div>
+                          <div className="w-full h-2 bg-slate-700 rounded-full overflow-hidden">
+                            <div className="h-full bg-vasati-orange rounded-full w-[48.1%]" />
+                          </div>
+                        </div>
+
+                        <div>
+                          <div className="flex justify-between text-slate-300 font-bold mb-1">
+                            <span>4. Successful Move-in & Checked In</span>
+                            <span className="font-mono">1,168 (47.6%)</span>
+                          </div>
+                          <div className="w-full h-2 bg-slate-700 rounded-full overflow-hidden">
+                            <div className="h-full bg-emerald-500 rounded-full w-[47.6%]" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 pt-3 border-t border-slate-700/80 flex items-center justify-between text-[11px] text-slate-400">
+                      <span>Leakage / Disintermediation: <strong>&lt; 0.5%</strong></span>
+                      <span className="text-emerald-400 font-bold">Zero Bypass Breaches</span>
+                    </div>
+                  </div>
+                </div>
+
                 {/* Properties & Bookings Split View */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   {/* Verified Properties */}
