@@ -137,11 +137,11 @@ export const BookingScreen: React.FC<BookingScreenProps> = ({
           </div>
         </div>
 
-        {/* Duration */}
+        {/* Duration matching Screen 6 */}
         <div>
           <h3 className="text-sm font-extrabold text-vasati-dark mb-2.5">Duration</h3>
-          <div className="grid grid-cols-4 gap-2">
-            {[1, 3, 6, 11].map(m => {
+          <div className="grid grid-cols-3 gap-2">
+            {[1, 3, 6].map(m => {
               const isSelected = duration === m;
               return (
                 <button

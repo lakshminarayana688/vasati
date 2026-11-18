@@ -206,9 +206,17 @@ export const ListingsScreen: React.FC<ListingsScreenProps> = ({
                         </span>
                         <span className="text-xs text-gray-400 font-medium"> / month</span>
 
-                        {/* Facility Pills */}
+                        {/* Facility Pills matching Reference Image */}
                         <div className="flex items-center gap-1.5 mt-1.5">
-                          {['AC', 'Meals', 'Wi-Fi'].map(tag => (
+                          {(
+                            pg.facilities && pg.facilities.length > 0
+                              ? pg.facilities.slice(0, 3)
+                              : pg.id === 'prop_green_comfort'
+                                ? ['AC', 'Wi-Fi', 'Parking']
+                                : pg.id === 'prop_comfort_stay'
+                                  ? ['AC', 'Wi-Fi']
+                                  : ['AC', 'Meals', 'Wi-Fi']
+                          ).map((tag: string) => (
                             <span
                               key={tag}
                               className="px-2 py-0.5 rounded-md bg-gray-100 text-gray-600 text-[10px] font-bold"

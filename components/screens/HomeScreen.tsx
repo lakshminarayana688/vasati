@@ -197,7 +197,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                     : 'bg-gray-100/90 text-gray-700 hover:bg-gray-200/80'
                 }`}
               >
-                {cat === 'All' ? 'All' : cat === 'Co-living' ? 'Co-living' : `${cat} PG`}
+                {cat}
               </button>
             );
           })}

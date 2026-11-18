@@ -15,7 +15,11 @@ import {
   Send,
   CheckCircle,
   ShieldAlert,
-  ArrowRight
+  ArrowRight,
+  Home,
+  Search,
+  Bookmark,
+  CalendarCheck
 } from 'lucide-react';
 
 interface ProfileScreenProps {
@@ -76,7 +80,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
   };
 
   return (
-    <div className="w-full h-full bg-white flex flex-col justify-between font-sans relative pb-20">
+    <div className="w-full h-full bg-white flex flex-col justify-between font-sans relative pb-16">
       <div className="flex-1 overflow-y-auto no-scrollbar pb-6">
         {/* Top Purple Header Banner matching Screen 8 */}
         <div className="bg-gradient-to-br from-vasati-purple to-purple-800 pt-7 pb-8 px-6 text-white rounded-b-[2.5rem] shadow-xl relative">
@@ -88,23 +92,25 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
             <Settings className="w-5 h-5 text-white" />
           </button>
 
-          {/* User Info with Avatar */}
+          {/* User Info with Avatar matching Screen 8 */}
           <div className="flex items-center gap-4">
             <div className="relative">
               <img
-                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80"
+                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80"
                 alt="Lakshminarayana G"
                 className="w-16 h-16 rounded-full object-cover border-2 border-white/80 shadow-md"
               />
               <span className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-emerald-400 border-2 border-vasati-purple" />
             </div>
-
             <div>
-              <h2 className="text-lg font-black tracking-tight leading-tight">Lakshminarayana G</h2>
-              <p className="text-xs text-purple-200 mt-0.5">lakshmi@gmail.com</p>
-              <span className="inline-block px-2 py-0.5 rounded-full bg-white/20 text-[10px] font-bold text-white mt-1.5">
-                Verified Resident
-              </span>
+              <h2 className="text-lg font-extrabold text-white tracking-tight leading-tight">
+                Lakshminarayana G
+              </h2>
+              <p className="text-xs text-purple-200 mt-0.5 font-medium">lakshmi@gmail.com</p>
+              <div className="mt-1.5 inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/15 text-[10px] font-bold text-white backdrop-blur-sm">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                Verified Tenant
+              </div>
             </div>
           </div>
         </div>
@@ -221,6 +227,49 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Bottom Sticky Navigation Bar matching Screen 8 */}
+      <div className="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-100 py-2.5 px-6 flex items-center justify-between shadow-nav z-30">
+        <button
+          onClick={() => onNavigateTab('home')}
+          className="flex flex-col items-center gap-0.5 text-gray-400 hover:text-vasati-purple transition-colors"
+        >
+          <Home className="w-5 h-5" />
+          <span className="text-[10px] font-medium">Home</span>
+        </button>
+
+        <button
+          onClick={() => onNavigateTab('search')}
+          className="flex flex-col items-center gap-0.5 text-gray-400 hover:text-vasati-purple transition-colors"
+        >
+          <Search className="w-5 h-5" />
+          <span className="text-[10px] font-medium">Search</span>
+        </button>
+
+        <button
+          onClick={() => onNavigateTab('saved')}
+          className="flex flex-col items-center gap-0.5 text-gray-400 hover:text-vasati-purple transition-colors"
+        >
+          <Bookmark className="w-5 h-5" />
+          <span className="text-[10px] font-medium">Saved</span>
+        </button>
+
+        <button
+          onClick={() => onNavigateTab('bookings')}
+          className="flex flex-col items-center gap-0.5 text-gray-400 hover:text-vasati-purple transition-colors"
+        >
+          <CalendarCheck className="w-5 h-5" />
+          <span className="text-[10px] font-medium">Bookings</span>
+        </button>
+
+        <button
+          onClick={() => onNavigateTab('profile')}
+          className="flex flex-col items-center gap-0.5 text-vasati-purple"
+        >
+          <User className="w-5 h-5" />
+          <span className="text-[10px] font-bold">Profile</span>
+        </button>
       </div>
 
       {/* Profile Edit Modal */}

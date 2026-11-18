@@ -406,11 +406,15 @@ export default function VasatiApp() {
             {/* Screen Inner Container */}
             <div className="relative w-full h-full bg-white rounded-[38px] overflow-hidden flex flex-col shadow-inner">
               {/* Authentic 9:41 Status Bar */}
-              <div className="w-full px-6 pt-3 pb-1 flex items-center justify-between text-vasati-dark text-xs font-bold select-none z-40 bg-white">
+              <div className={`w-full px-6 pt-3 pb-1 flex items-center justify-between text-xs font-bold select-none z-40 transition-colors duration-200 ${
+                activeScreen === 'profile' ? 'bg-vasati-purple text-white' : 'bg-white text-vasati-dark'
+              }`}>
                 <span>9:41</span>
                 {/* Dynamic Island / Speaker cutout */}
                 <div className="w-20 h-4 bg-black rounded-full" />
-                <div className="flex items-center gap-1.5 text-vasati-dark">
+                <div className={`flex items-center gap-1.5 ${
+                  activeScreen === 'profile' ? 'text-white' : 'text-vasati-dark'
+                }`}>
                   <Signal className="w-3.5 h-3.5" />
                   <Wifi className="w-3.5 h-3.5" />
                   <Battery className="w-4 h-4" />
