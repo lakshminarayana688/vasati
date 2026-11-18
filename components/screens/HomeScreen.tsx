@@ -97,6 +97,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                     onClick={() => {
                       setSelectedCity(c);
                       setCityDropdownOpen(false);
+                      onOpenListings({ city: c });
                     }}
                     className={`w-full text-left px-4 py-2 text-sm hover:bg-vasati-purple-soft transition-colors ${
                       selectedCity === c ? 'text-vasati-purple font-bold' : 'text-gray-700'

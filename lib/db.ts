@@ -755,6 +755,80 @@ function seedInitialData(db: Database.Database) {
           image_url: 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=600&q=80'
         }
       ]
+    },
+    {
+      id: 'prop_zolo_cyberstay',
+      owner_id: 'usr_own_1',
+      name: 'Zolo Cyberstay Luxury PG',
+      tagline: 'Premium Co-living in the Heart of Cyber City',
+      description: 'Ultra-modern co-living residence in Gachibowli near DLF Cyber City and Mindspace IT Park. Features high-speed fiber internet, housekeeping, chef-curated meals, gym, and 24x7 security.',
+      category: 'Co-living',
+      property_type: 'Co-living',
+      address_line: 'Plot 42, Gachibowli Financial District',
+      locality: 'Gachibowli',
+      city: 'Hyderabad',
+      state: 'Telangana',
+      pincode: '500032',
+      latitude: 17.4401,
+      longitude: 78.3489,
+      approximate_location: 'Near DLF Cyber City, Gachibowli (~400m radius)',
+      monthly_rent_from: 8500,
+      security_deposit: 8500,
+      notice_period_days: 30,
+      food_type: 'Both',
+      meals_included: 1,
+      house_rules: 'Visitors permitted in lounge. Quiet hours after 11 PM.',
+      status: 'approved',
+      is_featured: 1,
+      is_premium: 1,
+      rating: 4.8,
+      review_count: 680,
+      amenities: ['am_ac', 'am_wifi', 'am_meals', 'am_parking', 'am_power', 'am_security', 'am_lift'],
+      images: [
+        'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80',
+        'https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=800&q=80'
+      ],
+      rooms: [
+        { id: 'rm_zc_1', room_type: 'Single Room', monthly_rent: 12000, security_deposit: 12000, total_beds: 10, available_beds: 3, description: 'Executive private room with balcony', image_url: 'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=600&q=80' },
+        { id: 'rm_zc_2', room_type: 'Sharing Room', monthly_rent: 8500, security_deposit: 8500, total_beds: 20, available_beds: 6, description: 'Double sharing with AC', image_url: 'https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=600&q=80' }
+      ]
+    },
+    {
+      id: 'prop_stanza_hinjawadi',
+      owner_id: 'usr_own_1',
+      name: 'Stanza Living Hinjawadi Coliving',
+      tagline: 'Techie Haven Near Rajiv Gandhi Infotech Park',
+      description: 'Designer co-living accommodation in Hinjawadi Phase 1, Pune. Walking distance from major IT campuses (Infosys, Wipro, TCS). Fast Wi-Fi, games room, cafeteria, and housekeeping.',
+      category: 'Co-living',
+      property_type: 'Co-living',
+      address_line: 'Hinjawadi Phase 1, Near Infosys Circle',
+      locality: 'Hinjawadi',
+      city: 'Pune',
+      state: 'Maharashtra',
+      pincode: '411057',
+      latitude: 18.5913,
+      longitude: 73.7389,
+      approximate_location: 'Near Infosys Circle, Hinjawadi Phase 1 (~300m radius)',
+      monthly_rent_from: 8200,
+      security_deposit: 8200,
+      notice_period_days: 30,
+      food_type: 'Both',
+      meals_included: 1,
+      house_rules: 'Community guidelines apply. Quiet hours after 11 PM.',
+      status: 'approved',
+      is_featured: 1,
+      is_premium: 1,
+      rating: 4.7,
+      review_count: 710,
+      amenities: ['am_ac', 'am_wifi', 'am_meals', 'am_parking', 'am_power', 'am_security', 'am_lift', 'am_cctv'],
+      images: [
+        'https://images.unsplash.com/photo-1540518614846-7ede433c4550?auto=format&fit=crop&w=800&q=80',
+        'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80'
+      ],
+      rooms: [
+        { id: 'rm_st_1', room_type: 'Single Room', monthly_rent: 13000, security_deposit: 13000, total_beds: 12, available_beds: 2, description: 'Solo private suite with high speed LAN', image_url: 'https://images.unsplash.com/photo-1540518614846-7ede433c4550?auto=format&fit=crop&w=600&q=80' },
+        { id: 'rm_st_2', room_type: 'Sharing Room', monthly_rent: 8200, security_deposit: 8200, total_beds: 18, available_beds: 5, description: 'Twin sharing room with ergonomic chairs', image_url: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=600&q=80' }
+      ]
     }
   ];
 

@@ -47,6 +47,7 @@ export const BookingScreen: React.FC<BookingScreenProps> = ({
   ];
 
   const [selectedRoomId, setSelectedRoomId] = useState<string>(rooms[0].id);
+  const [selectedBed, setSelectedBed] = useState<string>('Bed A');
   const [duration, setDuration] = useState<number>(3); // 3 months default as in screenshot
   const [moveInDate, setMoveInDate] = useState<string>('2026-12-01');
 
@@ -65,6 +66,7 @@ export const BookingScreen: React.FC<BookingScreenProps> = ({
       cover_image: property.cover_image || property.images?.[0]?.image_url,
       room_id: selectedRoom.id,
       room_type: selectedRoom.room_type,
+      selected_bed: selectedRoom.room_type.includes('Sharing') ? selectedBed : 'Private Bed',
       duration_months: duration,
       move_in_date: moveInDate,
       monthly_rent: monthlyRent,
@@ -136,6 +138,51 @@ export const BookingScreen: React.FC<BookingScreenProps> = ({
             })}
           </div>
         </div>
+
+        {/* Interactive Bed Selector for Sharing Rooms */}
+        {selectedRoom.room_type.includes('Sharing') && (
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-extrabold text-vasati-dark">Select Bed</h3>
+              <span className="text-[11px] text-emerald-600 font-bold flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                Live Availability
+              </span>
+            </div>
+            <div className="grid grid-cols-3 gap-2.5">
+              {[
+                { id: 'Bed A', name: 'Bed A', desc: 'Window side', status: 'available' },
+                { id: 'Bed B', name: 'Bed B', desc: 'Door side', status: 'available' },
+                ...(selectedRoom.room_type.includes('Triple')
+                  ? [{ id: 'Bed C', name: 'Bed C', desc: 'Quiet corner', status: 'available' }]
+                  : [{ id: 'Bed B2', name: 'Bed B2 (Booked)', desc: 'Occupied', status: 'occupied' }]),
+              ].map(b => {
+                const isSelected = selectedBed === b.id;
+                const isOccupied = b.status === 'occupied';
+                return (
+                  <button
+                    key={b.id}
+                    disabled={isOccupied}
+                    type="button"
+                    onClick={() => setSelectedBed(b.id)}
+                    className={`p-2.5 rounded-2xl border text-center transition-all ${
+                      isOccupied
+                        ? 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed opacity-60'
+                        : isSelected
+                        ? 'bg-vasati-purple text-white border-vasati-purple shadow-sm'
+                        : 'bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100'
+                    }`}
+                  >
+                    <p className="text-xs font-bold">{b.name}</p>
+                    <p className={`text-[10px] mt-0.5 ${isSelected ? 'text-purple-200' : 'text-gray-500'}`}>
+                      {b.desc}
+                    </p>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Duration matching Screen 6 */}
         <div>

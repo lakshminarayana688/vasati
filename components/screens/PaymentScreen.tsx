@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { InvoiceModal } from '../InvoiceModal';
 import {
   ChevronLeft,
   ShieldCheck,
@@ -9,7 +10,8 @@ import {
   Download,
   Share2,
   Lock,
-  ArrowRight
+  ArrowRight,
+  FileText
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -28,6 +30,7 @@ export const PaymentScreen: React.FC<PaymentScreenProps> = ({
   const [upiId, setUpiId] = useState('lakshmi@okhdfcbank');
   const [processing, setProcessing] = useState(false);
   const [paymentResult, setPaymentResult] = useState<any>(null);
+  const [showInvoiceModal, setShowInvoiceModal] = useState(false);
 
   // Fallbacks if direct navigation without prior selection
   const amount = bookingDetails?.total_amount || 24000;
@@ -136,14 +139,44 @@ export const PaymentScreen: React.FC<PaymentScreenProps> = ({
           </div>
         </div>
 
-        <div className="pt-6 space-y-3">
+        <div className="pt-6 space-y-2.5">
           <button
             onClick={() => onPaymentSuccess(paymentResult)}
             className="w-full py-3.5 rounded-full bg-vasati-purple hover:bg-vasati-purple-dark text-white font-bold text-xs shadow-lg shadow-vasati-purple/20 transition-all"
           >
             Go to My Bookings
           </button>
+
+          <button
+            onClick={() => setShowInvoiceModal(true)}
+            className="w-full py-3 rounded-full border border-vasati-purple text-vasati-purple hover:bg-purple-50 font-bold text-xs flex items-center justify-center gap-1.5 transition-all"
+          >
+            <FileText className="w-4 h-4" />
+            <span>Download GST Tax Invoice</span>
+          </button>
         </div>
+
+        {showInvoiceModal && (
+          <InvoiceModal
+            invoiceData={{
+              invoiceNumber: paymentResult.invoiceNumber,
+              bookingCode: paymentResult.bookingCode,
+              propertyName: propertyName,
+              roomType: bookingDetails?.room_type || 'Single Room',
+              customerName: 'Lakshminarayana G',
+              customerEmail: 'lakshmi@gmail.com',
+              customerPhone: '+91 98450 12345',
+              businessName: 'Sri Sai Stays & Hospitality',
+              monthlyRent: paymentResult.totalAmount / duration,
+              durationMonths: duration,
+              securityDeposit: paymentResult.securityDeposit || 8000,
+              totalAmount: paymentResult.totalAmount,
+              commissionAmount: paymentResult.commissionAmount,
+              transactionReference: paymentResult.transactionReference,
+            }}
+            onClose={() => setShowInvoiceModal(false)}
+          />
+        )}
       </div>
     );
   }
@@ -177,7 +210,10 @@ export const PaymentScreen: React.FC<PaymentScreenProps> = ({
             <h3 className="text-sm font-extrabold text-vasati-dark truncate">{propertyName}</h3>
             <p className="text-xs text-gray-500 truncate">📍 {locality}</p>
             <p className="text-xs font-black text-vasati-purple mt-0.5">
-              ₹{amount.toLocaleString('en-IN')} <span className="font-normal text-gray-500">({duration} Months)</span>
+              ₹{amount.toLocaleString('en-IN')}{' '}
+              <span className="font-normal text-gray-500">
+                ({duration} Months{bookingDetails?.selected_bed ? ` • ${bookingDetails.selected_bed}` : ''})
+              </span>
             </p>
           </div>
         </div>

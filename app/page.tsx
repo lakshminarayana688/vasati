@@ -56,6 +56,7 @@ export default function VasatiApp() {
         params.append('amenities', filters.facilities.join(','));
       }
       if (filters.locality) params.append('locality', filters.locality);
+      if (filters.city) params.append('city', filters.city);
       if (filters.query) params.append('q', filters.query);
       if (filters.category) params.append('category', filters.category);
 
