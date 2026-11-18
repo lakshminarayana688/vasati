@@ -40,6 +40,8 @@ export const OwnerPortal: React.FC = () => {
   const [pgDescription, setPgDescription] = useState('');
   const [pgImgUrl, setPgImgUrl] = useState('https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80');
   const [pgCreated, setPgCreated] = useState(false);
+  const [showAgreementModal, setShowAgreementModal] = useState(false);
+  const [showKycModal, setShowKycModal] = useState(false);
 
   const loadData = async () => {
     try {
@@ -161,10 +163,19 @@ export const OwnerPortal: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200">
+            <button
+              onClick={() => setShowAgreementModal(true)}
+              className="px-3 py-1.5 rounded-full bg-purple-50 hover:bg-purple-100 text-vasati-purple text-xs font-bold border border-purple-200 transition-colors"
+            >
+              8% Commission Agreement
+            </button>
+            <button
+              onClick={() => setShowKycModal(true)}
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold border border-emerald-200 transition-colors"
+            >
               <ShieldCheck className="w-3.5 h-3.5" />
               KYC Verified Host
-            </span>
+            </button>
           </div>
         </div>
 
@@ -729,6 +740,100 @@ export const OwnerPortal: React.FC = () => {
               </div>
             )}
           </>
+        )}
+        {/* Commission Agreement Modal */}
+        {showAgreementModal && (
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-3xl w-full max-w-lg p-6 shadow-2xl animate-fade-in relative text-xs">
+              <button
+                onClick={() => setShowAgreementModal(false)}
+                className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-gray-100 text-gray-400"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <h3 className="text-base font-extrabold text-vasati-dark">VASATI PG Owner Commission Agreement</h3>
+              <p className="text-[11px] text-gray-500 mt-0.5">Binding Host Services Contract & Anti-Bypass Attribution</p>
+
+              <div className="mt-4 p-4 rounded-2xl bg-gray-50 border border-gray-100 max-h-72 overflow-y-auto space-y-3 leading-relaxed text-gray-700">
+                <p>
+                  <strong>1. Commission Structure:</strong> The Owner agrees that VASATI shall be entitled to an introductory commission of strictly <strong>8% of the first month's agreed rent</strong> upon fulfillment of successful move-in. Subsequent months carry zero percent (0%) platform fees.
+                </p>
+                <p>
+                  <strong>2. Security Deposit Exemption:</strong> Platform commission shall strictly NOT be charged on tenant security deposits. 100% of the deposit is passed directly to the owner/caretaker.
+                </p>
+                <p>
+                  <strong>3. Anti-Bypass & Attribution Period:</strong> To safeguard the integrity of the marketplace, the Owner acknowledges that all prospective tenants introduced via VASATI inquiries (enquiry ID) or scheduled visits (visit ID) remain subject to VASATI commission obligations for a period of <strong>30 calendar days</strong>.
+                </p>
+                <p>
+                  <strong>4. Payout Settlement:</strong> VASATI settles net rental dues (gross rent less 8% commission) into the host's registered bank account via automated IMPS within 24 hours of tenant check-in.
+                </p>
+              </div>
+
+              <div className="mt-4 flex items-center justify-between pt-3 border-t border-gray-100">
+                <span className="text-[11px] text-emerald-700 font-bold flex items-center gap-1">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                  Electronically Signed & Accepted
+                </span>
+                <button
+                  onClick={() => setShowAgreementModal(false)}
+                  className="px-4 py-2 bg-vasati-purple text-white font-bold rounded-xl"
+                >
+                  Close Agreement
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* KYC Verification Modal */}
+        {showKycModal && (
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-3xl w-full max-w-md p-6 shadow-2xl animate-fade-in relative text-xs">
+              <button
+                onClick={() => setShowKycModal(false)}
+                className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-gray-100 text-gray-400"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <h3 className="text-base font-extrabold text-vasati-dark">Host Identity & Property KYC</h3>
+              <p className="text-[11px] text-gray-500 mt-0.5">Government ID & Ownership Verification</p>
+
+              <div className="mt-4 space-y-3">
+                <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-between">
+                  <div>
+                    <p className="font-bold text-emerald-900">Aadhaar / National ID</p>
+                    <p className="text-[10px] text-emerald-700">XXXX-XXXX-4912 • Verified</p>
+                  </div>
+                  <span className="text-[10px] font-black px-2 py-0.5 rounded bg-emerald-600 text-white">VALID</span>
+                </div>
+
+                <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-between">
+                  <div>
+                    <p className="font-bold text-emerald-900">PAN Card Verification</p>
+                    <p className="text-[10px] text-emerald-700">ABCPS****M • Verified</p>
+                  </div>
+                  <span className="text-[10px] font-black px-2 py-0.5 rounded bg-emerald-600 text-white">VALID</span>
+                </div>
+
+                <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-between">
+                  <div>
+                    <p className="font-bold text-emerald-900">Property Ownership / Lease Deed</p>
+                    <p className="text-[10px] text-emerald-700">BESCOM Electricity Bill & Property Tax 2026</p>
+                  </div>
+                  <span className="text-[10px] font-black px-2 py-0.5 rounded bg-emerald-600 text-white">VALID</span>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setShowKycModal(false)}
+                className="w-full mt-5 py-2.5 bg-vasati-purple text-white font-bold rounded-xl"
+              >
+                Done
+              </button>
+            </div>
+          </div>
         )}
       </main>
     </div>

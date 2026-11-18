@@ -18,24 +18,41 @@ import {
   Eye,
   Sliders,
   TrendingUp,
-  Activity
+  Activity,
+  RotateCcw,
+  Check,
+  X
 } from 'lucide-react';
 import { VasatiLogo } from '../VasatiLogo';
 
 export const AdminDashboard: React.FC = () => {
   const [data, setData] = useState<any>(null);
+  const [refunds, setRefunds] = useState<any[]>([]);
+  const [usersList, setUsersList] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'overview' | 'approvals' | 'bookings' | 'commissions' | 'complaints' | 'audit_logs'>('overview');
+  const [activeTab, setActiveTab] = useState<
+    'overview' | 'approvals' | 'bookings' | 'commissions' | 'refunds' | 'users' | 'complaints' | 'audit_logs'
+  >('overview');
   const [commissionRate, setCommissionRate] = useState(8);
 
   const fetchMetrics = async () => {
     try {
       setLoading(true);
-      const res = await fetch('/api/admin/metrics');
-      const json = await res.json();
-      if (json.success) {
-        setData(json);
-      }
+      const [mRes, rRes, uRes] = await Promise.all([
+        fetch('/api/admin/metrics'),
+        fetch('/api/refunds'),
+        fetch('/api/admin/users'),
+      ]);
+
+      const [mJson, rJson, uJson] = await Promise.all([
+        mRes.json(),
+        rRes.json(),
+        uRes.json(),
+      ]);
+
+      if (mJson.success) setData(mJson);
+      if (rJson.success) setRefunds(rJson.refunds || []);
+      if (uJson.success) setUsersList(uJson.users || []);
     } catch (err) {
       console.error(err);
     } finally {
@@ -61,6 +78,40 @@ export const AdminDashboard: React.FC = () => {
       const json = await res.json();
       if (json.success) {
         alert('Complaint marked as RESOLVED');
+        fetchMetrics();
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleVerifyProperty = async (propertyId: string, status: 'approved' | 'rejected') => {
+    try {
+      const res = await fetch('/api/admin/verify-property', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ property_id: propertyId, status }),
+      });
+      const json = await res.json();
+      if (json.success) {
+        alert(`Property status updated to ${status}`);
+        fetchMetrics();
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleProcessRefund = async (refundId: string, status: 'PROCESSED' | 'REJECTED') => {
+    try {
+      const res = await fetch('/api/refunds', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refund_id: refundId, status }),
+      });
+      const json = await res.json();
+      if (json.success) {
+        alert(`Refund ${status === 'PROCESSED' ? 'Approved & Settled' : 'Rejected'}`);
         fetchMetrics();
       }
     } catch (err) {
@@ -122,6 +173,8 @@ export const AdminDashboard: React.FC = () => {
             { id: 'approvals', label: 'Property Approvals', icon: FileCheck },
             { id: 'bookings', label: 'Bookings & Lifecycle', icon: Calendar },
             { id: 'commissions', label: '8% Commission Engine', icon: DollarSign },
+            { id: 'refunds', label: `Refunds (${refunds.filter(r => r.status === 'PENDING').length})`, icon: RotateCcw },
+            { id: 'users', label: 'User Directory', icon: Users },
             { id: 'complaints', label: `Complaints (${kpis.complaintsOpen})`, icon: AlertTriangle },
             { id: 'audit_logs', label: 'Anti-Bypass Audit Trail', icon: Activity },
           ].map(tab => {
@@ -264,9 +317,6 @@ export const AdminDashboard: React.FC = () => {
                       Ensure all listings have genuine photos, validated GPS coordinates, and clear room inventories.
                     </p>
                   </div>
-                  <span className="px-3 py-1 rounded-full bg-emerald-950 text-emerald-400 text-xs font-bold border border-emerald-800">
-                    All Active Stays Verified
-                  </span>
                 </div>
 
                 <div className="divide-y divide-slate-700">
@@ -278,6 +328,11 @@ export const AdminDashboard: React.FC = () => {
                           <span className="px-2 py-0.5 rounded bg-purple-900/60 text-purple-300 text-[10px] font-bold">
                             {p.category}
                           </span>
+                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                            p.status === 'approved' ? 'bg-emerald-950 text-emerald-400 border border-emerald-800' : 'bg-amber-950 text-amber-400 border border-amber-800'
+                          }`}>
+                            {p.status.toUpperCase()}
+                          </span>
                         </div>
                         <p className="text-slate-400 mt-1">
                           Address: {p.address_line}, {p.locality}, {p.city} - {p.pincode}
@@ -286,12 +341,69 @@ export const AdminDashboard: React.FC = () => {
                       </div>
 
                       <div className="flex items-center gap-2">
-                        <span className="px-3 py-1 bg-emerald-900/60 text-emerald-300 rounded-lg text-xs font-bold">
-                          Verified & Approved
-                        </span>
+                        {p.status !== 'approved' ? (
+                          <button
+                            onClick={() => handleVerifyProperty(p.id, 'approved')}
+                            className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold"
+                          >
+                            Approve Listing
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => handleVerifyProperty(p.id, 'rejected')}
+                            className="px-3 py-1.5 bg-slate-700 hover:bg-red-900 text-slate-300 hover:text-white rounded-lg text-xs"
+                          >
+                            Revoke Approval
+                          </button>
+                        )}
                       </div>
                     </div>
                   ))}
+                </div>
+              </div>
+            )}
+
+            {/* TAB: BOOKINGS ACROSS 10 STAGES */}
+            {activeTab === 'bookings' && (
+              <div className="bg-slate-800/80 rounded-2xl border border-slate-700 p-6 space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-base font-extrabold text-white">Full Booking Lifecycle Management</h3>
+                    <p className="text-xs text-slate-400 mt-0.5">
+                      10 Statuses: Pending, Owner Accepted, Payment Pending, Confirmed, Move-in Pending, Checked In, Completed, Cancelled, Refund Pending, Refunded.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="overflow-x-auto text-xs">
+                  <table className="w-full text-left">
+                    <thead>
+                      <tr className="border-b border-slate-700 text-slate-400 text-[10px] uppercase font-bold">
+                        <th className="pb-3">Booking Code</th>
+                        <th className="pb-3">Customer</th>
+                        <th className="pb-3">Property</th>
+                        <th className="pb-3">Duration</th>
+                        <th className="pb-3">Total Amount</th>
+                        <th className="pb-3">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-800">
+                      {data?.recentBookings?.map((b: any) => (
+                        <tr key={b.id} className="hover:bg-slate-800/50">
+                          <td className="py-3 font-mono font-bold text-vasati-orange">{b.booking_code}</td>
+                          <td className="py-3 font-bold text-white">{b.customer_name}</td>
+                          <td className="py-3 text-slate-300">{b.property_name} ({b.room_type})</td>
+                          <td className="py-3 text-slate-400">{b.duration_months} Months</td>
+                          <td className="py-3 font-bold text-white">₹{b.total_amount?.toLocaleString('en-IN')}</td>
+                          <td className="py-3">
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-950 text-purple-300 border border-purple-800">
+                              {b.status}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
             )}
@@ -361,6 +473,105 @@ export const AdminDashboard: React.FC = () => {
                       </tbody>
                     </table>
                   </div>
+                </div>
+              </div>
+            )}
+
+            {/* TAB: REFUNDS MANAGEMENT */}
+            {activeTab === 'refunds' && (
+              <div className="bg-slate-800/80 rounded-2xl border border-slate-700 p-6 space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-base font-extrabold text-white">Refund Management & Cancellations</h3>
+                    <p className="text-xs text-slate-400 mt-0.5">
+                      Process tenant refund requests, reverse commission charges, and update banking settlement trails.
+                    </p>
+                  </div>
+                </div>
+
+                {refunds.length === 0 ? (
+                  <div className="text-center py-12 text-slate-400 text-xs">
+                    No active refund claims. All booking settlements healthy.
+                  </div>
+                ) : (
+                  <div className="divide-y divide-slate-700">
+                    {refunds.map(r => (
+                      <div key={r.id} className="py-4 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-white">{r.customer_name}</span>
+                            <span className="font-mono text-[10px] text-vasati-orange">{r.booking_code}</span>
+                            <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                              r.status === 'PROCESSED' ? 'bg-emerald-950 text-emerald-400 border border-emerald-800' : 'bg-amber-950 text-amber-400 border border-amber-800'
+                            }`}>
+                              {r.status}
+                            </span>
+                          </div>
+                          <p className="text-slate-300 mt-1">Property: {r.property_name} • Reason: "{r.reason}"</p>
+                          <p className="text-slate-400 text-[11px] mt-0.5">Refund Claim Amount: <span className="text-white font-bold">₹{r.amount?.toLocaleString('en-IN')}</span></p>
+                        </div>
+
+                        {r.status === 'PENDING' && (
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => handleProcessRefund(r.id, 'PROCESSED')}
+                              className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold"
+                            >
+                              Approve Refund
+                            </button>
+                            <button
+                              onClick={() => handleProcessRefund(r.id, 'REJECTED')}
+                              className="px-3.5 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-300 rounded-lg text-xs"
+                            >
+                              Reject
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* TAB: USERS & HOSTS DIRECTORY */}
+            {activeTab === 'users' && (
+              <div className="bg-slate-800/80 rounded-2xl border border-slate-700 p-6 space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-base font-extrabold text-white">Registered Users & Host Directory</h3>
+                    <p className="text-xs text-slate-400 mt-0.5">
+                      Inspect KYC verification documents and resident records.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="divide-y divide-slate-700 text-xs">
+                  {usersList.map(u => (
+                    <div key={u.id} className="py-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-extrabold text-white">{u.name}</span>
+                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                            u.role === 'owner' ? 'bg-purple-900/60 text-purple-300' : u.role === 'admin' ? 'bg-orange-900/60 text-orange-300' : 'bg-slate-700 text-slate-300'
+                          }`}>
+                            {u.role.toUpperCase()}
+                          </span>
+                        </div>
+                        <p className="text-slate-400 mt-0.5">{u.email} • {u.phone || 'Phone verified'}</p>
+                        {u.business_name && <p className="text-[11px] text-purple-300">Entity: {u.business_name}</p>}
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        {u.role === 'owner' && (
+                          <span className="px-2.5 py-1 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 text-[10px] font-bold flex items-center gap-1">
+                            <ShieldCheck className="w-3 h-3" />
+                            KYC Verified Host
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}
@@ -438,4 +649,3 @@ export const AdminDashboard: React.FC = () => {
     </div>
   );
 };
-

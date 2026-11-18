@@ -270,6 +270,19 @@ function initSchema(db: Database.Database) {
       FOREIGN KEY(commission_id) REFERENCES commissions(id)
     );
 
+    -- Refunds Table
+    CREATE TABLE IF NOT EXISTS refunds (
+      id TEXT PRIMARY KEY,
+      booking_id TEXT NOT NULL,
+      amount INTEGER NOT NULL,
+      reason TEXT,
+      status TEXT CHECK(status IN ('PENDING', 'APPROVED', 'REJECTED', 'PROCESSED')) DEFAULT 'PENDING',
+      requested_by TEXT,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      processed_at DATETIME,
+      FOREIGN KEY(booking_id) REFERENCES bookings(id)
+    );
+
     -- Customer & Owner Complaints
     CREATE TABLE IF NOT EXISTS complaints (
       id TEXT PRIMARY KEY,

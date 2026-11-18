@@ -18,7 +18,9 @@ import {
   Clock,
   CheckCircle,
   X,
-  AlertCircle
+  AlertCircle,
+  PhoneCall,
+  PhoneOff
 } from 'lucide-react';
 
 interface DetailsScreenProps {
@@ -53,6 +55,8 @@ export const DetailsScreen: React.FC<DetailsScreenProps> = ({
   const [showVisitModal, setShowVisitModal] = useState(false);
   const [showMapModal, setShowMapModal] = useState(false);
   const [showChatModal, setShowChatModal] = useState(false);
+  const [showCallModal, setShowCallModal] = useState(false);
+  const [callStatus, setCallStatus] = useState<'connecting' | 'ringing' | 'connected' | 'ended'>('connecting');
 
   // Visit modal form states
   const [visitDate, setVisitDate] = useState('');
@@ -311,13 +315,28 @@ export const DetailsScreen: React.FC<DetailsScreenProps> = ({
               </div>
             </div>
 
-            <button
-              onClick={() => setShowChatModal(true)}
-              className="p-2.5 rounded-full bg-white text-vasati-purple shadow-sm hover:bg-vasati-purple hover:text-white transition-colors"
-              title="Chat with Host"
-            >
-              <MessageSquare className="w-4 h-4" />
-            </button>
+            <div className="flex items-center gap-1.5">
+              <button
+                onClick={() => {
+                  setShowCallModal(true);
+                  setCallStatus('connecting');
+                  setTimeout(() => setCallStatus('ringing'), 1000);
+                  setTimeout(() => setCallStatus('connected'), 2600);
+                }}
+                className="p-2.5 rounded-full bg-white text-emerald-600 shadow-sm hover:bg-emerald-600 hover:text-white transition-colors"
+                title="Masked Audio Call"
+              >
+                <PhoneCall className="w-4 h-4" />
+              </button>
+
+              <button
+                onClick={() => setShowChatModal(true)}
+                className="p-2.5 rounded-full bg-white text-vasati-purple shadow-sm hover:bg-vasati-purple hover:text-white transition-colors"
+                title="Chat with Host"
+              >
+                <MessageSquare className="w-4 h-4" />
+              </button>
+            </div>
           </div>
 
           {/* Reviews Preview */}
@@ -546,6 +565,53 @@ export const DetailsScreen: React.FC<DetailsScreenProps> = ({
                 Send
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Masked Consent Calling Modal */}
+      {showCallModal && (
+        <div className="fixed inset-0 bg-black/75 backdrop-blur-md z-50 flex items-center justify-center p-4">
+          <div className="bg-slate-900 text-white rounded-3xl w-full max-w-sm p-6 shadow-2xl flex flex-col items-center text-center animate-fade-in relative border border-purple-500/30">
+            <div className="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-3 animate-pulse border-2 border-emerald-500/40">
+              <PhoneCall className="w-8 h-8" />
+            </div>
+
+            <span className="text-[10px] font-mono text-purple-300 uppercase tracking-widest bg-purple-900/60 px-3 py-0.5 rounded-full mb-1">
+              VASATI Secure Telephony Bridge
+            </span>
+
+            <h3 className="text-base font-extrabold">{property.name} Host</h3>
+            <p className="text-xs text-gray-400 mt-0.5 font-mono">
+              Masked Virtual: +91 80 4719 3200 (Ext: 8812)
+            </p>
+
+            <div className="my-5 p-3 rounded-2xl bg-slate-800/80 border border-slate-700/80 w-full text-xs space-y-1">
+              <div className="flex justify-between text-gray-400">
+                <span>Tenant Identity:</span>
+                <span className="text-white font-bold">Lakshminarayana G</span>
+              </div>
+              <div className="flex justify-between text-gray-400">
+                <span>Host Phone:</span>
+                <span className="text-emerald-400 font-bold">Masked & Protected</span>
+              </div>
+              <div className="flex justify-between text-gray-400">
+                <span>Call Status:</span>
+                <span className="font-bold uppercase text-amber-400">{callStatus}</span>
+              </div>
+            </div>
+
+            <p className="text-[10px] text-gray-400 mb-5">
+              🛡️ Anti-Bypass Notice: Direct numbers are masked. Conversations are attributed to your enquiry ID for booking protection.
+            </p>
+
+            <button
+              onClick={() => setShowCallModal(false)}
+              className="w-full py-3 rounded-full bg-red-600 hover:bg-red-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg transition-all"
+            >
+              <PhoneOff className="w-4 h-4" />
+              <span>End Call</span>
+            </button>
           </div>
         </div>
       )}

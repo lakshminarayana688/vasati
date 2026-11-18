@@ -128,13 +128,33 @@ export const BookingsListView: React.FC<BookingsListViewProps> = ({ onBack, onSe
                     <FileText className="w-3.5 h-3.5 text-vasati-purple" />
                     <span>Invoice: {b.invoice_number}</span>
                   </span>
-                  <button
-                    onClick={() => alert(`Downloaded Official VASATI Receipt for ${b.booking_code}`)}
-                    className="font-bold text-vasati-purple hover:underline flex items-center gap-1"
-                  >
-                    <Download className="w-3 h-3" />
-                    <span>Receipt</span>
-                  </button>
+                  <div className="flex items-center gap-3">
+                    {b.status === 'Confirmed' && (
+                      <button
+                        onClick={async () => {
+                          if (confirm(`Request cancellation and full refund for ${b.booking_code}?`)) {
+                            await fetch('/api/refunds', {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({ booking_id: b.id, reason: 'Tenant requested cancellation before check-in' }),
+                            });
+                            alert('Refund request submitted! Status updated to Refund Pending.');
+                            window.location.reload();
+                          }
+                        }}
+                        className="text-red-500 font-bold hover:underline"
+                      >
+                        Cancel & Refund
+                      </button>
+                    )}
+                    <button
+                      onClick={() => alert(`Downloaded Official VASATI Receipt for ${b.booking_code}`)}
+                      className="font-bold text-vasati-purple hover:underline flex items-center gap-1"
+                    >
+                      <Download className="w-3 h-3" />
+                      <span>Receipt</span>
+                    </button>
+                  </div>
                 </div>
               )}
             </div>

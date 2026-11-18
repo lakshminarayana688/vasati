@@ -67,6 +67,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 }) => {
   const [selectedCity, setSelectedCity] = useState('Bengaluru');
   const [cityDropdownOpen, setCityDropdownOpen] = useState(false);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -108,13 +109,38 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             )}
           </div>
 
-          <button
-            onClick={() => alert('Notifications: Your booking for Sri Sai PG is confirmed!')}
-            className="relative p-2.5 rounded-full hover:bg-gray-100 transition-colors"
-          >
-            <Bell className="w-5 h-5 text-vasati-dark" />
-            <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-vasati-orange ring-2 ring-white" />
-          </button>
+          <div className="relative">
+            <button
+              onClick={() => setNotificationsOpen(!notificationsOpen)}
+              className="relative p-2.5 rounded-full hover:bg-gray-100 transition-colors"
+            >
+              <Bell className="w-5 h-5 text-vasati-dark" />
+              <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-vasati-orange ring-2 ring-white" />
+            </button>
+
+            {notificationsOpen && (
+              <div className="absolute top-10 right-0 z-50 bg-white rounded-3xl shadow-2xl border border-purple-100 p-4 w-72 animate-fade-in text-xs">
+                <div className="flex items-center justify-between pb-2 border-b border-gray-100 mb-2">
+                  <h4 className="font-extrabold text-vasati-dark">Notifications</h4>
+                  <span className="text-[10px] text-vasati-purple font-bold">Mark all read</span>
+                </div>
+                <div className="space-y-2.5">
+                  <div className="p-2.5 rounded-xl bg-purple-50 border border-purple-100">
+                    <p className="font-bold text-vasati-purple text-[11px]">Visit Request Approved!</p>
+                    <p className="text-gray-600 text-[10px] mt-0.5">Host at Sri Sai PG confirmed your visit for Nov 20, 11:00 AM.</p>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-emerald-50 border border-emerald-100">
+                    <p className="font-bold text-emerald-800 text-[11px]">Booking Confirmed</p>
+                    <p className="text-gray-600 text-[10px] mt-0.5">Booking BK-VAS-2026-8812 is confirmed. Welcome to VASATI!</p>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-gray-50 border border-gray-100">
+                    <p className="font-bold text-gray-700 text-[11px]">Rent Reminder</p>
+                    <p className="text-gray-500 text-[10px] mt-0.5">Next billing date scheduled for 1st Dec 2026.</p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Hero Section */}
