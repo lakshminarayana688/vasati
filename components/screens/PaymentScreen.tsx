@@ -198,7 +198,7 @@ export const PaymentScreen: React.FC<PaymentScreenProps> = ({
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-y-auto no-scrollbar px-5 py-4 space-y-5 pb-24">
+      <div className="flex-1 overflow-y-auto no-scrollbar px-5 py-4 space-y-5 max-w-4xl mx-auto w-full pb-24">
         {/* Booking Summary Card */}
         <div className="p-3.5 rounded-3xl bg-white border border-vasati-purple-border/60 shadow-card flex items-center gap-3">
           <img
@@ -368,20 +368,22 @@ export const PaymentScreen: React.FC<PaymentScreenProps> = ({
 
       {/* Sticky Bottom Action */}
       <div className="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-vasati-purple-border/30 p-4 shadow-nav z-20">
-        <button
-          onClick={handlePayNow}
-          disabled={processing}
-          className="w-full py-4 rounded-full bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant hover:from-vasati-royal hover:to-vasati-purple text-white font-extrabold text-sm shadow-xl shadow-vasati-purple/25 flex items-center justify-center gap-2 transition-all active:scale-98 disabled:opacity-60"
-        >
-          {processing ? (
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-              <span>Verifying Payment...</span>
-            </div>
-          ) : (
-            <span>Pay ₹{amount.toLocaleString('en-IN')}</span>
-          )}
-        </button>
+        <div className="max-w-4xl mx-auto w-full">
+          <button
+            onClick={handlePayNow}
+            disabled={processing}
+            className="w-full py-4 rounded-full bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant hover:from-vasati-royal hover:to-vasati-purple text-white font-extrabold text-sm shadow-xl shadow-vasati-purple/25 flex items-center justify-center gap-2 transition-all active:scale-98 disabled:opacity-60"
+          >
+            {processing ? (
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <span>Verifying Payment...</span>
+              </div>
+            ) : (
+              <span>Pay ₹{amount.toLocaleString('en-IN')}</span>
+            )}
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -315,6 +315,62 @@ export default function VasatiApp() {
             </span>
           </div>
 
+          {/* Desktop Navigation Links (when customer app is active) */}
+          {activeRole === 'customer' && (
+            <div className="hidden lg:flex items-center gap-1 bg-purple-50/70 p-1 rounded-full border border-purple-100 text-xs font-bold">
+              <button
+                onClick={() => navigateTo('home')}
+                className={`px-3 py-1.5 rounded-full transition-all ${
+                  activeScreen === 'home'
+                    ? 'bg-vasati-purple text-white shadow-sm'
+                    : 'text-gray-600 hover:text-vasati-purple'
+                }`}
+              >
+                Home
+              </button>
+              <button
+                onClick={() => navigateTo('filters')}
+                className={`px-3 py-1.5 rounded-full transition-all ${
+                  activeScreen === 'filters' || activeScreen === 'listings'
+                    ? 'bg-vasati-purple text-white shadow-sm'
+                    : 'text-gray-600 hover:text-vasati-purple'
+                }`}
+              >
+                Search PGs
+              </button>
+              <button
+                onClick={() => navigateTo('saved_list')}
+                className={`px-3 py-1.5 rounded-full transition-all ${
+                  activeScreen === 'saved_list'
+                    ? 'bg-vasati-purple text-white shadow-sm'
+                    : 'text-gray-600 hover:text-vasati-purple'
+                }`}
+              >
+                Saved ({savedIds.length})
+              </button>
+              <button
+                onClick={() => navigateTo('bookings_list')}
+                className={`px-3 py-1.5 rounded-full transition-all ${
+                  activeScreen === 'bookings_list'
+                    ? 'bg-vasati-purple text-white shadow-sm'
+                    : 'text-gray-600 hover:text-vasati-purple'
+                }`}
+              >
+                My Bookings
+              </button>
+              <button
+                onClick={() => navigateTo('profile')}
+                className={`px-3 py-1.5 rounded-full transition-all ${
+                  activeScreen === 'profile'
+                    ? 'bg-vasati-purple text-white shadow-sm'
+                    : 'text-gray-600 hover:text-vasati-purple'
+                }`}
+              >
+                Profile
+              </button>
+            </div>
+          )}
+
           {/* Role Switcher */}
           <div className="flex items-center gap-1.5 bg-gray-100/90 p-1 rounded-full text-xs font-bold">
             <button
@@ -357,7 +413,7 @@ export default function VasatiApp() {
                 </button>
                 <button
                   onClick={() => setViewMode('responsive')}
-                  title="Full Web View"
+                  title="Full Desktop Web View"
                   className={`p-1.5 rounded-full transition-all ${
                     viewMode === 'responsive' ? 'bg-white text-vasati-purple shadow-sm' : 'text-gray-500'
                   }`}
@@ -373,20 +429,20 @@ export default function VasatiApp() {
       {/* Main View Container */}
       <div className="w-full flex-1 flex items-center justify-center p-0 md:p-6">
         {activeRole === 'owner' ? (
-          <div className="w-full">
+          <div className="w-full max-w-7xl">
             <OwnerPortal />
           </div>
         ) : activeRole === 'admin' ? (
-          <div className="w-full">
+          <div className="w-full max-w-7xl">
             <AdminDashboard />
           </div>
         ) : viewMode === 'mobile' ? (
-          /* Realistic Smartphone Frame Matching Reference Image */
-          <div className="relative my-4 w-full max-w-[395px] h-[835px] max-h-[92vh] bg-black rounded-[48px] p-3 shadow-[0_25px_60px_-15px_rgba(92,22,197,0.35)] border-4 border-gray-800/80 flex flex-col overflow-hidden">
+          /* Mobile View: Seamless full-screen on mobile devices (< md), authentic smartphone frame preview on desktop (>= md) */
+          <div className="w-full h-full md:my-4 md:max-w-[400px] md:h-[840px] md:max-h-[92vh] md:bg-black md:rounded-[48px] md:p-3 md:shadow-[0_25px_60px_-15px_rgba(92,22,197,0.35)] md:border-4 md:border-gray-800/80 flex flex-col overflow-hidden">
             {/* Screen Inner Container */}
-            <div className="relative w-full h-full bg-white rounded-[38px] overflow-hidden flex flex-col shadow-inner">
-              {/* Authentic 9:41 Status Bar */}
-              <div className={`w-full px-6 pt-3 pb-1 flex items-center justify-between text-xs font-bold select-none z-40 transition-colors duration-200 ${
+            <div className="relative w-full h-full bg-white md:rounded-[38px] overflow-hidden flex flex-col shadow-inner">
+              {/* Authentic 9:41 Status Bar (displayed in desktop preview frame) */}
+              <div className={`hidden md:flex w-full px-6 pt-3 pb-1 items-center justify-between text-xs font-bold select-none z-40 transition-colors duration-200 ${
                 activeScreen === 'profile' ? 'bg-vasati-purple text-white' : 'bg-white text-vasati-dark'
               }`}>
                 <span>9:41</span>
@@ -406,15 +462,15 @@ export default function VasatiApp() {
                 {renderCustomerScreen()}
               </div>
 
-              {/* Bottom Home Indicator Bar */}
-              <div className="w-full py-1.5 bg-white flex justify-center z-40">
+              {/* Bottom Home Indicator Bar (displayed in desktop preview frame) */}
+              <div className="hidden md:flex w-full py-1.5 bg-white justify-center z-40">
                 <div className="w-32 h-1 bg-gray-300 rounded-full" />
               </div>
             </div>
           </div>
         ) : (
-          /* Full Responsive Web View */
-          <div className="w-full max-w-4xl min-h-[750px] bg-white rounded-3xl shadow-xl overflow-hidden border border-purple-100 flex flex-col my-4">
+          /* Full Responsive Desktop Web View */
+          <div className="w-full max-w-7xl min-h-[820px] bg-white md:rounded-3xl shadow-xl overflow-hidden border border-purple-100 flex flex-col my-0 md:my-4">
             {renderCustomerScreen()}
           </div>
         )}

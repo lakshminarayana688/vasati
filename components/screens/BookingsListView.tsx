@@ -68,7 +68,7 @@ export const BookingsListView: React.FC<BookingsListViewProps> = ({ onBack, onSe
         <div className="w-6" />
       </div>
 
-      <div className="flex-1 overflow-y-auto no-scrollbar p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto no-scrollbar p-4 max-w-6xl mx-auto w-full">
         {loading ? (
           <div className="text-center py-12">
             <div className="w-7 h-7 border-3 border-vasati-purple border-t-transparent rounded-full animate-spin mx-auto" />
@@ -80,7 +80,8 @@ export const BookingsListView: React.FC<BookingsListViewProps> = ({ onBack, onSe
             <p className="text-xs text-vasati-secondary mt-1">Explore top PGs and book your ideal stay today.</p>
           </div>
         ) : (
-          bookings.map(b => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {bookings.map(b => (
             <div
               key={b.id}
               className="bg-white rounded-3xl p-4 shadow-card hover:shadow-card-hover border border-vasati-purple-border/50 space-y-3 transition-all"
@@ -176,7 +177,8 @@ export const BookingsListView: React.FC<BookingsListViewProps> = ({ onBack, onSe
                 </div>
               )}
             </div>
-          ))
+          ))}
+          </div>
         )}
       </div>
 

@@ -140,46 +140,48 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
       <div className="flex-1 overflow-y-auto no-scrollbar pb-6">
         {/* Top Purple Header Banner matching Screen 8 */}
         <div className="bg-gradient-to-br from-vasati-royal via-vasati-purple to-vasati-purple-vibrant pt-7 pb-8 px-6 text-white rounded-b-[2.5rem] shadow-xl relative">
-          {/* Settings Gear Top Right */}
-          <button
-            onClick={() => setActiveModal('profile')}
-            className="absolute top-5 right-6 p-1.5 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
-          >
-            <Settings className="w-5 h-5 text-white" />
-          </button>
+          <div className="max-w-4xl mx-auto w-full relative">
+            {/* Settings Gear Top Right */}
+            <button
+              onClick={() => setActiveModal('profile')}
+              className="absolute top-0 right-0 p-1.5 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+            >
+              <Settings className="w-5 h-5 text-white" />
+            </button>
 
-          {/* User Info with Avatar matching Screen 8 */}
-          <div className="flex items-center gap-4">
-            <div className="relative group">
-              <img
-                src={avatarUrl}
-                alt={name}
-                className="w-16 h-16 rounded-full object-cover border-2 border-white/80 shadow-md"
-              />
-              <button
-                type="button"
-                onClick={() => setPhotoActionModalOpen(true)}
-                title="Change Photo (Camera / Gallery)"
-                className="absolute -bottom-1 -right-1 p-1.5 bg-vasati-orange text-white rounded-full shadow-md border-2 border-vasati-purple hover:scale-110 active:scale-95 transition-all"
-              >
-                <Camera className="w-3.5 h-3.5" />
-              </button>
-            </div>
-            <div>
-              <h2 className="text-lg font-extrabold text-white tracking-tight leading-tight">
-                {name}
-              </h2>
-              <p className="text-xs text-purple-200 mt-0.5 font-medium">{email}</p>
-              <div className="mt-1.5 inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/15 text-[10px] font-bold text-white backdrop-blur-sm">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                Verified Tenant
+            {/* User Info with Avatar matching Screen 8 */}
+            <div className="flex items-center gap-4">
+              <div className="relative group">
+                <img
+                  src={avatarUrl}
+                  alt={name}
+                  className="w-16 h-16 rounded-full object-cover border-2 border-white/80 shadow-md"
+                />
+                <button
+                  type="button"
+                  onClick={() => setPhotoActionModalOpen(true)}
+                  title="Change Photo (Camera / Gallery)"
+                  className="absolute -bottom-1 -right-1 p-1.5 bg-vasati-orange text-white rounded-full shadow-md border-2 border-vasati-purple hover:scale-110 active:scale-95 transition-all"
+                >
+                  <Camera className="w-3.5 h-3.5" />
+                </button>
+              </div>
+              <div>
+                <h2 className="text-lg font-extrabold text-white tracking-tight leading-tight">
+                  {name}
+                </h2>
+                <p className="text-xs text-purple-200 mt-0.5 font-medium">{email}</p>
+                <div className="mt-1.5 inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/15 text-[10px] font-bold text-white backdrop-blur-sm">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                  Verified Tenant
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         {/* Content Container */}
-        <div className="px-5 mt-5 space-y-4">
+        <div className="px-5 mt-5 space-y-4 max-w-4xl mx-auto w-full">
           {/* Highlight Card: My Bookings matching Reference Image */}
           <div
             onClick={onOpenBookings}

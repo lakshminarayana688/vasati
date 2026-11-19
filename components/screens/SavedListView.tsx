@@ -27,7 +27,7 @@ export const SavedListView: React.FC<SavedListViewProps> = ({
         <div className="w-6" />
       </div>
 
-      <div className="flex-1 overflow-y-auto no-scrollbar p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto no-scrollbar p-4 max-w-6xl mx-auto w-full">
         {savedProperties.length === 0 ? (
           <div className="text-center py-16 px-4">
             <Heart className="w-12 h-12 text-vasati-secondary/40 mx-auto mb-2" />
@@ -37,7 +37,8 @@ export const SavedListView: React.FC<SavedListViewProps> = ({
             </p>
           </div>
         ) : (
-          savedProperties.map(pg => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {savedProperties.map(pg => (
             <div
               key={pg.id}
               onClick={() => onSelectProperty(pg.id)}
@@ -86,7 +87,8 @@ export const SavedListView: React.FC<SavedListViewProps> = ({
                 </button>
               </div>
             </div>
-          ))
+          ))}
+          </div>
         )}
       </div>
     </div>

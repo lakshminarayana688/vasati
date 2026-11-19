@@ -125,8 +125,8 @@ export const ListingsScreen: React.FC<ListingsScreenProps> = ({
           )}
         </div>
       ) : (
-        // List View matching Reference Image Screen 4
-        <div className="flex-1 overflow-y-auto no-scrollbar px-4 py-3 space-y-4">
+        // List View matching Reference Image Screen 4 with Responsive Grid
+        <div className="flex-1 overflow-y-auto no-scrollbar px-4 py-3 max-w-6xl mx-auto w-full">
           {properties.length === 0 ? (
             <div className="text-center py-16 px-4">
               <p className="text-base font-bold text-vasati-dark">No PGs match your filters</p>
@@ -139,14 +139,15 @@ export const ListingsScreen: React.FC<ListingsScreenProps> = ({
               </button>
             </div>
           ) : (
-            properties.map(pg => {
-              const isSaved = savedIds.includes(pg.id);
-              return (
-                <div
-                  key={pg.id}
-                  onClick={() => onSelectProperty(pg.id)}
-                  className="bg-white rounded-3xl p-3.5 shadow-card hover:shadow-card-hover border border-vasati-purple-border/50 hover:border-vasati-purple/40 transition-all cursor-pointer group"
-                >
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {properties.map(pg => {
+                const isSaved = savedIds.includes(pg.id);
+                return (
+                  <div
+                    key={pg.id}
+                    onClick={() => onSelectProperty(pg.id)}
+                    className="bg-white rounded-3xl p-3.5 shadow-card hover:shadow-card-hover border border-vasati-purple-border/50 hover:border-vasati-purple/40 transition-all cursor-pointer group flex flex-col justify-between"
+                  >
                   {/* Property Image with Badges */}
                   <div className="relative w-full h-44 rounded-2xl overflow-hidden">
                     <img
@@ -235,7 +236,8 @@ export const ListingsScreen: React.FC<ListingsScreenProps> = ({
                   </div>
                 </div>
               );
-            })
+            })}
+            </div>
           )}
         </div>
       )}

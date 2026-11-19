@@ -325,7 +325,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         </div>
 
         {/* Popular Areas Section */}
-        <div className="px-5 mt-6">
+        <div className="px-5 mt-6 max-w-6xl mx-auto w-full">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-base font-extrabold text-vasati-dark">Popular Areas</h3>
             <button
@@ -337,14 +337,14 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             </button>
           </div>
 
-          <div className="flex items-center gap-3 overflow-x-auto no-scrollbar pb-1">
+          <div className="flex items-center gap-3 overflow-x-auto no-scrollbar pb-1 md:grid md:grid-cols-5 md:gap-4 md:overflow-visible">
             {POPULAR_AREAS.map(area => (
               <div
                 key={area.name}
                 onClick={() => onOpenListings({ locality: area.name })}
-                className="flex-shrink-0 w-28 group cursor-pointer"
+                className="flex-shrink-0 w-28 md:w-auto group cursor-pointer"
               >
-                <div className="relative w-28 h-28 rounded-2xl overflow-hidden shadow-sm border border-gray-100 group-hover:shadow-md transition-all">
+                <div className="relative w-28 md:w-full h-28 md:h-32 rounded-2xl overflow-hidden shadow-sm border border-gray-100 group-hover:shadow-md transition-all">
                   <img
                     src={area.image}
                     alt={area.name}
@@ -362,7 +362,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         </div>
 
         {/* Featured PGs Section */}
-        <div className="px-5 mt-6">
+        <div className="px-5 mt-6 max-w-6xl mx-auto w-full">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-base font-extrabold text-vasati-dark">Featured PGs</h3>
             <button
@@ -374,8 +374,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             </button>
           </div>
 
-          <div className="space-y-3.5">
-            {featured.slice(0, 2).map(pg => {
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {featured.map(pg => {
               const isSaved = savedIds.includes(pg.id);
               return (
                 <div

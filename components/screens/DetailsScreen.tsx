@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ChatModal } from '../ChatModal';
 import {
   ChevronLeft,
   Heart,
@@ -156,7 +157,7 @@ export const DetailsScreen: React.FC<DetailsScreenProps> = ({
       {/* Scrollable Details Body */}
       <div className="flex-1 overflow-y-auto no-scrollbar pb-24">
         {/* Hero Gallery with Floating Buttons */}
-        <div className="relative w-full h-72 bg-gray-900">
+        <div className="relative w-full h-72 md:h-96 bg-gray-900 md:rounded-b-3xl overflow-hidden">
           <img
             src={images[activeImageIndex]?.image_url}
             alt={property.name}
@@ -200,168 +201,232 @@ export const DetailsScreen: React.FC<DetailsScreenProps> = ({
           </div>
         </div>
 
-        {/* Property Info Content */}
-        <div className="px-5 pt-4">
-          {/* Title and Rating */}
-          <div className="flex items-start justify-between">
-            <div>
-              <h1 className="text-xl font-extrabold text-vasati-dark">{property.name}</h1>
-              <div className="flex items-center gap-1.5 mt-1">
-                <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                <span className="text-sm font-bold text-gray-900">{property.rating}</span>
-                <span className="text-xs text-gray-400">({property.review_count} reviews)</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Location & Map Link */}
-          <div className="flex items-center justify-between mt-2.5 pb-3 border-b border-gray-100">
-            <div className="flex items-center gap-1 text-xs text-gray-600">
-              <MapPin className="w-4 h-4 text-vasati-purple shrink-0" />
-              <span>{property.locality}, {property.city}</span>
-            </div>
-
-            <button
-              onClick={() => setShowMapModal(true)}
-              className="text-xs font-bold text-vasati-purple hover:underline flex items-center gap-1"
-            >
-              <MapPin className="w-3.5 h-3.5" />
-              <span>View on Map</span>
-            </button>
-          </div>
-
-          {/* Monthly Rent */}
-          <div className="mt-3">
-            <span className="text-2xl font-black text-vasati-purple">
-              ₹{property.monthly_rent_from.toLocaleString('en-IN')}
-            </span>
-            <span className="text-sm text-gray-400 font-medium"> / month</span>
-          </div>
-
-          {/* Facilities 2x4 Grid */}
-          <div className="mt-5">
-            <h3 className="text-sm font-extrabold text-vasati-dark mb-3">Facilities</h3>
-            <div className="grid grid-cols-4 gap-2.5">
-              {['ac', 'wifi', 'meals', 'parking', 'security', 'lift', 'power_backup', 'cctv'].map(key => {
-                const item = FACILITY_ICONS[key];
-                if (!item) return null;
-                const Icon = item.icon;
-                return (
-                  <div
-                    key={key}
-                    className="flex flex-col items-center justify-center p-2.5 rounded-2xl bg-white border border-vasati-purple-border/70 aspect-square shadow-sm"
-                  >
-                    <Icon className="w-5 h-5 text-vasati-purple mb-1" />
-                    <span className="text-[10px] font-bold text-vasati-dark text-center leading-tight">
-                      {item.name}
-                    </span>
+        {/* Property Info Content with Responsive Desktop/Mobile Layout */}
+        <div className="px-5 pt-4 max-w-6xl mx-auto w-full">
+          <div className="md:grid md:grid-cols-3 md:gap-8">
+            {/* Left 2 Columns: Main Info */}
+            <div className="md:col-span-2">
+              {/* Title and Rating */}
+              <div className="flex items-start justify-between">
+                <div>
+                  <h1 className="text-xl md:text-2xl font-extrabold text-vasati-dark">{property.name}</h1>
+                  <div className="flex items-center gap-1.5 mt-1">
+                    <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                    <span className="text-sm font-bold text-gray-900">{property.rating}</span>
+                    <span className="text-xs text-gray-400">({property.review_count} reviews)</span>
                   </div>
-                );
-              })}
-            </div>
-          </div>
+                </div>
+              </div>
 
-          {/* About this PG */}
-          <div className="mt-6">
-            <h3 className="text-sm font-extrabold text-vasati-dark mb-2">About this PG</h3>
-            <p className="text-xs text-gray-600 leading-relaxed">
-              {property.description}
-            </p>
-          </div>
+              {/* Location & Map Link */}
+              <div className="flex items-center justify-between mt-2.5 pb-3 border-b border-gray-100">
+                <div className="flex items-center gap-1 text-xs text-gray-600">
+                  <MapPin className="w-4 h-4 text-vasati-purple shrink-0" />
+                  <span>{property.locality}, {property.city}</span>
+                </div>
 
-          {/* Room Availability */}
-          <div className="mt-6">
-            <h3 className="text-sm font-extrabold text-vasati-dark mb-2">Available Room Types</h3>
-            <div className="space-y-2">
-              {property.rooms && property.rooms.map((room: any) => (
-                <div
-                  key={room.id}
-                  className="p-3 rounded-2xl border border-purple-100 bg-vasati-purple-soft/30 flex items-center justify-between"
+                <button
+                  onClick={() => setShowMapModal(true)}
+                  className="text-xs font-bold text-vasati-purple hover:underline flex items-center gap-1"
                 >
-                  <div>
-                    <h4 className="text-xs font-bold text-vasati-dark">{room.room_type}</h4>
-                    <p className="text-[10px] text-gray-500">{room.description}</p>
-                    <p className="text-[10px] font-bold text-emerald-600 mt-0.5">
-                      {room.available_beds} beds available
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-sm font-black text-vasati-purple">
-                      ₹{room.monthly_rent.toLocaleString('en-IN')}
-                    </span>
-                    <span className="text-[10px] text-gray-400">/mo</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Anti-Bypass Protected Host Card */}
-          <div className="mt-6 p-3.5 rounded-2xl bg-purple-50/70 border border-purple-100 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-vasati-purple text-white flex items-center justify-center font-bold text-sm">
-                VS
+                  <MapPin className="w-3.5 h-3.5" />
+                  <span>View on Map</span>
+                </button>
               </div>
-              <div>
-                <div className="flex items-center gap-1.5">
-                  <h4 className="text-xs font-bold text-vasati-dark">{property.owner?.businessName}</h4>
-                  <span className="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-emerald-100 text-emerald-700">
-                    KYC Verified
-                  </span>
+
+              {/* Monthly Rent (Mobile view) */}
+              <div className="mt-3 md:hidden">
+                <span className="text-2xl font-black text-vasati-purple">
+                  ₹{property.monthly_rent_from.toLocaleString('en-IN')}
+                </span>
+                <span className="text-sm text-gray-400 font-medium"> / month</span>
+              </div>
+
+              {/* Facilities 2x4 Grid */}
+              <div className="mt-5">
+                <h3 className="text-sm font-extrabold text-vasati-dark mb-3">Facilities</h3>
+                <div className="grid grid-cols-4 sm:grid-cols-8 md:grid-cols-4 lg:grid-cols-8 gap-2.5">
+                  {['ac', 'wifi', 'meals', 'parking', 'security', 'lift', 'power_backup', 'cctv'].map(key => {
+                    const item = FACILITY_ICONS[key];
+                    if (!item) return null;
+                    const Icon = item.icon;
+                    return (
+                      <div
+                        key={key}
+                        className="flex flex-col items-center justify-center p-2.5 rounded-2xl bg-white border border-vasati-purple-border/70 aspect-square shadow-sm"
+                      >
+                        <Icon className="w-5 h-5 text-vasati-purple mb-1" />
+                        <span className="text-[10px] font-bold text-vasati-dark text-center leading-tight">
+                          {item.name}
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
-                <p className="text-[10px] text-gray-500">
-                  {property.owner?.contactMode}
+              </div>
+
+              {/* About this PG */}
+              <div className="mt-6">
+                <h3 className="text-sm font-extrabold text-vasati-dark mb-2">About this PG</h3>
+                <p className="text-xs text-gray-600 leading-relaxed">
+                  {property.description}
                 </p>
               </div>
-            </div>
 
-            <div className="flex items-center gap-1.5">
-              <button
-                onClick={() => {
-                  setShowCallModal(true);
-                  setCallStatus('connecting');
-                  setTimeout(() => setCallStatus('ringing'), 1000);
-                  setTimeout(() => setCallStatus('connected'), 2600);
-                }}
-                className="p-2.5 rounded-full bg-white text-emerald-600 shadow-sm hover:bg-emerald-600 hover:text-white transition-colors"
-                title="Masked Audio Call"
-              >
-                <PhoneCall className="w-4 h-4" />
-              </button>
-
-              <button
-                onClick={() => setShowChatModal(true)}
-                className="p-2.5 rounded-full bg-white text-vasati-purple shadow-sm hover:bg-vasati-purple hover:text-white transition-colors"
-                title="Chat with Host"
-              >
-                <MessageSquare className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-
-          {/* Reviews Preview */}
-          <div className="mt-6 pb-4">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-sm font-extrabold text-vasati-dark">Ratings & Reviews</h3>
-              <span className="text-xs font-bold text-vasati-purple">4.7 / 5.0</span>
-            </div>
-            <div className="p-3 rounded-2xl bg-gray-50 border border-gray-100">
-              <div className="flex items-center gap-1 mb-1">
-                {[1, 2, 3, 4, 5].map(s => (
-                  <Star key={s} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                ))}
-                <span className="text-xs font-bold text-gray-800 ml-1">Lakshminarayana G</span>
+              {/* Room Availability */}
+              <div className="mt-6">
+                <h3 className="text-sm font-extrabold text-vasati-dark mb-2">Available Room Types</h3>
+                <div className="space-y-2">
+                  {property.rooms && property.rooms.map((room: any) => (
+                    <div
+                      key={room.id}
+                      className="p-3 rounded-2xl border border-purple-100 bg-vasati-purple-soft/30 flex items-center justify-between"
+                    >
+                      <div>
+                        <h4 className="text-xs font-bold text-vasati-dark">{room.room_type}</h4>
+                        <p className="text-[10px] text-gray-500">{room.description}</p>
+                        <p className="text-[10px] font-bold text-emerald-600 mt-0.5">
+                          {room.available_beds} beds available
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-sm font-black text-vasati-purple">
+                          ₹{room.monthly_rent.toLocaleString('en-IN')}
+                        </span>
+                        <span className="text-[10px] text-gray-400">/mo</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <p className="text-xs text-gray-600">
-                Spacious room, fast Wi-Fi, and very supportive staff. The food is hygienic and fresh!
-              </p>
+
+              {/* Anti-Bypass Protected Host Card */}
+              <div className="mt-6 p-3.5 rounded-2xl bg-purple-50/70 border border-purple-100 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-vasati-purple text-white flex items-center justify-center font-bold text-sm">
+                    VS
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <h4 className="text-xs font-bold text-vasati-dark">{property.owner?.businessName}</h4>
+                      <span className="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-emerald-100 text-emerald-700">
+                        KYC Verified
+                      </span>
+                    </div>
+                    <p className="text-[10px] text-gray-500">
+                      {property.owner?.contactMode}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={() => {
+                      setShowCallModal(true);
+                      setCallStatus('connecting');
+                      setTimeout(() => setCallStatus('ringing'), 1000);
+                      setTimeout(() => setCallStatus('connected'), 2600);
+                    }}
+                    className="p-2.5 rounded-full bg-white text-emerald-600 shadow-sm hover:bg-emerald-600 hover:text-white transition-colors"
+                    title="Masked Audio Call"
+                  >
+                    <PhoneCall className="w-4 h-4" />
+                  </button>
+
+                  <button
+                    onClick={() => setShowChatModal(true)}
+                    className="p-2.5 rounded-full bg-white text-vasati-purple shadow-sm hover:bg-vasati-purple hover:text-white transition-colors"
+                    title="Chat with Host"
+                  >
+                    <MessageSquare className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Reviews Preview */}
+              <div className="mt-6 pb-4">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-sm font-extrabold text-vasati-dark">Ratings & Reviews</h3>
+                  <span className="text-xs font-bold text-vasati-purple">4.7 / 5.0</span>
+                </div>
+                <div className="p-3 rounded-2xl bg-gray-50 border border-gray-100">
+                  <div className="flex items-center gap-1 mb-1">
+                    {[1, 2, 3, 4, 5].map(s => (
+                      <Star key={s} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                    ))}
+                    <span className="text-xs font-bold text-gray-800 ml-1">Lakshminarayana G</span>
+                  </div>
+                  <p className="text-xs text-gray-600">
+                    Spacious room, fast Wi-Fi, and very supportive staff. The food is hygienic and fresh!
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Right 1 Column: Desktop Sticky Booking & Contact Card */}
+            <div className="hidden md:block md:col-span-1">
+              <div className="sticky top-6 p-5 rounded-3xl bg-white border border-purple-100 shadow-xl space-y-4">
+                <div className="flex items-baseline justify-between border-b border-gray-100 pb-3">
+                  <div>
+                    <span className="text-2xl font-black text-vasati-purple">
+                      ₹{property.monthly_rent_from.toLocaleString('en-IN')}
+                    </span>
+                    <span className="text-xs text-gray-400 font-medium"> / month</span>
+                  </div>
+                  <div className="flex items-center gap-1 text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+                    <span>★ {property.rating}</span>
+                  </div>
+                </div>
+
+                <div className="space-y-2 text-xs text-gray-600">
+                  <div className="flex justify-between">
+                    <span>Deposit</span>
+                    <span className="font-bold text-gray-900">₹{property.security_deposit?.toLocaleString('en-IN') || '10,000'} (Refundable)</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Notice Period</span>
+                    <span className="font-bold text-gray-900">{property.notice_period_days || 30} Days</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Food Included</span>
+                    <span className="font-bold text-emerald-600">3 Meals Daily</span>
+                  </div>
+                </div>
+
+                <div className="space-y-2 pt-2">
+                  <button
+                    onClick={() => onBookNow(property)}
+                    className="w-full py-3 px-4 rounded-full bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant hover:from-vasati-royal hover:to-vasati-purple text-white font-extrabold text-xs shadow-lg shadow-vasati-purple/25 transition-all active:scale-98"
+                  >
+                    Book Now
+                  </button>
+                  <button
+                    onClick={() => setShowVisitModal(true)}
+                    className="w-full py-2.5 px-4 rounded-full bg-white border-2 border-vasati-purple text-vasati-purple hover:bg-vasati-purple-soft font-bold text-xs transition-all active:scale-98"
+                  >
+                    Request a Visit
+                  </button>
+                  <button
+                    onClick={() => setShowChatModal(true)}
+                    className="w-full py-2 px-4 rounded-full bg-purple-50 text-vasati-purple hover:bg-purple-100 font-bold text-xs flex items-center justify-center gap-2 transition-all"
+                  >
+                    <MessageSquare className="w-3.5 h-3.5" />
+                    <span>Chat with Host</span>
+                  </button>
+                </div>
+
+                <div className="p-3 bg-purple-50/60 rounded-2xl border border-purple-100 text-[11px] text-gray-600 flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4 text-vasati-purple shrink-0" />
+                  <span>VASATI Stay Guarantee • Zero Brokerage</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Sticky Bottom Actions Bar */}
-      <div className="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-purple-100 p-4 flex items-center gap-3 shadow-nav z-20">
+      {/* Sticky Bottom Actions Bar (Mobile Only) */}
+      <div className="md:hidden absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-purple-100 p-4 flex items-center gap-3 shadow-nav z-20">
         <button
           onClick={() => setShowVisitModal(true)}
           className="flex-1 py-3 px-4 rounded-full bg-white border-2 border-vasati-purple text-vasati-purple hover:bg-vasati-purple-soft font-bold text-xs transition-all active:scale-98"
@@ -508,66 +573,16 @@ export const DetailsScreen: React.FC<DetailsScreenProps> = ({
         </div>
       )}
 
-      {/* In-App Masked Chat Modal */}
-      {showChatModal && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl w-full max-w-sm h-[480px] shadow-2xl flex flex-col justify-between overflow-hidden animate-fade-in">
-            {/* Header */}
-            <div className="p-4 bg-vasati-purple text-white flex items-center justify-between">
-              <div>
-                <h3 className="text-xs font-bold">{property.name} Host</h3>
-                <p className="text-[10px] text-purple-200">VASATI Masked In-App Channel</p>
-              </div>
-              <button
-                onClick={() => setShowChatModal(false)}
-                className="text-white hover:text-purple-200"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Chat Body */}
-            <div className="flex-1 p-3 overflow-y-auto no-scrollbar space-y-2 bg-gray-50 text-xs">
-              <div className="bg-purple-100 p-2.5 rounded-2xl text-purple-900 text-[11px] text-center">
-                🔒 Privacy Protected: Direct phone numbers are masked to prevent spam and bypass.
-              </div>
-
-              <div className="bg-white p-2.5 rounded-2xl shadow-sm max-w-[80%] border border-gray-100">
-                <p className="font-bold text-[10px] text-vasati-purple">Host</p>
-                <p className="text-gray-700">Hello! Thanks for your interest in {property.name}. How can I assist you with your stay?</p>
-              </div>
-
-              {chatHistory.map((m, idx) => (
-                <div
-                  key={idx}
-                  className="bg-vasati-purple text-white p-2.5 rounded-2xl shadow-sm max-w-[80%] ml-auto text-right"
-                >
-                  <p>{m.message}</p>
-                  <span className="text-[9px] text-purple-200 block mt-0.5">{m.created_at}</span>
-                </div>
-              ))}
-            </div>
-
-            {/* Chat Input */}
-            <div className="p-3 bg-white border-t border-gray-100 flex items-center gap-2">
-              <input
-                type="text"
-                value={chatMessage}
-                onChange={e => setChatMessage(e.target.value)}
-                onKeyDown={e => e.key === 'Enter' && handleSendMessage()}
-                placeholder="Type your message..."
-                className="flex-1 px-3 py-2 bg-gray-100 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-vasati-purple"
-              />
-              <button
-                onClick={handleSendMessage}
-                className="px-3.5 py-2 bg-vasati-purple text-white rounded-xl text-xs font-bold hover:bg-vasati-purple-dark"
-              >
-                Send
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Fully Functional In-App Masked Chat Modal */}
+      <ChatModal
+        isOpen={showChatModal}
+        onClose={() => setShowChatModal(false)}
+        propertyId={property.id}
+        propertyName={property.name}
+        hostName={property.owner?.name || property.owner?.businessName || 'Host'}
+        customerId="usr_cust_1"
+        customerName="Lakshminarayana G"
+      />
 
       {/* Masked Consent Calling Modal */}
       {showCallModal && (

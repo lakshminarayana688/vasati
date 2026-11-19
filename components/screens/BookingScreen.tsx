@@ -92,7 +92,7 @@ export const BookingScreen: React.FC<BookingScreenProps> = ({
       </div>
 
       {/* Scrollable Form Content */}
-      <div className="flex-1 overflow-y-auto no-scrollbar px-5 py-4 space-y-5 pb-24">
+      <div className="flex-1 overflow-y-auto no-scrollbar px-5 py-4 space-y-5 max-w-4xl mx-auto w-full pb-24">
         {/* Select Room Type */}
         <div>
           <h3 className="text-sm font-extrabold text-vasati-dark mb-3">Select Room Type</h3>
@@ -248,6 +248,17 @@ export const BookingScreen: React.FC<BookingScreenProps> = ({
             <span>Total Payable</span>
             <span className="text-vasati-purple font-black">₹{totalPayable.toLocaleString('en-IN')}</span>
           </div>
+
+          {/* Desktop Continue Action Button */}
+          <div className="hidden md:block pt-3 border-t border-vasati-purple-border/40">
+            <button
+              onClick={handleContinue}
+              className="w-full py-3.5 px-6 rounded-full bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant hover:from-vasati-royal hover:to-vasati-purple text-white font-extrabold text-xs shadow-lg shadow-vasati-purple/25 flex items-center justify-center gap-2 transition-all active:scale-98"
+            >
+              <span>Continue to Payment</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
 
         <div className="text-[11px] text-vasati-secondary flex items-center gap-1.5 justify-center">
@@ -256,8 +267,8 @@ export const BookingScreen: React.FC<BookingScreenProps> = ({
         </div>
       </div>
 
-      {/* Sticky Bottom Bar */}
-      <div className="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-vasati-purple-border/30 p-4 flex items-center justify-between shadow-nav z-20">
+      {/* Sticky Bottom Bar (Mobile Only) */}
+      <div className="md:hidden absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-vasati-purple-border/30 p-4 flex items-center justify-between shadow-nav z-20">
         <div>
           <p className="text-[10px] uppercase font-bold text-vasati-secondary tracking-wider">Total Amount</p>
           <p className="text-xl font-black text-vasati-purple leading-tight">
