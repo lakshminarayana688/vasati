@@ -220,6 +220,7 @@ export default function VasatiApp() {
             savedIds={savedIds}
             onToggleSave={handleToggleSave}
             properties={properties}
+            isDesktop={viewMode === 'responsive'}
           />
         );
       case 'filters':
@@ -239,6 +240,7 @@ export default function VasatiApp() {
             onSelectProperty={handleSelectProperty}
             savedIds={savedIds}
             onToggleSave={handleToggleSave}
+            isDesktop={viewMode === 'responsive'}
           />
         );
       case 'details':
@@ -294,6 +296,7 @@ export default function VasatiApp() {
             savedProperties={savedProps}
             onSelectProperty={handleSelectProperty}
             onToggleSave={handleToggleSave}
+            isDesktop={viewMode === 'responsive'}
           />
         );
       default:

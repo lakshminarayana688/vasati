@@ -6,6 +6,7 @@ interface SavedListViewProps {
   savedProperties: any[];
   onSelectProperty: (propertyId: string) => void;
   onToggleSave: (propertyId: string) => void;
+  isDesktop?: boolean;
 }
 
 export const SavedListView: React.FC<SavedListViewProps> = ({
@@ -13,6 +14,7 @@ export const SavedListView: React.FC<SavedListViewProps> = ({
   savedProperties,
   onSelectProperty,
   onToggleSave,
+  isDesktop = false,
 }) => {
   return (
     <div className="w-full h-full bg-vasati-lavender flex flex-col justify-between font-sans relative">
@@ -37,7 +39,7 @@ export const SavedListView: React.FC<SavedListViewProps> = ({
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className={isDesktop ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" : "flex flex-col space-y-4 w-full"}>
             {savedProperties.map(pg => (
             <div
               key={pg.id}

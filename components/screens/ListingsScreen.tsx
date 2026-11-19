@@ -18,6 +18,7 @@ interface ListingsScreenProps {
   onSelectProperty: (propertyId: string) => void;
   savedIds: string[];
   onToggleSave: (propertyId: string) => void;
+  isDesktop?: boolean;
 }
 
 export const ListingsScreen: React.FC<ListingsScreenProps> = ({
@@ -27,6 +28,7 @@ export const ListingsScreen: React.FC<ListingsScreenProps> = ({
   onSelectProperty,
   savedIds,
   onToggleSave,
+  isDesktop = false,
 }) => {
   const [showMapView, setShowMapView] = useState(false);
   const [selectedMapPin, setSelectedMapPin] = useState<any>(null);
@@ -139,7 +141,7 @@ export const ListingsScreen: React.FC<ListingsScreenProps> = ({
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className={isDesktop ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full" : "flex flex-col space-y-4 w-full"}>
               {properties.map(pg => {
                 const isSaved = savedIds.includes(pg.id);
                 return (

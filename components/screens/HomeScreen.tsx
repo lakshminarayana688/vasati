@@ -24,6 +24,7 @@ interface HomeScreenProps {
   savedIds: string[];
   onToggleSave: (propertyId: string) => void;
   properties: any[];
+  isDesktop?: boolean;
 }
 
 const CITIES = ['Bengaluru', 'Hyderabad', 'Pune', 'Mumbai', 'Delhi-NCR', 'Chennai'];
@@ -65,6 +66,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   savedIds,
   onToggleSave,
   properties,
+  isDesktop = false,
 }) => {
   const [selectedCity, setSelectedCity] = useState('Bengaluru');
   const [cityDropdownOpen, setCityDropdownOpen] = useState(false);
@@ -374,7 +376,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className={isDesktop ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" : "flex flex-col space-y-3.5 w-full"}>
             {featured.map(pg => {
               const isSaved = savedIds.includes(pg.id);
               return (
