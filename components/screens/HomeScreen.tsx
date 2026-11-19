@@ -25,6 +25,8 @@ interface HomeScreenProps {
   onToggleSave: (propertyId: string) => void;
   properties: any[];
   isDesktop?: boolean;
+  selectedCategory?: string;
+  onSelectCategory?: (category: string) => void;
 }
 
 const CITIES = ['Bengaluru', 'Hyderabad', 'Pune', 'Mumbai', 'Delhi-NCR', 'Chennai'];
@@ -67,11 +69,12 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   onToggleSave,
   properties,
   isDesktop = false,
+  selectedCategory = 'All',
+  onSelectCategory,
 }) => {
   const [selectedCity, setSelectedCity] = useState('Bengaluru');
   const [cityDropdownOpen, setCityDropdownOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [locating, setLocating] = useState(false);
   const [locationNotice, setLocationNotice] = useState<string | null>(null);
@@ -270,8 +273,11 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
               <button
                 key={cat}
                 onClick={() => {
-                  setSelectedCategory(cat);
-                  onOpenListings({ category: cat === 'All' ? '' : cat });
+                  if (onSelectCategory) {
+                    onSelectCategory(cat);
+                  } else {
+                    onOpenListings({ category: cat === 'All' ? '' : cat });
+                  }
                 }}
                 className={`px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 ${
                   isActive

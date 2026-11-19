@@ -47,11 +47,18 @@ export async function GET(request: NextRequest) {
     }
 
     if (category && category !== 'All' && category !== 'All PGs') {
-      sql += ` AND p.category = ?`;
-      params.push(category);
-    }
-
-    if (gender && gender !== 'Any') {
+      const catLower = category.toLowerCase().trim();
+      if (catLower === 'boys' || catLower === 'boys pg') {
+        sql += ` AND p.category = 'Boys PG'`;
+      } else if (catLower === 'girls' || catLower === 'girls pg') {
+        sql += ` AND p.category = 'Girls PG'`;
+      } else if (catLower === 'co-living' || catLower === 'coliving') {
+        sql += ` AND p.category = 'Co-living'`;
+      } else {
+        sql += ` AND p.category = ?`;
+        params.push(category);
+      }
+    } else if (gender && gender !== 'Any') {
       if (gender === 'Boys') {
         sql += ` AND (p.category = 'Boys PG' OR p.category = 'Co-living')`;
       } else if (gender === 'Girls') {

@@ -57,15 +57,17 @@ export default function VasatiApp() {
   };
 
   // Properties & Saved data
+  const [allProperties, setAllProperties] = useState<any[]>([]);
   const [properties, setProperties] = useState<any[]>([]);
   const [savedIds, setSavedIds] = useState<string[]>(['prop_sri_sai']);
   const [selectedPropertyId, setSelectedPropertyId] = useState<string>('prop_sri_sai');
-  const [activeFilters, setActiveFilters] = useState<Partial<FilterState>>({});
+  const [activeFilters, setActiveFilters] = useState<any>({});
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [currentBookingDetails, setCurrentBookingDetails] = useState<any>(null);
   const [showAuthModal, setShowAuthModal] = useState<boolean>(false);
 
   // Fetch properties
-  const loadProperties = async (filters: any = {}) => {
+  const loadProperties = async (filters: any = {}, isInitial = false) => {
     try {
       const params = new URLSearchParams();
       if (filters.maxBudget) params.append('maxRent', filters.maxBudget.toString());
@@ -78,12 +80,15 @@ export default function VasatiApp() {
       if (filters.locality) params.append('locality', filters.locality);
       if (filters.city) params.append('city', filters.city);
       if (filters.query) params.append('q', filters.query);
-      if (filters.category) params.append('category', filters.category);
+      if (filters.category && filters.category !== 'All') params.append('category', filters.category);
 
       const res = await fetch(`/api/properties?${params.toString()}`);
       const data = await res.json();
       if (data.success) {
         setProperties(data.properties);
+        if (isInitial || Object.keys(filters).length === 0) {
+          setAllProperties(data.properties);
+        }
       }
     } catch (err) {
       console.error(err);
@@ -104,7 +109,7 @@ export default function VasatiApp() {
   };
 
   useEffect(() => {
-    loadProperties();
+    loadProperties({}, true);
     loadSaved();
   }, []);
 
@@ -129,15 +134,58 @@ export default function VasatiApp() {
     }
   };
 
+  const handleSelectCategory = (cat: string) => {
+    setSelectedCategory(cat);
+    const updated = { ...activeFilters };
+    if (cat === 'All') {
+      delete updated.category;
+    } else {
+      updated.category = cat;
+    }
+    setActiveFilters(updated);
+    loadProperties(updated);
+    navigateTo('listings');
+  };
+
   const handleApplyFilters = (filters: FilterState) => {
-    setActiveFilters(filters);
-    loadProperties(filters);
+    const combined = { ...activeFilters, ...filters };
+    if (filters.gender && filters.gender !== 'Any') {
+      if (filters.gender === 'Boys') {
+        combined.category = 'Boys';
+        setSelectedCategory('Boys');
+      } else if (filters.gender === 'Girls') {
+        combined.category = 'Girls';
+        setSelectedCategory('Girls');
+      }
+    } else if (filters.gender === 'Any' && (selectedCategory === 'Boys' || selectedCategory === 'Girls')) {
+      delete combined.category;
+      setSelectedCategory('All');
+    }
+    setActiveFilters(combined);
+    loadProperties(combined);
     navigateTo('listings');
   };
 
   const handleOpenListings = (customParams?: any) => {
+    let nextFilters = { ...activeFilters };
     if (customParams) {
-      loadProperties({ ...activeFilters, ...customParams });
+      if (customParams.category !== undefined) {
+        if (!customParams.category || customParams.category === 'All') {
+          setSelectedCategory('All');
+          delete nextFilters.category;
+        } else {
+          setSelectedCategory(customParams.category);
+          nextFilters.category = customParams.category;
+        }
+      }
+      nextFilters = { ...nextFilters, ...customParams };
+      if (!customParams.category && customParams.category !== undefined) {
+        delete nextFilters.category;
+      }
+      setActiveFilters(nextFilters);
+      loadProperties(nextFilters);
+    } else {
+      loadProperties(activeFilters);
     }
     navigateTo('listings');
   };
@@ -219,8 +267,10 @@ export default function VasatiApp() {
             onNavigateTab={handleNavigateTab}
             savedIds={savedIds}
             onToggleSave={handleToggleSave}
-            properties={properties}
+            properties={allProperties.length > 0 ? allProperties : properties}
             isDesktop={viewMode === 'responsive'}
+            selectedCategory={selectedCategory}
+            onSelectCategory={handleSelectCategory}
           />
         );
       case 'filters':
