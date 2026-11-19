@@ -77,10 +77,10 @@ export const FiltersScreen: React.FC<FiltersScreenProps> = ({
   return (
     <div className="w-full h-full bg-white flex flex-col justify-between font-sans relative">
       {/* Top Header */}
-      <div className="px-5 pt-4 pb-3 flex items-center justify-between border-b border-gray-100">
+      <div className="px-5 pt-4 pb-3 flex items-center justify-between border-b border-vasati-purple-border/40">
         <button
           onClick={onBack}
-          className="p-1 rounded-full hover:bg-gray-100 text-vasati-dark transition-colors"
+          className="p-1 rounded-full hover:bg-vasati-purple-soft/50 text-vasati-dark transition-colors"
         >
           <ChevronLeft className="w-6 h-6" />
         </button>
@@ -116,7 +116,7 @@ export const FiltersScreen: React.FC<FiltersScreenProps> = ({
             className="w-full h-2 bg-purple-100 rounded-lg appearance-none cursor-pointer accent-vasati-purple"
           />
 
-          <div className="flex justify-between items-center text-xs font-semibold text-gray-500 mt-2">
+          <div className="flex justify-between items-center text-xs font-semibold text-vasati-secondary mt-2">
             <span>₹3K</span>
             <span>₹30K+</span>
           </div>
@@ -224,7 +224,7 @@ export const FiltersScreen: React.FC<FiltersScreenProps> = ({
       </div>
 
       {/* Sticky Bottom Apply Button */}
-      <div className="p-5 border-t border-purple-100 bg-white">
+      <div className="p-5 border-t border-vasati-purple-border/40 bg-white">
         <button
           onClick={handleApply}
           className="w-full py-3.5 rounded-full bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant hover:from-vasati-royal hover:to-vasati-purple text-white font-extrabold text-sm shadow-xl shadow-vasati-purple/25 transition-all duration-200 active:scale-98"
