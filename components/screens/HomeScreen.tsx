@@ -115,11 +115,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         p.locality?.toLowerCase().includes(area.name.toLowerCase()) ||
         area.name.toLowerCase().includes(p.locality?.toLowerCase())
       );
-      const count = dbMatch.length > 0 ? `${dbMatch.length} PG${dbMatch.length > 1 ? 's' : ''}` : area.count;
       const image = dbMatch[0]?.cover_image || area.image;
       return {
         name: area.name,
-        count,
+        count: area.count,
         image,
       };
     });
@@ -362,16 +361,20 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             </button>
           </div>
 
-          {/* Option 2: Modern Card Design */}
-          <div className="flex items-center gap-3.5 overflow-x-auto no-scrollbar pb-2 md:grid md:grid-cols-5 md:gap-4 md:overflow-visible">
+          {/* Option 2: Modern Card Design with Overlapping Fix */}
+          <div className={isDesktop ? "grid grid-cols-5 gap-4 w-full" : "flex items-center gap-3.5 overflow-x-auto no-scrollbar pb-2.5 w-full"}>
             {popularAreasList.map(area => (
               <div
                 key={area.name}
                 onClick={() => onOpenListings({ locality: area.name })}
-                className="flex-shrink-0 w-36 md:w-auto bg-white rounded-2xl border border-vasati-purple-border/50 shadow-card hover:shadow-card-hover transition-all duration-300 cursor-pointer overflow-hidden group flex flex-col justify-between"
+                className={
+                  isDesktop
+                    ? "w-full bg-white rounded-2xl border border-vasati-purple-border/60 shadow-card hover:shadow-card-hover transition-all duration-300 cursor-pointer overflow-hidden group flex flex-col justify-between box-border"
+                    : "flex-shrink-0 shrink-0 w-[160px] min-w-[160px] bg-white rounded-2xl border border-vasati-purple-border/60 shadow-card hover:shadow-card-hover transition-all duration-300 cursor-pointer overflow-hidden group flex flex-col justify-between box-border"
+                }
               >
                 {/* Location photograph at the top */}
-                <div className="relative w-full h-24 md:h-28 overflow-hidden bg-vasati-purple-soft/30">
+                <div className="relative w-full h-24 md:h-28 overflow-hidden bg-vasati-purple-soft/30 rounded-t-2xl shrink-0">
                   <img
                     src={area.image}
                     alt={area.name}
@@ -380,18 +383,18 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                 </div>
 
                 {/* Content below the photograph */}
-                <div className="p-2.5 flex flex-col gap-1.5 bg-white">
+                <div className="p-3 flex flex-col gap-1.5 bg-white rounded-b-2xl">
                   {/* Location name with purple map pin */}
-                  <div className="flex items-center gap-1 min-w-0">
+                  <div className="flex items-center gap-1.5 min-w-0">
                     <MapPin className="w-3.5 h-3.5 text-vasati-purple shrink-0" />
-                    <span className="text-xs font-bold text-vasati-dark truncate">
+                    <span className="text-xs font-bold text-vasati-dark truncate whitespace-nowrap">
                       {area.name}
                     </span>
                   </div>
 
                   {/* PG count inside light lavender rounded badge */}
                   <div className="self-start">
-                    <span className="inline-block px-2 py-0.5 rounded-full bg-vasati-purple-soft text-vasati-purple text-[10px] font-bold border border-vasati-purple-border/40">
+                    <span className="inline-block px-2.5 py-0.5 rounded-full bg-vasati-purple-soft text-vasati-purple text-[10px] font-bold border border-vasati-purple-border/40 whitespace-nowrap">
                       {area.count}
                     </span>
                   </div>
