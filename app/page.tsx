@@ -301,6 +301,7 @@ export default function VasatiApp() {
             onBookNow={handleBookNow}
             savedIds={savedIds}
             onToggleSave={handleToggleSave}
+            isDesktop={viewMode === 'responsive'}
           />
         );
       case 'booking':
