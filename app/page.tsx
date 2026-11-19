@@ -23,9 +23,7 @@ import {
   Shield,
   Wifi,
   Battery,
-  Signal,
-  Layers,
-  Sparkles
+  Signal
 } from 'lucide-react';
 
 export default function VasatiApp() {
@@ -34,7 +32,29 @@ export default function VasatiApp() {
   const [viewMode, setViewMode] = useState<'mobile' | 'responsive'>('mobile');
   const [activeScreen, setActiveScreen] = useState<
     'splash' | 'home' | 'filters' | 'listings' | 'details' | 'booking' | 'payment' | 'profile' | 'bookings_list' | 'saved_list'
-  >('home');
+  >('splash');
+  const [history, setHistory] = useState<string[]>(['splash']);
+
+  const navigateTo = (screen: any) => {
+    setHistory(prev => {
+      if (prev[prev.length - 1] === screen) return prev;
+      return [...prev, screen];
+    });
+    setActiveScreen(screen);
+  };
+
+  const goBack = () => {
+    setHistory(prev => {
+      if (prev.length <= 1) {
+        setActiveScreen('home');
+        return ['home'];
+      }
+      const nextHistory = prev.slice(0, -1);
+      const prevScreen = nextHistory[nextHistory.length - 1];
+      setActiveScreen(prevScreen as any);
+      return nextHistory;
+    });
+  };
 
   // Properties & Saved data
   const [properties, setProperties] = useState<any[]>([]);
@@ -112,51 +132,51 @@ export default function VasatiApp() {
   const handleApplyFilters = (filters: FilterState) => {
     setActiveFilters(filters);
     loadProperties(filters);
-    setActiveScreen('listings');
+    navigateTo('listings');
   };
 
   const handleOpenListings = (customParams?: any) => {
     if (customParams) {
       loadProperties({ ...activeFilters, ...customParams });
     }
-    setActiveScreen('listings');
+    navigateTo('listings');
   };
 
   const handleSelectProperty = (id: string) => {
     setSelectedPropertyId(id);
-    setActiveScreen('details');
+    navigateTo('details');
   };
 
   const handleBookNow = (prop: any) => {
     setSelectedPropertyId(prop.id);
-    setActiveScreen('booking');
+    navigateTo('booking');
   };
 
   const handleContinueToPayment = (details: any) => {
     setCurrentBookingDetails(details);
-    setActiveScreen('payment');
+    navigateTo('payment');
   };
 
   const handlePaymentSuccess = (confirmedBooking: any) => {
-    setActiveScreen('bookings_list');
+    navigateTo('bookings_list');
   };
 
   const handleNavigateTab = (tab: 'home' | 'search' | 'saved' | 'bookings' | 'profile') => {
     switch (tab) {
       case 'home':
-        setActiveScreen('home');
+        navigateTo('home');
         break;
       case 'search':
-        setActiveScreen('listings');
+        navigateTo('filters');
         break;
       case 'saved':
-        setActiveScreen('saved_list');
+        navigateTo('saved_list');
         break;
       case 'bookings':
-        setActiveScreen('bookings_list');
+        navigateTo('bookings_list');
         break;
       case 'profile':
-        setActiveScreen('profile');
+        navigateTo('profile');
         break;
     }
   };
@@ -179,14 +199,14 @@ export default function VasatiApp() {
       case 'splash':
         return (
           <SplashScreen
-            onGetStarted={() => setActiveScreen('home')}
+            onGetStarted={() => setShowAuthModal(true)}
             onLogin={() => setShowAuthModal(true)}
           />
         );
       case 'home':
         return (
           <HomeScreen
-            onOpenFilters={() => setActiveScreen('filters')}
+            onOpenFilters={() => navigateTo('filters')}
             onOpenListings={handleOpenListings}
             onSelectProperty={handleSelectProperty}
             onNavigateTab={handleNavigateTab}
@@ -198,7 +218,7 @@ export default function VasatiApp() {
       case 'filters':
         return (
           <FiltersScreen
-            onBack={() => setActiveScreen('home')}
+            onBack={goBack}
             onApply={handleApplyFilters}
             initialFilters={activeFilters}
           />
@@ -207,8 +227,8 @@ export default function VasatiApp() {
         return (
           <ListingsScreen
             properties={properties}
-            onBack={() => setActiveScreen('home')}
-            onOpenFilters={() => setActiveScreen('filters')}
+            onBack={goBack}
+            onOpenFilters={() => navigateTo('filters')}
             onSelectProperty={handleSelectProperty}
             savedIds={savedIds}
             onToggleSave={handleToggleSave}
@@ -218,7 +238,7 @@ export default function VasatiApp() {
         return (
           <DetailsScreen
             propertyId={selectedPropertyId}
-            onBack={() => setActiveScreen('listings')}
+            onBack={goBack}
             onBookNow={handleBookNow}
             savedIds={savedIds}
             onToggleSave={handleToggleSave}
@@ -228,7 +248,7 @@ export default function VasatiApp() {
         return (
           <BookingScreen
             property={selectedProp}
-            onBack={() => setActiveScreen('details')}
+            onBack={goBack}
             onContinueToPayment={handleContinueToPayment}
           />
         );
@@ -236,7 +256,7 @@ export default function VasatiApp() {
         return (
           <PaymentScreen
             bookingDetails={currentBookingDetails}
-            onBack={() => setActiveScreen('booking')}
+            onBack={goBack}
             onPaymentSuccess={handlePaymentSuccess}
           />
         );
@@ -244,9 +264,10 @@ export default function VasatiApp() {
         return (
           <ProfileScreen
             onNavigateTab={handleNavigateTab}
-            onOpenBookings={() => setActiveScreen('bookings_list')}
-            onOpenSaved={() => setActiveScreen('saved_list')}
+            onOpenBookings={() => navigateTo('bookings_list')}
+            onOpenSaved={() => navigateTo('saved_list')}
             onLogout={() => {
+              setHistory(['splash']);
               setActiveScreen('splash');
               setShowAuthModal(true);
             }}
@@ -255,14 +276,14 @@ export default function VasatiApp() {
       case 'bookings_list':
         return (
           <BookingsListView
-            onBack={() => setActiveScreen('profile')}
+            onBack={goBack}
             onSelectProperty={handleSelectProperty}
           />
         );
       case 'saved_list':
         return (
           <SavedListView
-            onBack={() => setActiveScreen('home')}
+            onBack={goBack}
             savedProperties={savedProps}
             onSelectProperty={handleSelectProperty}
             onToggleSave={handleToggleSave}
@@ -352,43 +373,6 @@ export default function VasatiApp() {
             </div>
           )}
         </div>
-
-        {/* Quick Screen Jump Bar for Customer App */}
-        {activeRole === 'customer' && (
-          <div className="max-w-7xl mx-auto mt-2 pt-2 border-t border-gray-100 flex items-center gap-1.5 overflow-x-auto no-scrollbar text-[11px] font-bold">
-            <span className="text-gray-400 uppercase tracking-wider text-[9px] mr-1 shrink-0 flex items-center gap-1">
-              <Layers className="w-3 h-3 text-vasati-purple" />
-              Reference Screens:
-            </span>
-            {[
-              { id: 'splash', label: '1. Splash' },
-              { id: 'home', label: '2. Home' },
-              { id: 'filters', label: '3. Filters' },
-              { id: 'listings', label: '4. Listings' },
-              { id: 'details', label: '5. Details' },
-              { id: 'booking', label: '6. Room Booking' },
-              { id: 'payment', label: '7. Payment' },
-              { id: 'profile', label: '8. Profile' },
-              { id: 'bookings_list', label: 'My Bookings' },
-              { id: 'saved_list', label: 'Saved PGs' },
-            ].map(screen => {
-              const isActive = activeScreen === screen.id;
-              return (
-                <button
-                  key={screen.id}
-                  onClick={() => setActiveScreen(screen.id as any)}
-                  className={`px-2.5 py-1 rounded-lg shrink-0 transition-all ${
-                    isActive
-                      ? 'bg-vasati-purple text-white shadow-sm'
-                      : 'bg-gray-100 text-gray-600 hover:bg-purple-100 hover:text-vasati-purple'
-                  }`}
-                >
-                  {screen.label}
-                </button>
-              );
-            })}
-          </div>
-        )}
       </nav>
 
       {/* Main View Container */}
@@ -452,7 +436,7 @@ export default function VasatiApp() {
               setActiveRole('owner');
             } else {
               setActiveRole('customer');
-              setActiveScreen('home');
+              navigateTo('home');
             }
           }}
         />
