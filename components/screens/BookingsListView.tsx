@@ -14,9 +14,14 @@ import {
 interface BookingsListViewProps {
   onBack: () => void;
   onSelectProperty: (propertyId: string) => void;
+  isDesktop?: boolean;
 }
 
-export const BookingsListView: React.FC<BookingsListViewProps> = ({ onBack, onSelectProperty }) => {
+export const BookingsListView: React.FC<BookingsListViewProps> = ({
+  onBack,
+  onSelectProperty,
+  isDesktop = false,
+}) => {
   const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedInvoice, setSelectedInvoice] = useState<any>(null);
@@ -80,11 +85,11 @@ export const BookingsListView: React.FC<BookingsListViewProps> = ({ onBack, onSe
             <p className="text-xs text-vasati-secondary mt-1">Explore top PGs and book your ideal stay today.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className={isDesktop ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" : "flex flex-col space-y-4 w-full"}>
             {bookings.map(b => (
             <div
               key={b.id}
-              className="bg-white rounded-3xl p-4 shadow-card hover:shadow-card-hover border border-vasati-purple-border/50 space-y-3 transition-all"
+              className="bg-white rounded-3xl p-4 shadow-card hover:shadow-card-hover border border-vasati-purple-border/50 space-y-3 transition-all w-full"
             >
               <div className="flex items-center justify-between">
                 <span className="text-[11px] font-mono font-bold text-vasati-purple">
@@ -113,7 +118,7 @@ export const BookingsListView: React.FC<BookingsListViewProps> = ({ onBack, onSe
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-vasati-purple-border/30 flex items-center justify-between text-xs">
+              <div className="pt-3 border-t border-vasati-purple-border/30 flex items-center justify-between text-xs flex-wrap gap-1">
                 <div>
                   <span className="text-vasati-secondary font-medium">Total Paid: </span>
                   <span className="font-extrabold text-vasati-purple">
@@ -126,7 +131,7 @@ export const BookingsListView: React.FC<BookingsListViewProps> = ({ onBack, onSe
               </div>
 
               {b.invoice_number && (
-                <div className="pt-2 border-t border-dashed border-vasati-purple-border/40 flex items-center justify-between text-[11px] text-vasati-secondary">
+                <div className="pt-2 border-t border-dashed border-vasati-purple-border/40 flex items-center justify-between text-[11px] text-vasati-secondary flex-wrap gap-2">
                   <span className="flex items-center gap-1">
                     <FileText className="w-3.5 h-3.5 text-vasati-purple" />
                     <span>Invoice: {b.invoice_number}</span>

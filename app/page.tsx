@@ -287,6 +287,7 @@ export default function VasatiApp() {
           <BookingsListView
             onBack={goBack}
             onSelectProperty={handleSelectProperty}
+            isDesktop={viewMode === 'responsive'}
           />
         );
       case 'saved_list':
