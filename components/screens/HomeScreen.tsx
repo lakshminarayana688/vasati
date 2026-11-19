@@ -108,6 +108,23 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 
   const featured = properties.filter(p => p.is_featured);
 
+  // Dynamic Popular Areas connected to real database properties (Option 2 Modern Card Design)
+  const popularAreasList = React.useMemo(() => {
+    return POPULAR_AREAS.map(area => {
+      const dbMatch = properties.filter(p =>
+        p.locality?.toLowerCase().includes(area.name.toLowerCase()) ||
+        area.name.toLowerCase().includes(p.locality?.toLowerCase())
+      );
+      const count = dbMatch.length > 0 ? `${dbMatch.length} PG${dbMatch.length > 1 ? 's' : ''}` : area.count;
+      const image = dbMatch[0]?.cover_image || area.image;
+      return {
+        name: area.name,
+        count,
+        image,
+      };
+    });
+  }, [properties]);
+
   return (
     <div className="w-full h-full bg-white flex flex-col justify-between font-sans relative pb-20">
       {/* Scrollable Content */}
@@ -345,23 +362,38 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             </button>
           </div>
 
-          <div className="flex items-center gap-3 overflow-x-auto no-scrollbar pb-1 md:grid md:grid-cols-5 md:gap-4 md:overflow-visible">
-            {POPULAR_AREAS.map(area => (
+          {/* Option 2: Modern Card Design */}
+          <div className="flex items-center gap-3.5 overflow-x-auto no-scrollbar pb-2 md:grid md:grid-cols-5 md:gap-4 md:overflow-visible">
+            {popularAreasList.map(area => (
               <div
                 key={area.name}
                 onClick={() => onOpenListings({ locality: area.name })}
-                className="flex-shrink-0 w-28 md:w-auto group cursor-pointer"
+                className="flex-shrink-0 w-36 md:w-auto bg-white rounded-2xl border border-vasati-purple-border/50 shadow-card hover:shadow-card-hover transition-all duration-300 cursor-pointer overflow-hidden group flex flex-col justify-between"
               >
-                <div className="relative w-28 md:w-full h-28 md:h-32 rounded-2xl overflow-hidden shadow-sm border border-gray-100 group-hover:shadow-md transition-all">
+                {/* Location photograph at the top */}
+                <div className="relative w-full h-24 md:h-28 overflow-hidden bg-vasati-purple-soft/30">
                   <img
                     src={area.image}
                     alt={area.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                  <div className="absolute bottom-2 left-2 right-2 text-white">
-                    <p className="text-xs font-bold leading-tight truncate">{area.name}</p>
-                    <p className="text-[10px] text-white/80">{area.count}</p>
+                </div>
+
+                {/* Content below the photograph */}
+                <div className="p-2.5 flex flex-col gap-1.5 bg-white">
+                  {/* Location name with purple map pin */}
+                  <div className="flex items-center gap-1 min-w-0">
+                    <MapPin className="w-3.5 h-3.5 text-vasati-purple shrink-0" />
+                    <span className="text-xs font-bold text-vasati-dark truncate">
+                      {area.name}
+                    </span>
+                  </div>
+
+                  {/* PG count inside light lavender rounded badge */}
+                  <div className="self-start">
+                    <span className="inline-block px-2 py-0.5 rounded-full bg-vasati-purple-soft text-vasati-purple text-[10px] font-bold border border-vasati-purple-border/40">
+                      {area.count}
+                    </span>
                   </div>
                 </div>
               </div>
