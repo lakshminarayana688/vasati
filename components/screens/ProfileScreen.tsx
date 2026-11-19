@@ -29,6 +29,7 @@ interface ProfileScreenProps {
   onOpenBookings: () => void;
   onOpenSaved: () => void;
   onLogout: () => void;
+  isDesktop?: boolean;
 }
 
 export const ProfileScreen: React.FC<ProfileScreenProps> = ({
@@ -36,6 +37,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
   onOpenBookings,
   onOpenSaved,
   onLogout,
+  isDesktop = false,
 }) => {
   const [activeModal, setActiveModal] = useState<string | null>(null);
 

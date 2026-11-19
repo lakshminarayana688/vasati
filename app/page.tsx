@@ -310,6 +310,7 @@ export default function VasatiApp() {
             property={selectedProp}
             onBack={goBack}
             onContinueToPayment={handleContinueToPayment}
+            isDesktop={viewMode === 'responsive'}
           />
         );
       case 'payment':
@@ -331,6 +332,7 @@ export default function VasatiApp() {
               setActiveScreen('splash');
               setShowAuthModal(true);
             }}
+            isDesktop={viewMode === 'responsive'}
           />
         );
       case 'bookings_list':

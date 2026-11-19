@@ -12,12 +12,14 @@ interface BookingScreenProps {
   property: any;
   onBack: () => void;
   onContinueToPayment: (bookingDetails: any) => void;
+  isDesktop?: boolean;
 }
 
 export const BookingScreen: React.FC<BookingScreenProps> = ({
   property,
   onBack,
   onContinueToPayment,
+  isDesktop = false,
 }) => {
   const rooms = property?.rooms && property.rooms.length > 0 ? property.rooms : [
     {
@@ -250,15 +252,17 @@ export const BookingScreen: React.FC<BookingScreenProps> = ({
           </div>
 
           {/* Desktop Continue Action Button */}
-          <div className="hidden md:block pt-3 border-t border-vasati-purple-border/40">
-            <button
-              onClick={handleContinue}
-              className="w-full py-3.5 px-6 rounded-full bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant hover:from-vasati-royal hover:to-vasati-purple text-white font-extrabold text-xs shadow-lg shadow-vasati-purple/25 flex items-center justify-center gap-2 transition-all active:scale-98"
-            >
-              <span>Continue to Payment</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
+          {isDesktop && (
+            <div className="pt-3 border-t border-vasati-purple-border/40">
+              <button
+                onClick={handleContinue}
+                className="w-full py-3.5 px-6 rounded-full bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant hover:from-vasati-royal hover:to-vasati-purple text-white font-extrabold text-xs shadow-lg shadow-vasati-purple/25 flex items-center justify-center gap-2 transition-all active:scale-98"
+              >
+                <span>Continue to Payment</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          )}
         </div>
 
         <div className="text-[11px] text-vasati-secondary flex items-center gap-1.5 justify-center">
@@ -268,22 +272,24 @@ export const BookingScreen: React.FC<BookingScreenProps> = ({
       </div>
 
       {/* Sticky Bottom Bar (Mobile Only) */}
-      <div className="md:hidden absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-vasati-purple-border/30 p-4 flex items-center justify-between shadow-nav z-20">
-        <div>
-          <p className="text-[10px] uppercase font-bold text-vasati-secondary tracking-wider">Total Amount</p>
-          <p className="text-xl font-black text-vasati-purple leading-tight">
-            ₹{totalPayable.toLocaleString('en-IN')}
-          </p>
-        </div>
+      {!isDesktop && (
+        <div className="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-vasati-purple-border/30 p-4 flex items-center justify-between shadow-nav z-20">
+          <div>
+            <p className="text-[10px] uppercase font-bold text-vasati-secondary tracking-wider">Total Amount</p>
+            <p className="text-xl font-black text-vasati-purple leading-tight">
+              ₹{totalPayable.toLocaleString('en-IN')}
+            </p>
+          </div>
 
-        <button
-          onClick={handleContinue}
-          className="py-3.5 px-6 rounded-full bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant hover:from-vasati-royal hover:to-vasati-purple text-white font-extrabold text-xs shadow-lg shadow-vasati-purple/25 flex items-center gap-2 transition-all active:scale-98"
-        >
-          <span>Continue</span>
-          <ArrowRight className="w-4 h-4" />
-        </button>
-      </div>
+          <button
+            onClick={handleContinue}
+            className="py-3.5 px-6 rounded-full bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant hover:from-vasati-royal hover:to-vasati-purple text-white font-extrabold text-xs shadow-lg shadow-vasati-purple/25 flex items-center gap-2 transition-all active:scale-98"
+          >
+            <span>Continue</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
+      )}
     </div>
   );
 };
