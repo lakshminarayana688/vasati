@@ -12,7 +12,8 @@ import {
   Bookmark,
   CalendarCheck,
   User,
-  Sparkles
+  Sparkles,
+  Navigation
 } from 'lucide-react';
 
 interface HomeScreenProps {
@@ -70,6 +71,35 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
+  const [locating, setLocating] = useState(false);
+  const [locationNotice, setLocationNotice] = useState<string | null>(null);
+  const [manualInput, setManualInput] = useState('');
+
+  const handleDetectLocation = () => {
+    if (typeof window !== 'undefined' && !navigator.geolocation) {
+      setLocationNotice('Location services are not supported by your browser.');
+      return;
+    }
+    setLocating(true);
+    setLocationNotice(null);
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setLocating(false);
+        setSelectedCity('Bengaluru (Nearby)');
+        setCityDropdownOpen(false);
+        onOpenListings({ city: 'Bengaluru', nearby: true, lat: position.coords.latitude, lng: position.coords.longitude });
+      },
+      (error) => {
+        setLocating(false);
+        if (error.code === error.PERMISSION_DENIED) {
+          setLocationNotice('Location permission was denied. You can select your city below or enter your area manually.');
+        } else {
+          setLocationNotice('Unable to detect location. Please choose or enter manually below.');
+        }
+      },
+      { timeout: 8000, enableHighAccuracy: true }
+    );
+  };
 
   const featured = properties.filter(p => p.is_featured);
 
@@ -90,22 +120,71 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             </button>
 
             {cityDropdownOpen && (
-              <div className="absolute top-8 left-0 z-50 bg-white rounded-2xl shadow-xl border border-purple-100 py-2 w-44">
-                {CITIES.map(c => (
-                  <button
-                    key={c}
-                    onClick={() => {
-                      setSelectedCity(c);
-                      setCityDropdownOpen(false);
-                      onOpenListings({ city: c });
-                    }}
-                    className={`w-full text-left px-4 py-2 text-sm hover:bg-vasati-purple-soft transition-colors ${
-                      selectedCity === c ? 'text-vasati-purple font-bold' : 'text-gray-700'
-                    }`}
-                  >
-                    {c}
-                  </button>
-                ))}
+              <div className="absolute top-8 left-0 z-50 bg-white rounded-2xl shadow-xl border border-purple-100 p-2.5 w-64 animate-fade-in">
+                {/* Use Current Location via Geolocation */}
+                <button
+                  onClick={handleDetectLocation}
+                  disabled={locating}
+                  className="w-full flex items-center gap-2 px-3 py-2 rounded-xl bg-vasati-purple-soft text-vasati-purple font-bold text-xs hover:bg-purple-100 transition-colors mb-2 text-left"
+                >
+                  <Navigation className={`w-4 h-4 shrink-0 text-vasati-purple ${locating ? 'animate-spin' : ''}`} />
+                  <span>{locating ? 'Detecting location...' : 'Use Current Location'}</span>
+                </button>
+
+                {locationNotice && (
+                  <div className="mb-2.5 p-2.5 bg-amber-50 border border-amber-200 rounded-xl text-[11px] text-amber-800">
+                    <p className="font-medium leading-relaxed">{locationNotice}</p>
+                    <div className="mt-2 flex gap-1.5">
+                      <input
+                        type="text"
+                        placeholder="Enter area manually..."
+                        value={manualInput}
+                        onChange={(e) => setManualInput(e.target.value)}
+                        className="w-full px-2.5 py-1.5 bg-white border border-purple-200 rounded-lg text-xs outline-none focus:border-vasati-purple"
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && manualInput.trim()) {
+                            setSelectedCity(manualInput.trim());
+                            setCityDropdownOpen(false);
+                            onOpenListings({ city: manualInput.trim() });
+                          }
+                        }}
+                      />
+                      <button
+                        onClick={() => {
+                          if (manualInput.trim()) {
+                            setSelectedCity(manualInput.trim());
+                            setCityDropdownOpen(false);
+                            onOpenListings({ city: manualInput.trim() });
+                          }
+                        }}
+                        className="px-2.5 py-1.5 bg-vasati-purple text-white rounded-lg text-xs font-bold hover:bg-vasati-purple-deep"
+                      >
+                        Set
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                <div className="text-[10px] uppercase tracking-wider font-extrabold text-vasati-secondary px-2 py-1">
+                  Or Select City
+                </div>
+                <div className="space-y-0.5 max-h-48 overflow-y-auto">
+                  {CITIES.map(c => (
+                    <button
+                      key={c}
+                      onClick={() => {
+                        setSelectedCity(c);
+                        setCityDropdownOpen(false);
+                        onOpenListings({ city: c });
+                      }}
+                      className={`w-full text-left px-3 py-2 rounded-lg text-xs hover:bg-vasati-purple-soft transition-colors ${
+                        selectedCity === c ? 'text-vasati-purple font-bold bg-vasati-purple-light' : 'text-gray-700'
+                      }`}
+                    >
+                      {c}
+                    </button>
+                  ))}
+                </div>
               </div>
             )}
           </div>

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { SplashScreen } from '@/components/screens/SplashScreen';
+import { PermissionsScreen } from '@/components/screens/PermissionsScreen';
 import { HomeScreen } from '@/components/screens/HomeScreen';
 import { FiltersScreen, FilterState } from '@/components/screens/FiltersScreen';
 import { ListingsScreen } from '@/components/screens/ListingsScreen';
@@ -19,7 +20,6 @@ import {
   Smartphone,
   Monitor,
   User,
-  Building,
   Shield,
   Wifi,
   Battery,
@@ -27,11 +27,11 @@ import {
 } from 'lucide-react';
 
 export default function VasatiApp() {
-  // Navigation & Role states
-  const [activeRole, setActiveRole] = useState<'customer' | 'owner' | 'admin'>('customer');
+  // Navigation & Role states (PG Owner Hub removed from interface; retained internally)
+  const [activeRole, setActiveRole] = useState<'customer' | 'admin' | 'owner'>('customer');
   const [viewMode, setViewMode] = useState<'mobile' | 'responsive'>('mobile');
   const [activeScreen, setActiveScreen] = useState<
-    'splash' | 'home' | 'filters' | 'listings' | 'details' | 'booking' | 'payment' | 'profile' | 'bookings_list' | 'saved_list'
+    'splash' | 'permissions' | 'home' | 'filters' | 'listings' | 'details' | 'booking' | 'payment' | 'profile' | 'bookings_list' | 'saved_list'
   >('splash');
   const [history, setHistory] = useState<string[]>(['splash']);
 
@@ -203,6 +203,13 @@ export default function VasatiApp() {
             onLogin={() => setShowAuthModal(true)}
           />
         );
+      case 'permissions':
+        return (
+          <PermissionsScreen
+            onContinue={() => navigateTo('home')}
+            onSkip={() => navigateTo('home')}
+          />
+        );
       case 'home':
         return (
           <HomeScreen
@@ -323,18 +330,6 @@ export default function VasatiApp() {
             </button>
 
             <button
-              onClick={() => setActiveRole('owner')}
-              className={`px-3 py-1.5 rounded-full flex items-center gap-1.5 transition-all ${
-                activeRole === 'owner'
-                  ? 'bg-vasati-purple text-white shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              <Building className="w-3.5 h-3.5" />
-              <span>PG Owner Hub</span>
-            </button>
-
-            <button
               onClick={() => setActiveRole('admin')}
               className={`px-3 py-1.5 rounded-full flex items-center gap-1.5 transition-all ${
                 activeRole === 'admin'
@@ -432,12 +427,8 @@ export default function VasatiApp() {
           onClose={() => setShowAuthModal(false)}
           onSuccess={user => {
             setShowAuthModal(false);
-            if (user.role === 'owner') {
-              setActiveRole('owner');
-            } else {
-              setActiveRole('customer');
-              navigateTo('home');
-            }
+            setActiveRole('customer');
+            navigateTo('permissions');
           }}
         />
       )}

@@ -13,14 +13,21 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   onClose,
   onSuccess,
 }) => {
-  const [role, setRole] = useState<'customer' | 'owner'>(initialRole);
+  const [role, setRole] = useState<'customer' | 'owner'>('customer');
   const [phone, setPhone] = useState('98450 12345');
+  const [agreedToTerms, setAgreedToTerms] = useState(true);
+  const [termsError, setTermsError] = useState(false);
   const [step, setStep] = useState<'phone' | 'otp' | 'success'>('phone');
   const [otp, setOtp] = useState(['5', '6', '2', '1']);
   const [loading, setLoading] = useState(false);
 
   const handleSendOtp = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!agreedToTerms) {
+      setTermsError(true);
+      return;
+    }
+    setTermsError(false);
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
@@ -36,9 +43,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       setStep('success');
       setTimeout(() => {
         onSuccess({
-          name: role === 'customer' ? 'Lakshminarayana G' : 'Ramesh Sharma',
+          name: 'Lakshminarayana G',
           phone: `+91 ${phone}`,
-          role,
+          role: 'customer',
         });
       }, 1200);
     }, 700);
@@ -63,28 +70,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             <h3 className="text-base font-extrabold text-vasati-dark text-center">Welcome to VASATI</h3>
             <p className="text-xs text-gray-500 text-center mt-0.5">Enter your phone number to login or sign up</p>
 
-            {/* Role Switcher */}
-            <div className="mt-4 p-1 bg-vasati-lavender rounded-2xl flex text-xs font-bold border border-vasati-purple-border/40">
-              <button
-                type="button"
-                onClick={() => setRole('customer')}
-                className={`flex-1 py-1.5 rounded-xl transition-all ${
-                  role === 'customer' ? 'bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant text-white shadow-sm' : 'text-vasati-secondary'
-                }`}
-              >
-                Tenant
-              </button>
-              <button
-                type="button"
-                onClick={() => setRole('owner')}
-                className={`flex-1 py-1.5 rounded-xl transition-all ${
-                  role === 'owner' ? 'bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant text-white shadow-sm' : 'text-vasati-secondary'
-                }`}
-              >
-                PG Host
-              </button>
-            </div>
-
             <div className="mt-4">
               <label className="text-xs font-bold text-vasati-dark block mb-1">Mobile Number</label>
               <div className="flex items-center border border-vasati-purple-border rounded-2xl overflow-hidden focus-within:ring-2 focus-within:ring-vasati-purple/30 bg-white">
@@ -102,10 +87,32 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               </div>
             </div>
 
+            {/* Terms & Conditions Acceptance */}
+            <div className="mt-3.5 flex items-start gap-2 bg-vasati-purple-soft/40 p-2.5 rounded-2xl border border-vasati-purple-border/50">
+              <input
+                type="checkbox"
+                id="terms_agree"
+                checked={agreedToTerms}
+                onChange={e => {
+                  setAgreedToTerms(e.target.checked);
+                  if (e.target.checked) setTermsError(false);
+                }}
+                className="mt-0.5 rounded text-vasati-purple focus:ring-vasati-purple accent-vasati-purple cursor-pointer"
+              />
+              <label htmlFor="terms_agree" className="text-[11px] text-vasati-secondary leading-snug cursor-pointer">
+                I agree to the <span className="font-bold text-vasati-purple">Terms of Service</span> and <span className="font-bold text-vasati-purple">Privacy Policy</span> of VASATI.
+              </label>
+            </div>
+            {termsError && (
+              <p className="text-[11px] font-bold text-red-500 mt-1 text-center">
+                Please accept the Terms & Conditions to proceed.
+              </p>
+            )}
+
             <button
               type="submit"
               disabled={loading}
-              className="w-full mt-5 py-3.5 rounded-full bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant hover:from-vasati-royal hover:to-vasati-purple text-white font-extrabold text-xs shadow-card-hover flex items-center justify-center gap-1.5 transition-all active:scale-98"
+              className="w-full mt-4 py-3.5 rounded-full bg-gradient-to-r from-vasati-purple to-vasati-purple-vibrant hover:from-vasati-royal hover:to-vasati-purple text-white font-extrabold text-xs shadow-card-hover flex items-center justify-center gap-1.5 transition-all active:scale-98"
             >
               {loading ? (
                 <span>Sending OTP...</span>

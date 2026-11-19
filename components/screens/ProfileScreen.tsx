@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { VasatiLogo } from '../VasatiLogo';
 import {
   Settings,
@@ -19,7 +19,9 @@ import {
   Home,
   Search,
   Bookmark,
-  CalendarCheck
+  CalendarCheck,
+  Camera,
+  Image as ImageIcon
 } from 'lucide-react';
 
 interface ProfileScreenProps {
@@ -37,11 +39,65 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
 }) => {
   const [activeModal, setActiveModal] = useState<string | null>(null);
 
-  // Profile Edit state
+  // Profile state & Photo handling
   const [name, setName] = useState('Lakshminarayana G');
   const [email, setEmail] = useState('lakshmi@gmail.com');
   const [phone, setPhone] = useState('+91 98450 12345');
   const [company, setCompany] = useState('Infosys Technologies, Electronic City');
+  const [avatarUrl, setAvatarUrl] = useState('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80');
+
+  const [photoActionModalOpen, setPhotoActionModalOpen] = useState(false);
+  const [cameraDeniedModalOpen, setCameraDeniedModalOpen] = useState(false);
+  const [complaintPhotoName, setComplaintPhotoName] = useState<string | null>(null);
+
+  const galleryInputRef = useRef<HTMLInputElement | null>(null);
+  const cameraInputRef = useRef<HTMLInputElement | null>(null);
+  const complaintFileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleTakePhoto = async () => {
+    try {
+      if (typeof window !== 'undefined' && navigator.mediaDevices?.getUserMedia) {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        stream.getTracks().forEach(track => track.stop());
+      }
+      cameraInputRef.current?.click();
+      setPhotoActionModalOpen(false);
+    } catch (err: any) {
+      console.warn('Camera permission denied or unavailable:', err);
+      setPhotoActionModalOpen(false);
+      setCameraDeniedModalOpen(true);
+    }
+  };
+
+  const handleGallerySelect = () => {
+    galleryInputRef.current?.click();
+    setPhotoActionModalOpen(false);
+  };
+
+  const onAvatarFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target?.result) {
+          setAvatarUrl(event.target.result as string);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleTakePhotoForComplaint = async () => {
+    try {
+      if (typeof window !== 'undefined' && navigator.mediaDevices?.getUserMedia) {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        stream.getTracks().forEach(track => track.stop());
+      }
+      complaintFileInputRef.current?.click();
+    } catch (err) {
+      setCameraDeniedModalOpen(true);
+    }
+  };
 
   // Complaint state
   const [complaintCategory, setComplaintCategory] = useState('Maintenance');
@@ -94,19 +150,26 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
 
           {/* User Info with Avatar matching Screen 8 */}
           <div className="flex items-center gap-4">
-            <div className="relative">
+            <div className="relative group">
               <img
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80"
-                alt="Lakshminarayana G"
+                src={avatarUrl}
+                alt={name}
                 className="w-16 h-16 rounded-full object-cover border-2 border-white/80 shadow-md"
               />
-              <span className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-emerald-400 border-2 border-vasati-purple" />
+              <button
+                type="button"
+                onClick={() => setPhotoActionModalOpen(true)}
+                title="Change Photo (Camera / Gallery)"
+                className="absolute -bottom-1 -right-1 p-1.5 bg-vasati-orange text-white rounded-full shadow-md border-2 border-vasati-purple hover:scale-110 active:scale-95 transition-all"
+              >
+                <Camera className="w-3.5 h-3.5" />
+              </button>
             </div>
             <div>
               <h2 className="text-lg font-extrabold text-white tracking-tight leading-tight">
-                Lakshminarayana G
+                {name}
               </h2>
-              <p className="text-xs text-purple-200 mt-0.5 font-medium">lakshmi@gmail.com</p>
+              <p className="text-xs text-purple-200 mt-0.5 font-medium">{email}</p>
               <div className="mt-1.5 inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/15 text-[10px] font-bold text-white backdrop-blur-sm">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                 Verified Tenant
@@ -283,7 +346,28 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
               <X className="w-5 h-5" />
             </button>
             <h3 className="text-base font-extrabold text-vasati-dark">Customer Profile</h3>
-            <div className="mt-4 space-y-3">
+            
+            {/* Avatar Photo Edit Preview */}
+            <div className="mt-4 flex items-center gap-3 p-3 bg-purple-50 rounded-2xl border border-purple-100">
+              <img
+                src={avatarUrl}
+                alt={name}
+                className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-sm"
+              />
+              <div className="flex-1">
+                <p className="text-xs font-bold text-vasati-dark">Profile Photo</p>
+                <p className="text-[10px] text-gray-500">Take a photo or choose from gallery</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setPhotoActionModalOpen(true)}
+                className="px-3 py-1.5 rounded-full bg-vasati-purple text-white text-[11px] font-bold hover:bg-vasati-purple-deep"
+              >
+                Change
+              </button>
+            </div>
+
+            <div className="mt-3 space-y-3">
               <div>
                 <label className="text-xs font-bold text-gray-700 block mb-1">Full Name</label>
                 <input
@@ -428,6 +512,30 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
                       className="w-full px-3 py-2 border rounded-xl text-xs"
                     />
                   </div>
+                  <div>
+                    <label className="text-xs font-bold text-gray-700 block mb-1">Photo Proof (Optional)</label>
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={handleTakePhotoForComplaint}
+                        className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 border border-purple-200 rounded-xl text-xs text-vasati-purple font-medium hover:bg-purple-50 transition-colors"
+                      >
+                        <Camera className="w-3.5 h-3.5" />
+                        <span>Take Photo</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => complaintFileInputRef.current?.click()}
+                        className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 border border-purple-200 rounded-xl text-xs text-vasati-purple font-medium hover:bg-purple-50 transition-colors"
+                      >
+                        <ImageIcon className="w-3.5 h-3.5" />
+                        <span>From Gallery</span>
+                      </button>
+                    </div>
+                    {complaintPhotoName && (
+                      <p className="mt-1 text-[11px] text-emerald-700 font-medium">✓ Attached: {complaintPhotoName}</p>
+                    )}
+                  </div>
                 </div>
                 <button
                   type="submit"
@@ -503,6 +611,115 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
             >
               Close
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Hidden file inputs for Gallery and Camera */}
+      <input
+        ref={galleryInputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={onAvatarFileChange}
+      />
+      <input
+        ref={cameraInputRef}
+        type="file"
+        accept="image/*"
+        capture="user"
+        className="hidden"
+        onChange={onAvatarFileChange}
+      />
+      <input
+        ref={complaintFileInputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={(e) => {
+          if (e.target.files?.[0]) {
+            setComplaintPhotoName(e.target.files[0].name);
+          }
+        }}
+      />
+
+      {/* Photo Picker Options Modal */}
+      {photoActionModalOpen && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl w-full max-w-xs p-5 shadow-2xl animate-fade-in relative text-center">
+            <button
+              onClick={() => setPhotoActionModalOpen(false)}
+              className="absolute top-4 right-4 p-1 rounded-full hover:bg-gray-100 text-gray-400"
+            >
+              <X className="w-4 h-4" />
+            </button>
+            <div className="w-12 h-12 rounded-2xl bg-purple-100 text-vasati-purple flex items-center justify-center mx-auto mb-3">
+              <Camera className="w-6 h-6" />
+            </div>
+            <h3 className="text-base font-extrabold text-vasati-dark">Profile Photo</h3>
+            <p className="text-xs text-gray-500 mt-1 mb-5">
+              Choose how you want to add or update your photo
+            </p>
+            <div className="space-y-2.5">
+              <button
+                onClick={handleTakePhoto}
+                className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-2xl bg-vasati-purple text-white text-xs font-bold shadow-md hover:bg-vasati-purple-deep transition-all"
+              >
+                <Camera className="w-4 h-4" />
+                <span>Take Photo (Camera)</span>
+              </button>
+              <button
+                onClick={handleGallerySelect}
+                className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-2xl border-2 border-vasati-purple text-vasati-purple text-xs font-bold hover:bg-purple-50 transition-all"
+              >
+                <ImageIcon className="w-4 h-4" />
+                <span>Choose from Gallery (Photos)</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Camera Permission Denied Explanation Modal */}
+      {cameraDeniedModalOpen && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl w-full max-w-sm p-6 shadow-2xl animate-fade-in relative text-center">
+            <button
+              onClick={() => setCameraDeniedModalOpen(false)}
+              className="absolute top-4 right-4 p-1 rounded-full hover:bg-gray-100 text-gray-400"
+            >
+              <X className="w-4 h-4" />
+            </button>
+            <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center mx-auto mb-3">
+              <ShieldAlert className="w-6 h-6" />
+            </div>
+            <h3 className="text-base font-extrabold text-vasati-dark">Camera Access Denied</h3>
+            <p className="text-xs text-gray-600 mt-1 leading-relaxed">
+              Camera access was denied or is restricted on your device.
+            </p>
+            <div className="mt-3.5 p-3 bg-purple-50 rounded-2xl border border-purple-100 text-left text-[11px] text-gray-700 space-y-1">
+              <p className="font-bold text-vasati-purple">How to enable in device settings:</p>
+              <p>1. Open device or browser <strong>Settings</strong>.</p>
+              <p>2. Select <strong>Site / App Permissions &gt; Camera</strong>.</p>
+              <p>3. Set permission for <strong>VASATI</strong> to <strong>Allow</strong>.</p>
+            </div>
+            <div className="mt-4 space-y-2">
+              <button
+                onClick={() => {
+                  setCameraDeniedModalOpen(false);
+                  handleGallerySelect();
+                }}
+                className="w-full py-2.5 rounded-full bg-vasati-purple text-white text-xs font-bold shadow-md hover:bg-vasati-purple-deep"
+              >
+                Choose from Gallery instead
+              </button>
+              <button
+                onClick={() => setCameraDeniedModalOpen(false)}
+                className="w-full py-1.5 rounded-full text-xs font-semibold text-gray-500 hover:text-gray-700"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}
